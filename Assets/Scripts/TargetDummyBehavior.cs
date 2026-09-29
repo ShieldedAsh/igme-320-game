@@ -46,7 +46,7 @@ public class TargetDummyEnemy : BaseBehavior
     
     //This should be empty, currently being used for accessing update
     //Probably should add something for misc. update things
-    protected override void ChooseAction()
+    protected override void Act()
     {
         
         if (sr.color != color)

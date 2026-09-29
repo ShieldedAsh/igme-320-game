@@ -4,13 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public abstract class BaseBehavior : MonoBehaviour
 {
+
     [SerializeField, Min(1)]
     protected int maxHealth;
     protected int currentHealth;
-
-    // The list of actions the NPC can take
-    [SerializeReference]
-    protected List<Action> actions;
 
     /// <summary>
     /// The max health of the NPC
@@ -32,16 +29,16 @@ public abstract class BaseBehavior : MonoBehaviour
     // Take action should be specifically for "actions"
     void FixedUpdate()
     {
-        ChooseAction();
+        Act();
     }
 
     // All NPC's should have some sort of collision behavior
     protected abstract void OnCollisionEnter2D(Collision2D collision);
 
     /// <summary>
-    /// The logic for how NPC's use the actions in their action list
+    /// The logic for how NPC's act
     /// </summary>
-    protected abstract void ChooseAction();
+    protected abstract void Act();
 
     /// <summary>
     /// Reduces the NPC's health by damage taken
@@ -50,5 +47,18 @@ public abstract class BaseBehavior : MonoBehaviour
     protected virtual void TakeDamage(int damage)
     {
         currentHealth -= damage;
+    }
+
+    /// <summary>
+    /// Moves the NPC to the destination over time
+    /// </summary>
+    /// <param name="transform">The transform of the NPC</param>
+    /// <param name="destination">The destination to move to</param>
+    /// <param name="deltaTime">The time since the last frame</param>
+    /// <param name="moveTime">The time to move between points</param>
+    /// <returns>A midpoint between the current location and the destination</returns>
+    protected Vector2 MoveTo(Transform transform, Vector2 destination, float deltaTime, float moveTime = 1)
+    {
+        return Vector2.Lerp(transform.position, destination, deltaTime/moveTime);
     }
 }
