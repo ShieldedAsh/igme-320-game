@@ -137,6 +137,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 5
+  jumpSpeed: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &1201633330
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +152,7 @@ GameObject:
   - component: {fileID: 1201633333}
   - component: {fileID: 1201633332}
   - component: {fileID: 1201633331}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: testfloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,6 +467,10 @@ PrefabInstance:
     - target: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6583743389979668093, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
