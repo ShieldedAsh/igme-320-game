@@ -9,6 +9,9 @@ public abstract class BaseBehavior : MonoBehaviour
     protected int maxHealth;
     protected int currentHealth;
 
+    [SerializeField] 
+    protected Animator animator;
+
     /// <summary>
     /// The max health of the NPC
     /// </summary>
@@ -32,13 +35,18 @@ public abstract class BaseBehavior : MonoBehaviour
         Act();
     }
 
-    // All NPC's should have some sort of collision behavior
-    protected abstract void OnCollisionEnter2D(Collision2D collision);
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+
+    }
 
     /// <summary>
     /// The logic for how NPC's act
     /// </summary>
-    protected abstract void Act();
+    protected virtual void Act()
+    {
+
+    }
 
     /// <summary>
     /// Reduces the NPC's health by damage taken

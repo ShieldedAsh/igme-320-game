@@ -24,9 +24,4 @@ public class FlyBehavior : BaseBehavior
             currentIndex = (currentIndex + 1) % points.Length;
         }
     }
-
-    protected override void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-    }
 }

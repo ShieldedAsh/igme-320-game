@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class TargetDummyEnemy : BaseBehavior
+public class TargetDummyBehavior : BaseBehavior
 {
-    SpriteRenderer sr;
-    Color color;
 
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
@@ -20,10 +18,6 @@ public class TargetDummyEnemy : BaseBehavior
     {
         maxHealth = 5;
         currentHealth = maxHealth;
-
-        // Health Render variables
-        sr = gameObject.GetComponent<SpriteRenderer>();
-        color = sr.color;
     }
 
     //DisplayHealth() should be in BaseBehavior TakeDamage()/Update() or not exist
@@ -33,38 +27,10 @@ public class TargetDummyEnemy : BaseBehavior
         if (currentHealth <= 0)
         {
             currentHealth = maxHealth;
-            //Placeholder heal effect
-            sr.color = Color.green;
         }
         else
         {
-            //Should be replaced with damage animation
-            sr.color = Color.red;
-        }
-        DisplayHealth();
-    }
-    
-    //This should be empty, currently being used for accessing update
-    //Probably should add something for misc. update things
-    protected override void Act()
-    {
-        
-        if (sr.color != color)
-        {
-            sr.color = color;
-        }
-    }
-
-    //Temp, check if displaying health
-    // Placeholder if we are displaying health
-    private void DisplayHealth()
-    {
-        foreach (Transform childT in transform.GetChild(0).transform)
-        {
-            if (childT.name == "CurrentHP")
-            {
-                childT.localScale = new Vector3(currentHealth / (float)maxHealth, childT.localScale.y, childT.localScale.z);
-            }
+            animator.SetBool("isDamaged", true);
         }
     }
 }
