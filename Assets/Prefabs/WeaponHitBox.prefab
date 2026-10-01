@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7111096441094994853}
   - component: {fileID: -4651293437280823480}
   m_Layer: 0
-  m_Name: AttackHitBox
+  m_Name: WeaponHitBox
   m_TagString: WeaponHitBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
