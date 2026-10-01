@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     //movement actions
     private InputAction moveAction;
     private InputAction jumpAction;
+    private InputAction jetpackAction;
 
     //movement refs
     private float moveX;
@@ -20,12 +21,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed = 10f;
     [SerializeField] private LayerMask groundLayer;
 
+    //jetpack refs
+    [SerializeField] private float jetpackFuel = 1f;
+    private bool jetpackInUse;
+    [SerializeField] private float jetpackCooldown = 3f;
+    [SerializeField] private float jetpackForce = 10f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
+        jetpackAction = InputSystem.actions.FindAction("Jetpack");
     }
 
     void Update()
@@ -35,6 +43,11 @@ public class PlayerMovement : MonoBehaviour
         if (jumpAction.WasPressedThisFrame())
         {
             jumpPressed = true;
+        }
+
+        if (jetpackAction.IsInProgress())
+        {
+            jetpackInUse = true;
         }
     }
 
@@ -54,6 +67,33 @@ public class PlayerMovement : MonoBehaviour
             }
 
             jumpPressed = false;
+        }
+
+        //if jetpack is being held
+        if (jetpackInUse)
+        {
+            //and there is fuel
+            if (jetpackFuel >= 0.0f)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jetpackForce);
+                jetpackFuel -= Time.fixedDeltaTime;
+            }
+        }
+
+        if (jetpackFuel <= 0.0f)
+        {
+            jetpackInUse = false;
+        }
+
+        if (IsGrounded() && jetpackFuel <= 0.0f)
+        {
+            jetpackCooldown -= Time.fixedDeltaTime;
+
+            if (jetpackCooldown <= 0.0f)
+            {
+                jetpackFuel = 1f;
+                jetpackCooldown = 3f;
+            }
         }
     }
 
