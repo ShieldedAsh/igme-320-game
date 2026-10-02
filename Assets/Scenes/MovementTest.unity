@@ -119,31 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &728923907 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-  m_PrefabInstance: {fileID: 1136902365005712583}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &728923912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 728923907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b2eb723249c8a949aa65d4bc0d7a1d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 5
-  jumpSpeed: 10
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  jetpackFuel: 1
-  jetpackCooldown: 3
-  jetpackForce: 10
 --- !u!4 &728923916 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
@@ -726,21 +701,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6583743389979668093, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6583743389979668093, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      propertyPath: m_GravityScale
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 728923912}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

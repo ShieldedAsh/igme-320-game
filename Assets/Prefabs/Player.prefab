@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6157970975840907676}
   - component: {fileID: 6583743389979668093}
   - component: {fileID: -5621033486213496804}
+  - component: {fileID: 109830746946145905}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -166,7 +167,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &-5621033486213496804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,3 +183,23 @@ MonoBehaviour:
   attackHitbox: {fileID: 8153167537513750294, guid: c61ae573e1caa3f44ab78a283fcc4cb6, type: 3}
   attackPoint: {fileID: 0}
   attackDuration: 0.15
+--- !u!114 &109830746946145905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230823812136170712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2eb723249c8a949aa65d4bc0d7a1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  speed: 5
+  jumpSpeed: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  jetpackFuel: 1
+  jetpackCooldown: 3
+  jetpackForce: 10
