@@ -35,11 +35,6 @@ public abstract class BaseBehavior : MonoBehaviour
         Act();
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
-    {
-
-    }
-
     /// <summary>
     /// The logic for how NPC's act
     /// </summary>

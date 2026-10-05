@@ -2,14 +2,10 @@ using UnityEngine;
 
 public class TargetDummyBehavior : BaseBehavior
 {
-
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        // Placeholder tag "WeaponHitBox" is used for weapon detection
-        // Replace when actual weapon hit boxes are added
         if (collision.gameObject.tag == "WeaponHitBox")
         {
-            // Damage should be read from the collider
             TakeDamage(1);
         }
     }
@@ -20,7 +16,7 @@ public class TargetDummyBehavior : BaseBehavior
         currentHealth = maxHealth;
     }
 
-    //DisplayHealth() should be in BaseBehavior TakeDamage()/Update() or not exist
+    //Logic for when the dummy takes damage
     protected override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
