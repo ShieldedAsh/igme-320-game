@@ -24,13 +24,10 @@ public class TargetDummyBehavior : BaseBehavior
     protected override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
+        animator.SetTrigger("isDamaged");
         if (currentHealth <= 0)
         {
             currentHealth = maxHealth;
-        }
-        else
-        {
-            animator.SetBool("isDamaged", true);
         }
     }
 }
