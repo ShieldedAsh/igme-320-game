@@ -1,13 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
-public abstract class BaseBehavior : MonoBehaviour
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+public abstract class NPCBaseBehavior : MonoBehaviour
 {
 
     [SerializeField, Min(1)]
     protected int maxHealth;
     protected int currentHealth;
+
+    protected List<NPCBaseAttack> attacks;
+    [SerializeField]
+    protected NPCBaseAttack current;
+    [SerializeField]
+    protected float actCooldown;
+    [SerializeField]
+    protected List<GameObject> projectilePrefabs;
+    [SerializeField]
+    protected List<GameObject> spawnedProjectiles;
 
     [SerializeField] 
     protected Animator animator;
@@ -26,6 +36,18 @@ public abstract class BaseBehavior : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = maxHealth;
+        if (attacks == null)
+        {
+            attacks = new List<NPCBaseAttack>();
+        }
+        if (projectilePrefabs == null)
+        {
+            projectilePrefabs = new List<GameObject>();
+        }
+        if (spawnedProjectiles == null)
+        {
+            spawnedProjectiles = new List<GameObject>();
+        }
     }
 
     // If there is more we need to do per update, put here
@@ -33,15 +55,20 @@ public abstract class BaseBehavior : MonoBehaviour
     void FixedUpdate()
     {
         Act();
+        for (int i = 0; i < spawnedProjectiles.Count; i++)
+        {
+            if (spawnedProjectiles[i] == null)
+            {
+                spawnedProjectiles.RemoveAt(i);
+                i--;
+            }
+        }
     }
 
     /// <summary>
     /// The logic for how NPC's act
     /// </summary>
-    protected virtual void Act()
-    {
-
-    }
+    protected abstract void Act();
 
     /// <summary>
     /// Reduces the NPC's health by damage taken

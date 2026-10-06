@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FlyBehavior : BaseBehavior
+public class FlyBehavior : NPCBaseBehavior
 {
     Vector2[] points;
     int currentIndex;

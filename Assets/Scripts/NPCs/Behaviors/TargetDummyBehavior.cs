@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TargetDummyBehavior : BaseBehavior
+public class TargetDummyBehavior : NPCBaseBehavior
 {
     protected void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,5 +25,10 @@ public class TargetDummyBehavior : BaseBehavior
         {
             currentHealth = maxHealth;
         }
+    }
+
+    protected override void Act()
+    {
+
     }
 }
