@@ -294,8 +294,9 @@ MonoBehaviour:
   - {fileID: 6308373797199440529, guid: 0b83fd6173fa7d04396c6575f54f5aaf, type: 3}
   spawnedProjectiles: []
   animator: {fileID: 0}
-  angleRange: 0
+  angleRange: 90
   target: {fileID: 2049744127}
+  projectileCount: 2
 --- !u!50 &1750415593
 Rigidbody2D:
   serializedVersion: 5
@@ -518,7 +519,7 @@ Transform:
   m_GameObject: {fileID: 2049744127}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.62, y: 0.9, z: 0}
+  m_LocalPosition: {x: 3, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
