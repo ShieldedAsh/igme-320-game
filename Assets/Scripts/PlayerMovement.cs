@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
     //component refs
     private Rigidbody2D rb;
     private Collider2D col;
-
+    
     //movement actions
     private InputAction moveAction;
     private InputAction jumpAction;
