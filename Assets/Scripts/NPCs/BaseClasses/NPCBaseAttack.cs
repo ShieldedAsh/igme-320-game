@@ -16,4 +16,9 @@ public abstract class NPCBaseAttack
     }
 
     public float Duration { get => actionDuration; }
+
+    public void SetActionDuration(float value)
+    {
+        actionDuration = value;
+    }
 }

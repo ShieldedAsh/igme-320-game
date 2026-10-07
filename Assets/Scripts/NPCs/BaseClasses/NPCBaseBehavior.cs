@@ -13,7 +13,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     [SerializeField]
     protected NPCBaseAttack current;
     [SerializeField]
-    protected float actCooldown;
+    protected float timeTillAction;
     [SerializeField]
     protected List<GameObject> projectilePrefabs;
     [SerializeField]
