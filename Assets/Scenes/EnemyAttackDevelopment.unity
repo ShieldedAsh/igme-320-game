@@ -289,14 +289,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileEmitterBehavior
   maxHealth: 0
-  actCooldown: 0
+  timeTillAction: 0
   projectilePrefabs:
   - {fileID: 6308373797199440529, guid: 0b83fd6173fa7d04396c6575f54f5aaf, type: 3}
   spawnedProjectiles: []
   animator: {fileID: 0}
-  angleRange: 90
   target: {fileID: 2049744127}
-  projectileCount: 2
+  actionTime: 1
 --- !u!50 &1750415593
 Rigidbody2D:
   serializedVersion: 5
