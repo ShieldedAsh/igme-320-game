@@ -7,10 +7,7 @@ public abstract class NPCBaseAttack
     protected float actionDuration;
     protected Transform parent;
 
-    public NPCBaseAttack(Transform _parent) : this(_parent, 1.0f)
-    {
-
-    }
+    public NPCBaseAttack(Transform _parent) : this(_parent, 1.0f) { }
 
     public NPCBaseAttack(Transform _parent, float _actionDuration)
     {
