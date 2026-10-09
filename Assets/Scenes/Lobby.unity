@@ -176,37 +176,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a50f101c5a9db954a8f868540cb41178, type: 3}
---- !u!1 &480780567
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 480780568}
-  m_Layer: 0
-  m_Name: AttackPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &480780568
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 480780567}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.94, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 998213821}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &650236630
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +187,7 @@ GameObject:
   - component: {fileID: 650236633}
   - component: {fileID: 650236632}
   - component: {fileID: 650236634}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,11 +332,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 5
---- !u!4 &998213821 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-  m_PrefabInstance: {fileID: 1812322960}
-  m_PrefabAsset: {fileID: 0}
+  jumpSpeed: 10
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  jetpackFuel: 1
+  jetpackCooldown: 3
+  jetpackForce: 10
 --- !u!114 &998213822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,8 +352,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackHitbox: {fileID: 8153167537513750294, guid: c61ae573e1caa3f44ab78a283fcc4cb6, type: 3}
-  attackPoint: {fileID: 480780568}
   attackDuration: 0.15
+  attackOffset: 0.75
 --- !u!1 &1683119556
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,7 +365,7 @@ GameObject:
   - component: {fileID: 1683119559}
   - component: {fileID: 1683119558}
   - component: {fileID: 1683119560}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -575,10 +546,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 480780568}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       insertIndex: -1
