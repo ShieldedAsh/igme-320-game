@@ -22,7 +22,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     //jetpack refs
-    [SerializeField] private float jetpackFuel = 1f;
+    [SerializeField] private float jetpackFuel = 3f;
+    [SerializeField] private float jetpackInitialBoost = 2.5f;
     private bool jetpackInUse;
     [SerializeField] private float jetpackCooldown = 3f;
     [SerializeField] private float jetpackForce = 10f;
@@ -75,7 +76,12 @@ public class PlayerMovement : MonoBehaviour
             //and there is fuel
             if (jetpackFuel >= 0.0f)
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jetpackForce);
+                if (jetpackFuel == 3.0f)
+                {
+                    rb.AddForceY(jetpackInitialBoost, ForceMode2D.Impulse);
+                }
+
+                rb.gravityScale = 0.2f;
                 jetpackFuel -= Time.fixedDeltaTime;
             }
         }
@@ -83,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
         if (jetpackFuel <= 0.0f)
         {
             jetpackInUse = false;
+            rb.gravityScale = 1;
         }
 
         if (IsGrounded() && jetpackFuel <= 0.0f)
