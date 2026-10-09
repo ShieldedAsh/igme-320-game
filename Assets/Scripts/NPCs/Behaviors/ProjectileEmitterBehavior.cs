@@ -26,7 +26,7 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
         }
         if (projectilePrefabs.Count > 0)
         {
-            attacks.Add(new FireProjectiles(projectilePrefabs[0], this.transform, actionTime));
+            actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, actionTime));
         }
         directionAngle = 0.0f;
         arcAngle = 90.0f;
@@ -36,62 +36,63 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
         projectileLifetime = 0.5f;
     }
 
-    protected override void Act()
+    protected override float Act()
     {
-        attacks[0].SetActionDuration(actionTime);
-        if (timeTillAction <= 0)
+        if (actions[0] is FireProjectiles)
         {
-            if (attacks.Count > 0)
+            actions[0].SetActionDuration(actionTime);
+            currentAction = actions[0];
+            List<GameObject> newProjectiles = new List<GameObject>();
+            Vector2 direction = (Vector2)target.transform.position.normalized;
+            Randomize();
+            switch (Random.Range(0,8))
             {
-                if (attacks[0] is FireProjectiles)
-                {
-                    List<GameObject> newProjectiles = new List<GameObject>();
-                    Vector2 direction = (Vector2)target.transform.position.normalized;
-                    Randomize();
-                    switch (Random.Range(0,8))
-                    {
-                        case 0:
-                            Debug.Log("Direction Projectile");
-                            spawnedProjectiles.Add(((FireProjectiles)attacks[0]).EmitProjectile(projectileScale, projectileSpeed, projectileLifetime, direction));
-                            break;
-                        case 1:
-                            Debug.Log($"{directionAngle} degree Projectile");
-                            spawnedProjectiles.Add(((FireProjectiles)attacks[0]).EmitProjectile(projectileScale, projectileSpeed, projectileLifetime, directionAngle));
-                            break;
-                        case 2:
-                            Debug.Log("Direction Circle - " + projectileCount);
-                            newProjectiles = ((FireProjectiles)attacks[0]).EmitCircle(projectileCount, projectileScale, projectileSpeed, projectileLifetime, direction);
-                            break;
-                        case 3:
-                            Debug.Log($"{directionAngle} degree Circle - " + projectileCount);
-                            newProjectiles = ((FireProjectiles)attacks[0]).EmitCircle(projectileCount, projectileScale, projectileSpeed, projectileLifetime, directionAngle);
-                            break;
-                        case 4:
-                            Debug.Log("Direction Cross");
-                            newProjectiles = ((FireProjectiles)attacks[0]).EmitCross(projectileScale, projectileSpeed, projectileLifetime, direction);
-                            break;
-                        case 5:
-                            Debug.Log($"{directionAngle} degree Cross");
-                            newProjectiles = ((FireProjectiles)attacks[0]).EmitCross(projectileScale, projectileSpeed, projectileLifetime, directionAngle);
-                            break;
-                        case 6:
-                            Debug.Log("Direction Arc - " + projectileCount);
-                            newProjectiles = ((FireProjectiles)attacks[0]).EmitArc(arcAngle, projectileCount, projectileScale, projectileSpeed, projectileLifetime, direction);
-                            break;
-                        case 7:
-                            Debug.Log($"{directionAngle} degree Arc - " + projectileCount );
-                            newProjectiles = ((FireProjectiles)attacks[0]).EmitArc(arcAngle, projectileCount, projectileScale, projectileSpeed, projectileLifetime, directionAngle);
-                            break;
-                    }
-                    if (spawnedProjectiles.Count > 0)
-                    {
-                        spawnedProjectiles.AddRange(newProjectiles);
-                    }
-                }
-                timeTillAction = attacks[0].Duration;
+                case 0:
+                    Debug.Log("Direction Projectile");
+                    spawnedProjectiles.Add(((FireProjectiles)currentAction).EmitProjectile(projectileScale, projectileSpeed, projectileLifetime, direction));
+                    break;
+                case 1:
+                    Debug.Log($"{directionAngle} degree Projectile");
+                    spawnedProjectiles.Add(((FireProjectiles)currentAction).EmitProjectile(projectileScale, projectileSpeed, projectileLifetime, directionAngle));
+                    break;
+                case 2:
+                    Debug.Log("Direction Circle - " + projectileCount);
+                    newProjectiles = ((FireProjectiles)currentAction).EmitCircle(projectileCount, projectileScale, projectileSpeed, projectileLifetime, direction);
+                    break;
+                case 3:
+                    Debug.Log($"{directionAngle} degree Circle - " + projectileCount);
+                    newProjectiles = ((FireProjectiles)currentAction).EmitCircle(projectileCount, projectileScale, projectileSpeed, projectileLifetime, directionAngle);
+                    break;
+                case 4:
+                    Debug.Log("Direction Cross");
+                    newProjectiles = ((FireProjectiles)currentAction).EmitCross(projectileScale, projectileSpeed, projectileLifetime, direction);
+                    break;
+                case 5:
+                    Debug.Log($"{directionAngle} degree Cross");
+                    newProjectiles = ((FireProjectiles)currentAction).EmitCross(projectileScale, projectileSpeed, projectileLifetime, directionAngle);
+                    break;
+                case 6:
+                    Debug.Log("Direction Arc - " + projectileCount);
+                    newProjectiles = ((FireProjectiles)currentAction).EmitArc(arcAngle, projectileCount, projectileScale, projectileSpeed, projectileLifetime, direction);
+                    break;
+                case 7:
+                    Debug.Log($"{directionAngle} degree Arc - " + projectileCount );
+                    newProjectiles = ((FireProjectiles)currentAction).EmitArc(arcAngle, projectileCount, projectileScale, projectileSpeed, projectileLifetime, directionAngle);
+                    break;
+            }
+            if (spawnedProjectiles.Count > 0)
+            {
+                spawnedProjectiles.AddRange(newProjectiles);
             }
         }
-        timeTillAction -= Time.fixedDeltaTime;
+        if (currentAction != null)
+        {
+            return currentAction.Duration;
+        }
+        else
+        {
+            return 1.0f;
+        }
     }
 
     private void Randomize()

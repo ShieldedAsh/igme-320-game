@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireProjectiles : NPCBaseAttack
+public class FireProjectiles : NPCBaseAction
 {
     GameObject projectilePrefab;
 

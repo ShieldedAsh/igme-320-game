@@ -2,26 +2,33 @@ using UnityEngine;
 
 public class FlyBehavior : NPCBaseBehavior
 {
-    Vector2[] points;
-    int currentIndex;
+    Vector2 destination;
+    Coroutine myCoroutine;
 
     protected override void Start()
     {
         base.Start();
-        points = new Vector2[4];
-        points[0] = new Vector2(5.0f, 3.0f);
-        points[1] = new Vector2(5.0f, -3.0f);
-        points[2] = new Vector2(-5.0f, -3.0f);
-        points[3] = new Vector2(-5.0f, 3.0f);
-        currentIndex = 0;
+        myCoroutine = null;
+        if (projectilePrefabs.Count > 0)
+        {
+            actions.Add(new Move(this.transform));
+        }
     }
 
-    protected override void Act()
+    protected override float Act()
     {
-        this.transform.position = MoveTo(this.transform, points[currentIndex], Time.deltaTime);
-        if ((transform.position - (Vector3)points[currentIndex]).magnitude <= 0.1f )
+        if (destination == null || (Vector2)transform.position == destination )
         {
-            currentIndex = (currentIndex + 1) % points.Length;
+            destination = new Vector2(Random.Range(-9.0f, 9.0f), Random.Range(-5.0f, 5.0f));
         }
+        if (CanAct() && myCoroutine == null)
+        {
+            currentAction = actions[0];
+            if (currentAction is Move)
+            {
+                myCoroutine = StartCoroutine(((Move)currentAction).MoveTo(destination, currentAction.Duration));
+            }
+        }
+        return 1.0f;
     }
 }

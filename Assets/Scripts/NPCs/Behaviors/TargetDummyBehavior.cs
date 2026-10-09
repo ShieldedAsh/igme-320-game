@@ -27,8 +27,8 @@ public class TargetDummyBehavior : NPCBaseBehavior
         }
     }
 
-    protected override void Act()
+    protected override float Act()
     {
-
+        return 99.0f;
     }
 }

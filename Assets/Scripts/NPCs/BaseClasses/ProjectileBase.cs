@@ -36,6 +36,11 @@ public class ProjectileBase : MonoBehaviour
         this.transform.position += (Vector3)(movementDirection * speed * Time.fixedDeltaTime);
         if (currentLifetime >= totalLifetime)
         {
+            NPCBaseBehavior parentBehavior = null;
+            if ((parentBehavior = this.transform.parent.GetComponent<NPCBaseBehavior>()) != null)
+            {
+                parentBehavior.RemoveProjectile(this.gameObject);
+            }
             Destroy(this.gameObject);
         }
     }

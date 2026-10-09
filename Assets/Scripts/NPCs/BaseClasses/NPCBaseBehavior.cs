@@ -4,23 +4,20 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public abstract class NPCBaseBehavior : MonoBehaviour
 {
-
-    [SerializeField, Min(1)]
-    protected int maxHealth;
-    protected int currentHealth;
-
-    protected List<NPCBaseAttack> attacks;
     [SerializeField]
-    protected NPCBaseAttack current;
-    [SerializeField]
-    protected float timeTillAction;
+    protected Animator animator;
     [SerializeField]
     protected List<GameObject> projectilePrefabs;
-    [SerializeField]
+    [SerializeField, Min(1)]
+    protected int maxHealth;
+
+    protected int currentHealth;
+    protected List<NPCBaseAction> actions;
+    protected NPCBaseAction currentAction;
+    protected float timeTillAction;
     protected List<GameObject> spawnedProjectiles;
 
-    [SerializeField] 
-    protected Animator animator;
+    
 
     /// <summary>
     /// The max health of the NPC
@@ -36,9 +33,9 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = maxHealth;
-        if (attacks == null)
+        if (actions == null)
         {
-            attacks = new List<NPCBaseAttack>();
+            actions = new List<NPCBaseAction>();
         }
         if (projectilePrefabs == null)
         {
@@ -54,21 +51,18 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     // Take action should be specifically for "actions"
     void FixedUpdate()
     {
-        Act();
-        for (int i = 0; i < spawnedProjectiles.Count; i++)
+        timeTillAction -= Time.fixedDeltaTime;
+        if (CanAct())
         {
-            if (spawnedProjectiles[i] == null)
-            {
-                spawnedProjectiles.RemoveAt(i);
-                i--;
-            }
+            timeTillAction = Act();
         }
     }
 
     /// <summary>
-    /// The logic for how NPC's act
+    /// The logic for how NPCs act
     /// </summary>
-    protected abstract void Act();
+    /// <returns>The amount of time until the next action</returns>
+    protected abstract float Act();
 
     /// <summary>
     /// Reduces the NPC's health by damage taken
@@ -79,16 +73,21 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         currentHealth -= damage;
     }
 
-    /// <summary>
-    /// Moves the NPC to the destination over time
-    /// </summary>
-    /// <param name="transform">The transform of the NPC</param>
-    /// <param name="destination">The destination to move to</param>
-    /// <param name="deltaTime">The time since the last frame</param>
-    /// <param name="moveTime">The time to move between points</param>
-    /// <returns>A midpoint between the current location and the destination</returns>
-    protected Vector2 MoveTo(Transform transform, Vector2 destination, float deltaTime, float moveTime = 1)
+    protected bool CanAct()
     {
-        return Vector2.Lerp(transform.position, destination, deltaTime/moveTime);
+        if (timeTillAction <= 0 && actions.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // Projectiles should call this upon death to remove themselves from the list
+    public void RemoveProjectile(GameObject projectile)
+    {
+        if (projectile.GetComponent<ProjectileBase>() != null)
+        {
+            spawnedProjectiles.Remove(projectile);
+        }
     }
 }
