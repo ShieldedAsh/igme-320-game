@@ -10,10 +10,10 @@ public class ProjectileBase : MonoBehaviour
     float totalLifetime;
     float currentLifetime;
 
-    public Vector2 MovementDirection { get; }
-    public float Speed { get; }
-    public float TotalLifetime { get; }
-    public float CurrentLifetime { get; }
+    public Vector2 MovementDirection { get => movementDirection; }
+    public float Speed { get => speed; }
+    public float TotalLifetime { get => totalLifetime; }
+    public float CurrentLifetime { get => currentLifetime; }
 
     public void setDirection(Vector2 _direction)
     {

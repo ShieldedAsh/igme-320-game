@@ -11,10 +11,7 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
     float directionAngle;
     
     float arcAngle;
-    int projectileCount;
-    float projectileScale;
-    float projectileSpeed;
-    float projectileLifetime;
+    ProjectileSettings settings;
 
     protected override void Start()
     {
@@ -24,67 +21,68 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
         {
             actionTime = 0.1f;
         }
-        if (projectilePrefabs.Count > 0)
-        {
-            actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, actionTime));
-        }
+        actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, actionTime));
+        currentAction = actions[0];
         directionAngle = 0.0f;
         arcAngle = 90.0f;
-        projectileCount = 8;
-        projectileScale = 0.5f;
-        projectileSpeed = 2.0f;
-        projectileLifetime = 0.5f;
+        settings = new ProjectileSettings(8, 0.5f, 2.0f, 0.5f);
     }
 
     protected override float Act()
     {
-        if (actions[0] is FireProjectiles)
+        currentAction.SetActionDuration(actionTime);
+        List<GameObject> newProjectiles = new List<GameObject>();
+        Vector2 direction = (Vector2)target.transform.position.normalized;
+        Randomize();
+        try
         {
-            actions[0].SetActionDuration(actionTime);
-            currentAction = actions[0];
-            List<GameObject> newProjectiles = new List<GameObject>();
-            Vector2 direction = (Vector2)target.transform.position.normalized;
-            Randomize();
-            switch (Random.Range(0,8))
+            FireProjectiles fp = ConvertActionTo<FireProjectiles>(currentAction);
+            switch (Random.Range(0, 8))
             {
                 case 0:
                     Debug.Log("Direction Projectile");
-                    spawnedProjectiles.Add(((FireProjectiles)currentAction).EmitProjectile(projectileScale, projectileSpeed, projectileLifetime, direction));
+                    projectiles.Add(fp.EmitProjectile(settings, direction));
                     break;
                 case 1:
                     Debug.Log($"{directionAngle} degree Projectile");
-                    spawnedProjectiles.Add(((FireProjectiles)currentAction).EmitProjectile(projectileScale, projectileSpeed, projectileLifetime, directionAngle));
+                    projectiles.Add(fp.EmitProjectile(settings, directionAngle));
                     break;
                 case 2:
-                    Debug.Log("Direction Circle - " + projectileCount);
-                    newProjectiles = ((FireProjectiles)currentAction).EmitCircle(projectileCount, projectileScale, projectileSpeed, projectileLifetime, direction);
+                    Debug.Log("Direction Circle - " + settings.Count);
+                    newProjectiles = fp.EmitCircle(settings, direction);
                     break;
                 case 3:
-                    Debug.Log($"{directionAngle} degree Circle - " + projectileCount);
-                    newProjectiles = ((FireProjectiles)currentAction).EmitCircle(projectileCount, projectileScale, projectileSpeed, projectileLifetime, directionAngle);
+                    Debug.Log($"{directionAngle} degree Circle - " + settings.Count);
+                    newProjectiles = fp.EmitCircle(settings, directionAngle);
                     break;
                 case 4:
                     Debug.Log("Direction Cross");
-                    newProjectiles = ((FireProjectiles)currentAction).EmitCross(projectileScale, projectileSpeed, projectileLifetime, direction);
+                    newProjectiles = fp.EmitCross(settings, direction);
                     break;
                 case 5:
                     Debug.Log($"{directionAngle} degree Cross");
-                    newProjectiles = ((FireProjectiles)currentAction).EmitCross(projectileScale, projectileSpeed, projectileLifetime, directionAngle);
+                    newProjectiles = fp.EmitCross(settings, directionAngle);
                     break;
                 case 6:
-                    Debug.Log("Direction Arc - " + projectileCount);
-                    newProjectiles = ((FireProjectiles)currentAction).EmitArc(arcAngle, projectileCount, projectileScale, projectileSpeed, projectileLifetime, direction);
+                    Debug.Log("Direction Arc - " + settings.Count);
+                    newProjectiles = fp.EmitArc(arcAngle, settings, direction);
                     break;
                 case 7:
-                    Debug.Log($"{directionAngle} degree Arc - " + projectileCount );
-                    newProjectiles = ((FireProjectiles)currentAction).EmitArc(arcAngle, projectileCount, projectileScale, projectileSpeed, projectileLifetime, directionAngle);
+                    Debug.Log($"{directionAngle} degree Arc - " + settings.Count);
+                    newProjectiles = fp.EmitArc(arcAngle, settings, directionAngle);
                     break;
             }
-            if (spawnedProjectiles.Count > 0)
-            {
-                spawnedProjectiles.AddRange(newProjectiles);
-            }
         }
+        catch (System.TypeAccessException e)
+        {
+            Debug.Log(e);
+        }
+
+        if (newProjectiles.Count > 0)
+        {
+            projectiles.AddRange(newProjectiles);
+        }
+
         if (currentAction != null)
         {
             return currentAction.Duration;
@@ -97,11 +95,12 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
 
     private void Randomize()
     {
+        Debug.Log($"{settings.Count} {settings.Scale} {settings.Speed} {settings.Lifetime}");
         directionAngle = Random.Range(0.0f, 359.9f);
         arcAngle = Random.Range(1.0f, 180.0f);
-        projectileCount = Random.Range(1, 10);
-        projectileScale = Random.Range(0.25f, 1.0f);
-        projectileSpeed = Random.Range(2.0f / actionTime, 8.0f / actionTime);
-        projectileLifetime = Random.Range(actionTime / 2.0f, actionTime * 2.0f);
+        settings.SetCount(Random.Range(1, 10));
+        settings.SetScale(Random.Range(0.25f, 1.0f));
+        settings.SetSpeed(Random.Range(2.0f / actionTime, 8.0f / actionTime));
+        settings.SetLifetime(Random.Range(actionTime / 2.0f, actionTime * 2.0f));
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,14 +16,14 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected List<NPCBaseAction> actions;
     protected NPCBaseAction currentAction;
     protected float timeTillAction;
-    protected List<GameObject> spawnedProjectiles;
+    protected List<GameObject> projectiles;
 
     
 
     /// <summary>
     /// The max health of the NPC
     /// </summary>
-    public int MaxHealth { get; }
+    public int MaxHealth { get => maxHealth; }
 
     /// <summary>
     /// The NPC's current health
@@ -41,9 +42,9 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         {
             projectilePrefabs = new List<GameObject>();
         }
-        if (spawnedProjectiles == null)
+        if (projectiles == null)
         {
-            spawnedProjectiles = new List<GameObject>();
+            projectiles = new List<GameObject>();
         }
     }
 
@@ -87,7 +88,16 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         if (projectile.GetComponent<ProjectileBase>() != null)
         {
-            spawnedProjectiles.Remove(projectile);
+            projectiles.Remove(projectile);
         }
+    }
+
+    protected T ConvertActionTo<T>(NPCBaseAction action)
+    {
+        if (action is T && typeof(NPCBaseAction).IsAssignableFrom(typeof(T)))
+        {
+            return (T)Convert.ChangeType(action, typeof(T));
+        }
+        throw new TypeAccessException();
     }
 }

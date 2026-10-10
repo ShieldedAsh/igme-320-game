@@ -29,6 +29,6 @@ public class TargetDummyBehavior : NPCBaseBehavior
 
     protected override float Act()
     {
-        return 99.0f;
+        return 1.0f;
     }
 }
