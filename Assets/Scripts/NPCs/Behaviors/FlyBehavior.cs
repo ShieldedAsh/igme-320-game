@@ -19,7 +19,7 @@ public class FlyBehavior : NPCBaseBehavior
         currentAction = actions[0];
         if (currentAction is Move)
         {
-            StartCoroutine(((Move)currentAction).MoveTo(destination, currentAction.Duration));
+            StartCoroutine(((Move)currentAction).MoveTo(destination, EaseType.SmootherStep));
             destination = new Vector2(Random.Range(-9.0f, 9.0f), Random.Range(-5.0f, 5.0f));
         }
         return currentAction.Duration;
