@@ -11,29 +11,27 @@ public enum MovementEase {
 
 public class Move : NPCBaseAction
 {
-    Vector2 startLocation;
-    Vector2 currentEndLocation;
-
     public Move(Transform _parent) : this(_parent, 1.0f) {}
 
-    public Move(Transform _parent, float _actionDuration) : base(_parent, _actionDuration)
-    {
-    }
+    public Move(Transform _parent, float _actionDuration) : base(_parent, _actionDuration) {}
 
     public IEnumerator MoveTo(Vector2 destination, float moveTime)
     {
+        Vector2 startPos = parent.position;
+
         float elapsedTime = 0;
+        
         while (elapsedTime < moveTime)
         {
-            parent.position = Vector2.Lerp((Vector2)parent.position, destination, (elapsedTime / moveTime));
+            float t = (elapsedTime / moveTime);
+            parent.position = Vector2.Lerp(startPos, destination, t);
             elapsedTime += Time.deltaTime;
 
             // Yield here
             yield return null;
         }
-        // Make sure we got there
+
         parent.position = destination;
-        yield return null;
     }
 
     /*
