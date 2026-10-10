@@ -5,6 +5,6 @@ public class NewMonoBehaviourScript : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("Lobby");
+        SceneManager.LoadScene("LevelSelect");
     }
 }
