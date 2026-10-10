@@ -18,8 +18,6 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected float timeTillAction;
     protected List<GameObject> projectiles;
 
-    
-
     /// <summary>
     /// The max health of the NPC
     /// </summary>

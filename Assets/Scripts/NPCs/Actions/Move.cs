@@ -11,15 +11,26 @@ public enum EaseType {
 
 public class Move : NPCBaseAction
 {
-    public Move(Transform _parent) : this(_parent, 1.0f) {}
+    public Move(Transform _parent, float _actionDuration = 1.0f) : base(_parent, _actionDuration) {}
 
-    public Move(Transform _parent, float _actionDuration) : base(_parent, _actionDuration) {}
-
+    /// <summary>
+    /// A coroutine that moves the NPC to destination after actionDuration
+    /// </summary>
+    /// <param name="destination">The place to move to</param>
+    /// <param name="easeType">The type of easing to use while moving. Default is no easing</param>
+    /// <returns>A IEnumerator to run in StartCoroutine()</returns>
     public IEnumerator MoveTo(Vector2 destination, EaseType easeType = EaseType.None)
     {
         return MoveTo(destination, actionDuration, easeType);
     }
 
+    /// <summary>
+    /// A coroutine that moves the NPC to destination after moveTime
+    /// </summary>
+    /// <param name="destination">The place to move to</param>
+    /// <param name="moveTime">The time it takes to move to destination</param>
+    /// <param name="easeType">The type of easing to use while moving. Default is no easing</param>
+    /// <returns>A IEnumerator to run in StartCoroutine()</returns>
     public IEnumerator MoveTo(Vector2 destination, float moveTime, EaseType easeType = EaseType.None)
     {
         Vector2 startPos = parent.position;
@@ -27,6 +38,7 @@ public class Move : NPCBaseAction
         
         while (elapsedTime < moveTime)
         {
+            //Changes the easing type
             float t = (elapsedTime / moveTime);
             switch (easeType)
             {
@@ -34,7 +46,7 @@ public class Move : NPCBaseAction
                     break;
                 case EaseType.EaseOut:
                     t = Mathf.Sin(t * Mathf.PI * 0.5f);
-;                   break;
+                    break;
                 case EaseType.EaseIn:
                     t = 1.0f - Mathf.Cos(t * Mathf.PI * 0.5f);
                     break;

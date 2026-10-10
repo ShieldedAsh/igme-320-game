@@ -6,8 +6,7 @@ public class FireProjectiles : NPCBaseAction
 {
     GameObject projectilePrefab;
 
-    public FireProjectiles(GameObject _projectilePrefab, Transform _parent) : this(_projectilePrefab, _parent, 1.0f) {}
-    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, float _actionDuration) : base(_parent, _actionDuration) { projectilePrefab = _projectilePrefab; }
+    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, float _actionDuration = 1.0f) : base(_parent, _actionDuration) { projectilePrefab = _projectilePrefab; }
 
     #region Helper Functions
     /// <summary>
