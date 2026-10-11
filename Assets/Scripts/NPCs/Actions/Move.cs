@@ -36,6 +36,11 @@ public class Move : NPCBaseAction
         Vector2 startPos = parent.position;
         float elapsedTime = 0;
         
+        if (moveTime > actionDuration)
+        {
+            SetActionDuration(moveTime);
+        }
+
         while (elapsedTime < moveTime)
         {
             //Changes the easing type
@@ -66,6 +71,29 @@ public class Move : NPCBaseAction
         parent.position = destination;
     }
 
+    /// <summary>
+    /// Moves to the target position after a charge-up
+    /// </summary>
+    /// <param name="chargeUpTime">The amount of time to wait before charging</param>
+    /// <param name="target">The target to move to</param> 
+    /// <param name="easeType">The type of easing to use while moving. Default is Ease Out</param>
+    /// <returns>A IEnumerator to run in StartCoroutine()</returns>
+    public IEnumerator ChargeTo(float chargeUpTime, Vector2 target, EaseType easeType = EaseType.EaseOut)
+    {
+        if (chargeUpTime < 0)
+        {
+            chargeUpTime = 0.5f;
+        }
+        float moveTime = actionDuration - chargeUpTime;
+        if (moveTime <= 0)
+        {
+            moveTime = actionDuration;
+            SetActionDuration(actionDuration + chargeUpTime);
+        }
+        yield return new WaitForSeconds(chargeUpTime);
+        yield return MoveTo(target, moveTime, easeType);
+    }
+
     //Target has to be a gameObject so it can still know the location after the charge-up
     /// <summary>
     /// Charges into the target's position after a charge-up
@@ -77,34 +105,10 @@ public class Move : NPCBaseAction
     /// <returns>A IEnumerator to run in StartCoroutine()</returns>
     public IEnumerator ChargeInto(float chargeUpTime, GameObject target, float overshootDistance = 2.0f, EaseType easeType = EaseType.EaseOut)
     {
-        if (chargeUpTime <= 0)
-        {
-            chargeUpTime = 0.5f;
-        }
-        //Charge shouldn't be longer than it takes for the action to complete
-        float moveTime = actionDuration - chargeUpTime;
-        if (moveTime <= 0)
-        {
-            moveTime = actionDuration;
-            SetActionDuration(actionDuration + chargeUpTime);
-        }
-        for (int i = 0; i < 2; i++)
-        {
-            if (i == 0)
-            {
-                //Telegraph charge
-                Debug.Log("Charging Up!");
-                yield return new WaitForSeconds(chargeUpTime);
-            }
-            else
-            {
-                //Adds overshoot to the target's location
-                float angle = AngleMath.ToRadians(AngleMath.GetVectorDirection((Vector2)(target.transform.position - parent.transform.position)));
-                Vector2 destination = new Vector2(target.transform.position.x + (overshootDistance * Mathf.Cos(angle)), target.transform.position.y + (overshootDistance * Mathf.Sin(angle)));
-                
-                //Moves to the destination after waiting
-                yield return MoveTo(destination, moveTime, easeType);
-            }
-        }
+        yield return new WaitForSeconds(chargeUpTime);
+
+        float angle = AngleMath.ToRadians(AngleMath.GetVectorDirection((Vector2)(target.transform.position - parent.transform.position)));
+        Vector2 destination = new Vector2(target.transform.position.x + (overshootDistance * Mathf.Cos(angle)), target.transform.position.y + (overshootDistance * Mathf.Sin(angle)));
+        yield return ChargeTo(0.0f, destination, easeType);
     }
 }
