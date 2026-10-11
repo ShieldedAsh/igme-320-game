@@ -8,34 +8,6 @@ public class FireProjectiles : NPCBaseAction
 
     public FireProjectiles(GameObject _projectilePrefab, Transform _parent, float _actionDuration = 1.0f) : base(_parent, _actionDuration) { projectilePrefab = _projectilePrefab; }
 
-    #region Helper Functions
-    /// <summary>
-    /// Converts an angle in Degrees to Radians
-    /// </summary>
-    /// <param name="degrees">The angle to convert</param>
-    /// <returns>The angle in radians bounded to (0,2pi) </returns>
-    private float ToRadians(float degrees)
-    {
-        return (degrees * ((float)Math.PI / 180.0f));
-    }
-
-    /// <summary>
-    /// Gets the angle of a vector
-    /// </summary>
-    /// <param name="direction">The vector to get the angle of</param>
-    /// <returns>The angle of the vector in degrees</returns>
-    private float GetVectorDirection(Vector2 direction)
-    {
-        float angle = Vector2.Angle(Vector2.right, direction.normalized);
-        Vector3 cross = Vector3.Cross(Vector2.right, direction.normalized);
-        if (cross.z < 0)
-        {
-            angle = 360 - angle;
-        }
-        return angle;
-    }
-    #endregion
-
     #region Emit Projectile
     /// <summary>
     /// Fires one projectile
@@ -106,7 +78,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCircle(ProjectileSettings settings, Vector2 directionOffset)
     {
-        return EmitCircle(settings.Count, settings.Scale, settings.Speed, settings.Lifetime, GetVectorDirection(directionOffset));
+        return EmitCircle(settings.Count, settings.Scale, settings.Speed, settings.Lifetime, AngleMath.GetVectorDirection(directionOffset));
     }
 
     /// <summary>
@@ -149,7 +121,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCircle(int count, float scale, float speed, float lifetime, Vector2 directionOffset)
     {
-        return EmitCircle(count, scale, speed, lifetime, GetVectorDirection(directionOffset));
+        return EmitCircle(count, scale, speed, lifetime, AngleMath.GetVectorDirection(directionOffset));
     }
     #endregion
 
@@ -308,7 +280,7 @@ public class FireProjectiles : NPCBaseAction
             projectileList.Add(CreateProjectile(scale, speed, lifetime, direction));
             return projectileList;
         }
-        return CreateProjectileArc(projectileList, arcAngle, count, scale, speed, lifetime, GetVectorDirection(direction));
+        return CreateProjectileArc(projectileList, arcAngle, count, scale, speed, lifetime, AngleMath.GetVectorDirection(direction));
     }
 
     /// <summary>
@@ -326,7 +298,7 @@ public class FireProjectiles : NPCBaseAction
         ProjectileBase projScript = projectile.GetComponent<ProjectileBase>();
         if (projScript != null)
         {
-            projScript.setDirection(new Vector3((float)Math.Cos(ToRadians(directionAngle)), (float)Math.Sin(ToRadians(directionAngle)), 0));
+            projScript.setDirection(new Vector3((float)Math.Cos(AngleMath.ToRadians(directionAngle)), (float)Math.Sin(AngleMath.ToRadians(directionAngle)), 0));
             projScript.setSpeed(speed);
             projScript.setLifetime(lifetime);
         }
@@ -343,7 +315,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>The instantiated projectile</returns>
     private GameObject CreateProjectile(float scale, float speed, float lifetime, Vector2 direction)
     {
-        return CreateProjectile(scale, speed, lifetime, GetVectorDirection(direction));
+        return CreateProjectile(scale, speed, lifetime, AngleMath.GetVectorDirection(direction));
     }
     #endregion
 }

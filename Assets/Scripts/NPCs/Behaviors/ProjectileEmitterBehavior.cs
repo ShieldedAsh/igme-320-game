@@ -8,6 +8,9 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
 
     [SerializeField, Min(0.1f)]
     float actionTime;
+    [SerializeField]
+    bool mentionAction;
+
     float directionAngle;
     
     float arcAngle;
@@ -40,35 +43,43 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
             switch (Random.Range(0, 8))
             {
                 case 0:
-                    Debug.Log("Direction Projectile");
+                    if (mentionAction)
+                        Debug.Log("Direction Projectile");
                     projectiles.Add(fp.EmitProjectile(settings, direction));
                     break;
                 case 1:
-                    Debug.Log($"{directionAngle} degree Projectile");
+                    if (mentionAction)
+                        Debug.Log($"{directionAngle} degree Projectile");
                     projectiles.Add(fp.EmitProjectile(settings, directionAngle));
                     break;
                 case 2:
-                    Debug.Log("Direction Circle - " + settings.Count);
+                    if (mentionAction)
+                        Debug.Log("Direction Circle - " + settings.Count);
                     newProjectiles = fp.EmitCircle(settings, direction);
                     break;
                 case 3:
-                    Debug.Log($"{directionAngle} degree Circle - " + settings.Count);
+                    if (mentionAction)
+                        Debug.Log($"{directionAngle} degree Circle - " + settings.Count);
                     newProjectiles = fp.EmitCircle(settings, directionAngle);
                     break;
                 case 4:
-                    Debug.Log("Direction Cross");
+                    if (mentionAction)
+                        Debug.Log("Direction Cross");
                     newProjectiles = fp.EmitCross(settings, direction);
                     break;
                 case 5:
-                    Debug.Log($"{directionAngle} degree Cross");
+                    if (mentionAction)
+                        Debug.Log($"{directionAngle} degree Cross");
                     newProjectiles = fp.EmitCross(settings, directionAngle);
                     break;
                 case 6:
-                    Debug.Log("Direction Arc - " + settings.Count);
+                    if (mentionAction)
+                        Debug.Log("Direction Arc - " + settings.Count);
                     newProjectiles = fp.EmitArc(arcAngle, settings, direction);
                     break;
                 case 7:
-                    Debug.Log($"{directionAngle} degree Arc - " + settings.Count);
+                    if (mentionAction)
+                        Debug.Log($"{directionAngle} degree Arc - " + settings.Count);
                     newProjectiles = fp.EmitArc(arcAngle, settings, directionAngle);
                     break;
             }
@@ -95,7 +106,6 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
 
     private void Randomize()
     {
-        Debug.Log($"{settings.Count} {settings.Scale} {settings.Speed} {settings.Lifetime}");
         directionAngle = Random.Range(0.0f, 359.9f);
         arcAngle = Random.Range(1.0f, 180.0f);
         settings.SetCount(Random.Range(1, 10));
