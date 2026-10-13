@@ -10,7 +10,7 @@ public static class AngleMath
     /// <returns>The angle in degrees</returns>
     public static float ToDegrees(float radians)
     {
-        return (radians * (180.0f / (float)Math.PI));
+        return radians * Mathf.Rad2Deg;
     }
 
     /// <summary>
@@ -20,7 +20,7 @@ public static class AngleMath
     /// <returns>The angle in radians</returns>
     public static float ToRadians(float degrees)
     {
-        return (degrees * ((float)Math.PI / 180.0f));
+        return degrees * Mathf.Deg2Rad;
     }
 
     /// <summary>
