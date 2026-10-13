@@ -3,7 +3,7 @@ using UnityEngine;
 public class TargetDummyBehavior : BaseBehavior
 {
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    /*protected override void OnCollisionEnter2D(Collision2D collision)
     {
         // Placeholder tag "WeaponHitBox" is used for weapon detection
         // Replace when actual weapon hit boxes are added
@@ -11,6 +11,21 @@ public class TargetDummyBehavior : BaseBehavior
         {
             // Damage should be read from the collider
             TakeDamage(1);
+        }
+    }
+    */
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("WeaponHitBox"))
+        {
+            PlayerAttack playerAttack =
+                collision.GetComponentInParent<PlayerAttack>();
+
+            if (playerAttack != null)
+            {
+                TakeDamage(playerAttack.damage);
+            }
         }
     }
 
