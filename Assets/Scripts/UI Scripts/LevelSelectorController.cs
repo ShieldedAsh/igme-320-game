@@ -37,7 +37,7 @@ public class LevelSelectorController : MonoBehaviour
         if (string.IsNullOrWhiteSpace(path) ||
             !Application.CanStreamedLevelBeLoaded(path))
         {
-            Debug.LogError("this path is null£º" + path);
+            Debug.LogError("this path is null " + path);
             return;
         }
 
