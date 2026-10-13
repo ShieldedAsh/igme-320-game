@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public abstract class NPCBaseBehavior : MonoBehaviour
 {
+    //GetComponent<PlayerAttack>().damage;
+
     [SerializeField]
     protected Animator animator;
     [SerializeField]
