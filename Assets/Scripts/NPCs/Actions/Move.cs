@@ -45,23 +45,7 @@ public class Move : NPCBaseAction
         {
             //Changes the easing type
             float t = (elapsedTime / moveTime);
-            switch (easeType)
-            {
-                case EaseType.None:
-                    break;
-                case EaseType.EaseOut:
-                    t = Mathf.Sin(t * Mathf.PI * 0.5f);
-                    break;
-                case EaseType.EaseIn:
-                    t = 1.0f - Mathf.Cos(t * Mathf.PI * 0.5f);
-                    break;
-                case EaseType.SmoothStep:
-                    t = t * t * (3.0f - 2.0f * t);
-                    break;
-                case EaseType.SmootherStep:
-                    t = t * t * t * (t * (6.0f * t - 15.0f) + 10.0f);
-                    break;
-            }
+            t = AddEase(t, easeType);
             
             parent.position = Vector2.Lerp(startPos, destination, t);
             elapsedTime += Time.deltaTime;
@@ -111,4 +95,68 @@ public class Move : NPCBaseAction
         Vector2 destination = new Vector2(target.transform.position.x + (overshootDistance * Mathf.Cos(angle)), target.transform.position.y + (overshootDistance * Mathf.Sin(angle)));
         yield return ChargeTo(0.0f, destination, easeType);
     }
+
+    //untested
+    // Recomending EaseOut for jumping upwards, EaseIn/SmoothStep for jumping down
+    private IEnumerator JumpTo(Vector2 end, float moveTime, EaseType easeType = EaseType.EaseOut) {
+        //Not actual height, will see if I can make that work
+        float height = 1;
+
+
+        // look into always starting at 0,0 and having end be relative to start, then transforming to original positions
+        Vector2 start = parent.transform.position;
+        float xDist = end.x - start.x;
+        float midY = Mathf.Max(start.y, end.y) + height;
+        float a = 2 * (start.y + end.y - 2 * midY);
+        float b = -(start.x * (start.y + 3 * end.y) + end.x * (end.y + 3 * start.y) - 4 * midY * (end.x + start.y));
+        float c = -(start.x * (start.x * (start.y - end.y) - end.x * (3 * start.y + end.y - 4 * midY)));
+
+        float elapsedTime = 0;
+        if (moveTime > actionDuration) 
+        {
+            SetActionDuration(moveTime);
+        }
+
+        while (elapsedTime < moveTime) 
+        {
+            float t = (elapsedTime / moveTime)
+            t = AddEase(t, easeType);
+            float x = t * xDist + start.x;
+
+            // y = ax^2 + bx + c
+            float y = ((x * x) * (a / (xDist * xDist))) + ((x) * (b / (xDist * xDist))) + ((c / (xDist * xDist)) + start.y); 
+            parent.position = new Vector2(x, y);
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+        parent.position = destination;
+    }
+
+    private float AddEase(float t, EaseType easeType) 
+    {
+        switch (easeType)
+            {
+                case EaseType.None:
+                    break;
+                case EaseType.EaseOut:
+                    t = Mathf.Sin(t * Mathf.PI * 0.5f);
+                    break;
+                case EaseType.EaseIn:
+                    t = 1.0f - Mathf.Cos(t * Mathf.PI * 0.5f);
+                    break;
+                case EaseType.SmoothStep:
+                    t = t * t * (3.0f - 2.0f * t);
+                    break;
+                case EaseType.SmootherStep:
+                    t = t * t * t * (t * (6.0f * t - 15.0f) + 10.0f);
+                    break;
+            }
+        return t;
+    }
 }
+
+/*
+*
+*
+/
