@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PauseMenuController : MonoBehaviour
 {
@@ -14,7 +15,15 @@ public class PauseMenuController : MonoBehaviour
         SetPaused(false);
     }
 
-   
+    private void Update()
+    {
+        if (Keyboard.current != null &&
+            Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            SetPaused(!isPaused);
+        }
+    }
+
     public void PauseGame() //pause game method for pause button
     {
         SetPaused(true);
