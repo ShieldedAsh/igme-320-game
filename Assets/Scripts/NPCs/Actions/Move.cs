@@ -119,7 +119,7 @@ public class Move : NPCBaseAction
 
         while (elapsedTime < moveTime) 
         {
-            float t = (elapsedTime / moveTime)
+            float t = (elapsedTime / moveTime);
             t = AddEase(t, easeType);
             float x = t * xDist + start.x;
 
@@ -130,7 +130,7 @@ public class Move : NPCBaseAction
 
             yield return null;
         }
-        parent.position = destination;
+        parent.position = end;
     }
 
     private float AddEase(float t, EaseType easeType) 
@@ -155,8 +155,3 @@ public class Move : NPCBaseAction
         return t;
     }
 }
-
-/*
-*
-*
-/
