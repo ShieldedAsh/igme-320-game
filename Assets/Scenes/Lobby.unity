@@ -354,6 +354,7 @@ MonoBehaviour:
   attackHitbox: {fileID: 8153167537513750294, guid: c61ae573e1caa3f44ab78a283fcc4cb6, type: 3}
   attackDuration: 0.15
   attackOffset: 0.75
+  damage: 2
 --- !u!1 &1683119556
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +545,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5621033486213496804, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

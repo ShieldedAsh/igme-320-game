@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private GameObject attackHitbox;
     [SerializeField] private float attackDuration = 0.15f;
     [SerializeField] private float attackOffset = 0.75f;
+    [SerializeField] public int damage = 2;
 
     void Start()
     {
@@ -49,6 +50,8 @@ public class PlayerAttack : MonoBehaviour
         );
 
         hitbox.transform.SetParent(transform);
+
+       
 
         Destroy(hitbox, attackDuration);
     }

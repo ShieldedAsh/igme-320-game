@@ -17,11 +17,15 @@ public class TargetDummyBehavior : BaseBehavior
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-      
-        if (collision.gameObject.tag == "WeaponHitBox")
+        if (collision.gameObject.CompareTag("WeaponHitBox"))
         {
-            // Damage should be read from the collider
-            TakeDamage(1);
+            PlayerAttack playerAttack =
+                collision.GetComponentInParent<PlayerAttack>();
+
+            if (playerAttack != null)
+            {
+                TakeDamage(playerAttack.damage);
+            }
         }
     }
 
