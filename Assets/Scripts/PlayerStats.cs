@@ -19,7 +19,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (playerHealth <= 0)
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         if (justHit && lastHitTimer > 0.0f)
@@ -36,13 +36,14 @@ public class PlayerStats : MonoBehaviour
 
     }
 
-    void OnCollisionStay2D(Collision2D col)
+    void OnTriggerStay2D(Collider2D col)
     {
-         if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "EnemyProjectile") && !justHit)
-         {
-             playerHealth--;
-             Debug.Log(playerHealth);
-             justHit = true;
-         }
+        if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "EnemyProjectile") && !justHit)
+        {
+            //call projectile base class if it is a projectile and tell it to Destroy itself after the instance of damage occurs
+            playerHealth--;
+            Debug.Log(playerHealth);
+            justHit = true;
+        }
     }
 }

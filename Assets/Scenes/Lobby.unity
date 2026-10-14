@@ -352,6 +352,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1666118586714938080, guid: a50f101c5a9db954a8f868540cb41178, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6832532744921517512, guid: a50f101c5a9db954a8f868540cb41178, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.7150254
@@ -908,6 +912,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6583743389979668093, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -5621033486213496804, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
     m_RemovedGameObjects: []
@@ -1106,6 +1114,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1666118586714938080, guid: a50f101c5a9db954a8f868540cb41178, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6832532744921517512, guid: a50f101c5a9db954a8f868540cb41178, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.6062176
@@ -1151,63 +1163,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a50f101c5a9db954a8f868540cb41178, type: 3}
---- !u!1001 &1791354615488368815
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1693227090606536959, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_Name
-      value: LevelSelector
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.20907
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.93199
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9130584294507445970, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7978853d5b71ff2afb293928256d58db, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1221,4 +1176,3 @@ SceneRoots:
   - {fileID: 40094954}
   - {fileID: 1130957769}
   - {fileID: 1708857036}
-  - {fileID: 1791354615488368815}
