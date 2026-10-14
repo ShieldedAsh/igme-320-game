@@ -71,12 +71,10 @@ public class MeleeAttack : NPCBaseAction
         GameObject hitbox = Object.Instantiate(hitboxPrefab, parent);
         hitbox.gameObject.transform.position = location;
         hitbox.gameObject.transform.localScale = scale;
-        ProjectileBase projScript = hitbox.GetComponent<ProjectileBase>();
-        if (projScript != null)
+        MeleeBase meleeScript = hitbox.GetComponent<MeleeBase>();
+        if (meleeScript != null)
         {
-            projScript.SetDirection(Vector2.zero);
-            projScript.SetSpeed(0.0f);
-            projScript.SetLifetime(lifetime);
+            meleeScript.SetLifetime(lifetime);
         }
         return hitbox;
     }

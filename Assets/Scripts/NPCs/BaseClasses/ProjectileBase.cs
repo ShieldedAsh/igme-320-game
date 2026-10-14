@@ -42,7 +42,12 @@ public class ProjectileBase : MonoBehaviour
             {
                 parentBehavior.RemoveProjectile(this.gameObject);
             }
-            Destroy(this.gameObject);
+            DestroySelf();
         }
+    }
+
+    public void DestroySelf()
+    {
+        Destroy(this.gameObject);
     }
 }
