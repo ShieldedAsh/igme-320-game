@@ -5,6 +5,8 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
     private int playerHealth = 3;
+    private float lastHitTimer = 1.0f;
+    private bool justHit = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,14 +21,28 @@ public class PlayerStats : MonoBehaviour
         {
             SceneManager.LoadScene("Lobby");
         }
+
+        if (justHit && lastHitTimer > 0.0f)
+        {
+            lastHitTimer -= Time.deltaTime;
+            // Debug.Log($"Timer: {lastHitTimer}");
+        }
+
+        if (lastHitTimer <= 0.0f)
+        {
+            justHit = false;
+            lastHitTimer = 1.0f;
+        }
+
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnCollisionStay2D(Collision2D col)
     {
-         if (col.gameObject.tag == "Enemy" || col.gameObject.tag == "EnemyProjectile")
+         if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "EnemyProjectile") && !justHit)
          {
              playerHealth--;
              Debug.Log(playerHealth);
+             justHit = true;
          }
     }
 }
