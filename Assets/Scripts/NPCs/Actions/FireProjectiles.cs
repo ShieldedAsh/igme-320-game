@@ -2,11 +2,23 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * To Do:
+ * Emit X-Sequence (spawn delay between projectiles)
+ */
+
 public class FireProjectiles : NPCBaseAction
 {
     GameObject projectilePrefab;
 
+    public GameObject ProjectilePrefab { get => projectilePrefab; }
+
     public FireProjectiles(GameObject _projectilePrefab, Transform _parent, float _actionDuration = 1.0f) : base(_parent, _actionDuration) { projectilePrefab = _projectilePrefab; }
+
+    public void SetProjectile(GameObject projectile)
+    {
+        projectilePrefab = projectile;
+    }
 
     #region Emit Projectile
     /// <summary>
@@ -298,9 +310,9 @@ public class FireProjectiles : NPCBaseAction
         ProjectileBase projScript = projectile.GetComponent<ProjectileBase>();
         if (projScript != null)
         {
-            projScript.setDirection(new Vector3((float)Math.Cos(AngleMath.ToRadians(directionAngle)), (float)Math.Sin(AngleMath.ToRadians(directionAngle)), 0));
-            projScript.setSpeed(speed);
-            projScript.setLifetime(lifetime);
+            projScript.SetDirection(new Vector3((float)Math.Cos(AngleMath.ToRadians(directionAngle)), (float)Math.Sin(AngleMath.ToRadians(directionAngle)), 0));
+            projScript.SetSpeed(speed);
+            projScript.SetLifetime(lifetime);
         }
         return projectile;
     }

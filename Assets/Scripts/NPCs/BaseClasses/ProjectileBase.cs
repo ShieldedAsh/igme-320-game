@@ -1,10 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class ProjectileBase : MonoBehaviour
 {
-    [SerializeField]
-    bool isPowerful = false;
     Vector2 movementDirection;
     float speed;
     float totalLifetime;
@@ -15,17 +13,17 @@ public class ProjectileBase : MonoBehaviour
     public float TotalLifetime { get => totalLifetime; }
     public float CurrentLifetime { get => currentLifetime; }
 
-    public void setDirection(Vector2 _direction)
+    public void SetDirection(Vector2 _direction)
     {
         movementDirection = _direction.normalized;
     }
 
-    public void setSpeed(float _speed)
+    public void SetSpeed(float _speed)
     {
         speed = _speed;
     }
 
-    public void setLifetime(float _lifeTime)
+    public void SetLifetime(float _lifeTime)
     {
         totalLifetime = _lifeTime;
     }
@@ -33,30 +31,18 @@ public class ProjectileBase : MonoBehaviour
     void FixedUpdate()
     {
         currentLifetime += Time.fixedDeltaTime;
-        this.transform.position += (Vector3)(movementDirection * speed * Time.fixedDeltaTime);
+        if (movementDirection != Vector2.zero && speed != 0)
+        {
+            this.transform.position += (Vector3)(movementDirection * speed * Time.fixedDeltaTime);
+        }
         if (currentLifetime >= totalLifetime)
         {
-            NPCBaseBehavior parentBehavior = null;
+            NPCBaseBehavior parentBehavior;
             if ((parentBehavior = this.transform.parent.GetComponent<NPCBaseBehavior>()) != null)
             {
                 parentBehavior.RemoveProjectile(this.gameObject);
             }
             Destroy(this.gameObject);
-        }
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (true)
-        {
-            if (isPowerful)
-            {
-                //damage 2
-            }
-            else
-            {
-                //damage 1
-            }
         }
     }
 }
