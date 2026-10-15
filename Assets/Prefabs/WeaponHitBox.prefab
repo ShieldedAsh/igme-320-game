@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6613524813898109222}
   - component: {fileID: 7111096441094994853}
   - component: {fileID: -4651293437280823480}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WeaponHitBox
   m_TagString: WeaponHitBox
   m_Icon: {fileID: 0}
