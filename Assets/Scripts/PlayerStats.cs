@@ -1,17 +1,43 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(PlayerAugments))]
 public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
-    private int playerHealth = 3;
+    private int baseMaxHealth = 3;
+    private int currentMax;
+    private int playerHealth;
+    
     private float lastHitTimer = 1.0f;
     private bool justHit = false;
 
+    private PlayerAugments augments;
+    private int MaxHealth => augments.stats.MaxHealth .ApplyInt(baseMaxHealth);
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        augments = GetComponent<PlayerAugments>();
+        currentMax = MaxHealth;
+        playerHealth = currentMax;
+        augments.Changed += OnAugmentsChanged;
+    }
 
+    void OnDestroy()
+    {
+        if (augments != null)
+        {
+            augments.Changed -= OnAugmentsChanged;
+        }
+    }
+
+    private void OnAugmentsChanged()
+    {
+        int newMax = MaxHealth;
+
+        playerHealth = Mathf.Max(1, Mathf.Min(playerHealth + newMax - currentMax, newMax));
+        currentMax = newMax;
     }
 
     // Update is called once per frame

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerAugments))]
 public class PlayerMovement : MonoBehaviour
 {
     //component refs
@@ -28,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jetpackCooldown = 3f;
     [SerializeField] private float jetpackForce = 10f;
 
+    //augments
+    private PlayerAugments augments;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         jetpackAction = InputSystem.actions.FindAction("Jetpack");
+
+        augments = GetComponent<PlayerAugments>();
     }
 
     void Update()
@@ -54,8 +60,10 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        float currentSpeed = augments.stats.MoveSpeed.Apply(speed);
         //movement in x dir
-        rb.linearVelocity = new Vector2(moveX * speed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(moveX * currentSpeed, rb.linearVelocity.y);
 
         if (jumpPressed)
         {

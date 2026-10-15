@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerAugments))]
 public class PlayerAttack : MonoBehaviour
 {
     private InputAction attackAction;
@@ -10,9 +11,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackOffset = 0.75f;
     [SerializeField] public int damage = 2;
 
+    private PlayerAugments augments;
+    
     void Start()
     {
         attackAction = InputSystem.actions.FindAction("Attack");
+        augments = GetComponent<PlayerAugments>();
     }
 
     void Update()
