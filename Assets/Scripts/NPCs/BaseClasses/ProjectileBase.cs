@@ -7,6 +7,7 @@ public class ProjectileBase : MonoBehaviour
     float speed;
     float totalLifetime;
     float currentLifetime;
+    Transform parent;
 
     public Vector2 MovementDirection { get => movementDirection; }
     public float Speed { get => speed; }
@@ -28,6 +29,11 @@ public class ProjectileBase : MonoBehaviour
         totalLifetime = _lifeTime;
     }
 
+    public void SetParent(Transform _parent)
+    {
+        parent = _parent;
+    }
+
     void FixedUpdate()
     {
         currentLifetime += Time.fixedDeltaTime;
@@ -38,7 +44,7 @@ public class ProjectileBase : MonoBehaviour
         if (currentLifetime >= totalLifetime)
         {
             NPCBaseBehavior parentBehavior;
-            if ((parentBehavior = this.transform.parent.GetComponent<NPCBaseBehavior>()) != null)
+            if ((parentBehavior = parent.GetComponent<NPCBaseBehavior>()) != null)
             {
                 parentBehavior.RemoveProjectile(this.gameObject);
             }

@@ -11,6 +11,8 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected Animator animator;
     [SerializeField]
     protected List<GameObject> projectilePrefabs;
+    [SerializeField]
+    protected List<GameObject> meleeHitboxPrefabs;
     [SerializeField, Min(1)]
     protected int maxHealth;
 
@@ -33,7 +35,9 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     // Set as virtual in case child needs to add to Start()
     protected virtual void Start()
     {
+        Debug.Log("base start called");
         currentHealth = maxHealth;
+        timeTillAction = 0;
         if (actions == null)
         {
             actions = new List<NPCBaseAction>();
@@ -76,7 +80,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
 
     protected bool CanAct()
     {
-        if (timeTillAction <= 0 && actions.Count > 0)
+        if (actions != null && timeTillAction <= 0 && actions.Count > 0)
         {
             return true;
         }
