@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6060485148817454813}
   m_Layer: 0
   m_Name: Fireball
-  m_TagString: Untagged
+  m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,7 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13683450257f47d429c661780dd951b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileBase
-  movementDirection: {x: 0, y: 0}
 --- !u!95 &6060485148817454813
 Animator:
   serializedVersion: 7
