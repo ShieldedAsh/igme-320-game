@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public abstract class NPCBaseBehavior : MonoBehaviour
 {
-    //GetComponent<PlayerAttack>().damage;
-
     [SerializeField]
     protected Animator animator;
     [SerializeField]
@@ -16,6 +14,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     [SerializeField, Min(1)]
     protected int maxHealth;
 
+    [SerializeField]
     protected int currentHealth;
     protected List<NPCBaseAction> actions;
     protected NPCBaseAction currentAction;

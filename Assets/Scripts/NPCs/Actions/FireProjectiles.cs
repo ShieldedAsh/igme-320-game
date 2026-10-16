@@ -198,7 +198,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitArc(float arcAngle, ProjectileSettings settings, float fireAngle = 0.0f)
     {
-        return CreateProjectileArc(new List<GameObject>(), arcAngle, settings.Count, settings.Scale, settings.Speed, settings.Lifetime, fireAngle);
+        return CreateProjectileArc(new List<GameObject>(), arcAngle, settings.Count, settings.Scale, settings.Speed, settings.Lifetime, fireAngle, settings.SpawnLocation);
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitArc(float arcAngle, ProjectileSettings settings, Vector2 direction)
     {
-        return CreateProjectileArc(new List<GameObject>(), arcAngle, settings.Count, settings.Scale, settings.Speed, settings.Lifetime, direction);
+        return CreateProjectileArc(new List<GameObject>(), arcAngle, settings.Count, settings.Scale, settings.Speed, settings.Lifetime, direction, settings.SpawnLocation);
     }
 
     /// <summary>
@@ -223,9 +223,9 @@ public class FireProjectiles : NPCBaseAction
     /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
     /// <param name="fireAngle">The angle to fire towards in degrees</param>
     /// <returns>A list of the instantiated projectiles</returns>
-    public List<GameObject> EmitArc(float arcAngle, int count, float scale, float speed, float lifetime, float fireAngle = 0.0f)
+    public List<GameObject> EmitArc(float arcAngle, int count, float scale, float speed, float lifetime, float fireAngle = 0.0f, Transform spawnLocation = null)
     {
-        return CreateProjectileArc(new List<GameObject>(), arcAngle, count, scale, speed, lifetime, fireAngle);
+        return CreateProjectileArc(new List<GameObject>(), arcAngle, count, scale, speed, lifetime, fireAngle, spawnLocation);
     }
 
     /// <summary>
@@ -238,9 +238,9 @@ public class FireProjectiles : NPCBaseAction
     /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
     /// <param name="direction">The direction to fire towards</param>
     /// <returns>A list of the instantiated projectiles</returns>
-    public List<GameObject> EmitArc(float arcAngle, int count, float scale, float speed, float lifetime, Vector2 direction)
+    public List<GameObject> EmitArc(float arcAngle, int count, float scale, float speed, float lifetime, Vector2 direction, Transform spawnLocation = null)
     {
-        return CreateProjectileArc(new List<GameObject>(), arcAngle, count, scale, speed, lifetime, direction);
+        return CreateProjectileArc(new List<GameObject>(), arcAngle, count, scale, speed, lifetime, direction, spawnLocation);
     }
     #endregion
 
@@ -256,11 +256,11 @@ public class FireProjectiles : NPCBaseAction
     /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
     /// <param name="fireAngle">The angle to fire towards in degrees</param>
     /// <returns>A list of instantiated projectiles</returns>
-    private List<GameObject> CreateProjectileArc(List<GameObject> projectileList, float arcAngle, int count, float scale, float speed, float lifetime, float fireAngle = 0.0f)
+    private List<GameObject> CreateProjectileArc(List<GameObject> projectileList, float arcAngle, int count, float scale, float speed, float lifetime, float fireAngle = 0.0f, Transform spawnLocation = null)
     {
         if (count <= 1)
         {
-            projectileList.Add(CreateProjectile(scale, speed, lifetime, fireAngle));
+            projectileList.Add(CreateProjectile(scale, speed, lifetime, fireAngle, spawnLocation));
             return projectileList;
         }
         float deltaAngle = arcAngle / (count - 1.0f);
@@ -268,7 +268,7 @@ public class FireProjectiles : NPCBaseAction
         float currentAngle = startAngle;
         for (int i = 1; i <= count; i++)
         {
-            projectileList.Add(CreateProjectile(scale, speed, lifetime, currentAngle));
+            projectileList.Add(CreateProjectile(scale, speed, lifetime, currentAngle, spawnLocation));
             currentAngle += deltaAngle;
         }
         return projectileList;
@@ -285,14 +285,14 @@ public class FireProjectiles : NPCBaseAction
     /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
     /// <param name="direction">The direction to fire towards</param>
     /// <returns>A list of instantiated projectiles</returns>
-    private List<GameObject> CreateProjectileArc(List<GameObject> projectileList, float arcAngle, int count, float scale, float speed, float lifetime, Vector2 direction)
+    private List<GameObject> CreateProjectileArc(List<GameObject> projectileList, float arcAngle, int count, float scale, float speed, float lifetime, Vector2 direction, Transform spawnLocation = null)
     {
         if (count <= 1)
         {
-            projectileList.Add(CreateProjectile(scale, speed, lifetime, direction));
+            projectileList.Add(CreateProjectile(scale, speed, lifetime, direction, spawnLocation));
             return projectileList;
         }
-        return CreateProjectileArc(projectileList, arcAngle, count, scale, speed, lifetime, AngleMath.GetVectorDirection(direction));
+        return CreateProjectileArc(projectileList, arcAngle, count, scale, speed, lifetime, AngleMath.GetVectorDirection(direction), spawnLocation);
     }
 
     /// <summary>
@@ -310,6 +310,7 @@ public class FireProjectiles : NPCBaseAction
         {
             projectile.gameObject.transform.position = spawnLocation.position;
         }
+        projectile.gameObject.transform.rotation = Quaternion.Euler(0, 180.0f, -directionAngle);
         projectile.gameObject.transform.localScale = Vector3.one * scale;
         ProjectileBase projScript = projectile.GetComponent<ProjectileBase>();
         if (projScript != null)

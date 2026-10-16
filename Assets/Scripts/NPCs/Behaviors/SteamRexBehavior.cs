@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class SteamRexBehavior : NPCBaseBehavior
     Vector2 currentLocationTarget;
     ProjectileSettings projSettings;
     MeleeSettings meleeSettings;
+    [SerializeField]
+    Sprite[] phaseStartSprites;
 
     protected override void Start()
     {
@@ -29,22 +32,35 @@ public class SteamRexBehavior : NPCBaseBehavior
         state = SteamRexState.Spawn;
         hasUsedMelee = false;
         sr = this.gameObject.GetComponent<SpriteRenderer>();
+        sr.sprite = phaseStartSprites[0];
         actions.Add(new Move(this.transform, 2.0f));
         currentAction = actions[0];
-        arenaMarks = new Vector2[3];
-        arenaMarks[0] = new Vector2(-7.35f, -4.0f); //left
-        arenaMarks[1] = new Vector2(7.35f, -4.0f); //right
-        arenaMarks[2] = new Vector2(0.0f, -4.0f); //center floor
+        GameObject markers;
+        if ((markers = GameObject.Find("RoomMarkers")) != null)
+        {
+            arenaMarks = new Vector2[markers.transform.childCount];
+            for (int i = 0; i < markers.transform.childCount; i++)
+            {
+                arenaMarks[i] = markers.transform.GetChild(i).transform.position;
+            }
+        }
+        else
+        {
+            arenaMarks = new Vector2[3];
+            arenaMarks[0] = new Vector2(-7.35f, -4.0f); //left
+            arenaMarks[1] = new Vector2(7.35f, -4.0f); //right
+            arenaMarks[2] = new Vector2(0.0f, -4.0f); //center floor
+        }
         currentLocationTarget = arenaMarks[0];
         if (meleeHitboxPrefabs.Count > 0)
         {
             actions.Add(new MeleeAttack(meleeHitboxPrefabs[0], this.transform));
-            meleeSettings = new MeleeSettings(1.0f);
+            meleeSettings = new MeleeSettings(0.33f, new Vector2(0.6f, 0.6f));
         }
         if (projectilePrefabs.Count > 0)
         {
             actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform));
-            projSettings = new ProjectileSettings(1, 1.0f, 3.0f, 5.0f);
+            projSettings = new ProjectileSettings(1, 2.5f, 5.0f, 4.0f);
             if (this.transform.childCount > 0)
             {
                 projSettings.SetSpawnLocation(this.transform.GetChild(0));
@@ -72,16 +88,16 @@ public class SteamRexBehavior : NPCBaseBehavior
         {
             case SteamRexState.Spawn:
                 currentAction = actions[0];
-                currentAction.SetActionDuration(0.5f);
+                currentAction.SetActionDuration(1.5f);
                 state = SteamRexState.Phase1;
+                animator.SetInteger("Phase", 1);
                 break;
             case SteamRexState.Phase1:
-                currentAction.SetActionDuration(1.0f);
-                //double check range here (Melee Attack)
-                if (player != null && (player.transform.position - this.transform.position).magnitude <= 0.5f && !hasUsedMelee)
+                if (player != null && (player.transform.position - this.transform.position).magnitude <= 2.0f && !hasUsedMelee)
                 {
+                    currentAction.SetActionDuration(1.25f);
                     hasUsedMelee = true;
-                    currentLocationTarget = player.transform.position;
+                    currentLocationTarget = (Vector2)this.transform.position + new Vector2(-0.35f, 0.35f);
                     animator.SetTrigger("StartMelee");
                 }
                 else
@@ -89,16 +105,29 @@ public class SteamRexBehavior : NPCBaseBehavior
                     hasUsedMelee = false;
                     if (currentCycleIndex == 0)
                     {
+                        currentAction.SetActionDuration(2.25f);
                         Phase1Charge();
                         currentCycleIndex++;
                     }
                     else if (currentCycleIndex == 1)
                     {
-                        animator.SetTrigger("StartFire");    
+                        currentAction.SetActionDuration(0.5f);
                         currentCycleIndex++;
                     }
                     else if (currentCycleIndex == 2)
                     {
+                        currentAction.SetActionDuration(1.25f);
+                        animator.SetTrigger("StartFire");    
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 3)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 4)
+                    {
+                        currentAction.SetActionDuration(1.75f);
                         animator.SetTrigger("StartJump");
                         currentCycleIndex = 0;
                     }
@@ -106,18 +135,141 @@ public class SteamRexBehavior : NPCBaseBehavior
                 if (currentHealth <= maxHealth * 0.65f)
                 {
                     state = SteamRexState.Phase2;
+                    sr.sprite = phaseStartSprites[1];
+                    projSettings.SetCount(5);
+                    projSettings.SetScale(2.0f);
+                    projSettings.SetSpeed(3.5f);
+                    animator.SetInteger("Phase", 2);
                 }
                 break;
             case SteamRexState.Phase2:
+                if (player != null && (player.transform.position - this.transform.position).magnitude <= 2.0f && !hasUsedMelee)
+                {
+                    currentAction.SetActionDuration(1.0f);
+                    hasUsedMelee = true;
+                    currentLocationTarget = (Vector2)this.transform.position + new Vector2(-0.35f, 0.35f);
+                    animator.SetTrigger("StartMelee");
+                }
+                else
+                {
+                    hasUsedMelee = false;
+                    if (currentCycleIndex == 0)
+                    {
+                        currentAction.SetActionDuration(2.05f);
+                        Phase2Charge();
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 1)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 2)
+                    {
+                        currentAction.SetActionDuration(1.0f);
+                        Debug.Log("AHHHH");
+                        animator.SetTrigger("StartFire");
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 3)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 4)
+                    {
+                        currentAction.SetActionDuration(1.5f);
+                        animator.SetTrigger("StartJump");
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 5)
+                    {
+                        currentAction.SetActionDuration(0.25f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 6)
+                    {
+                        currentAction.SetActionDuration(1.5f);
+                        animator.SetTrigger("StartJump");
+                        currentCycleIndex = 0;
+                    }
+                }
                 if (currentHealth <= maxHealth * 0.25f)
                 {
                     state = SteamRexState.Phase3;
+                    sr.sprite = phaseStartSprites[2];
+                    projSettings.SetCount(11);
+                    projSettings.SetScale(1.5f);
+                    projSettings.SetSpeed(3.5f);
+                    animator.SetInteger("Phase", 3);
                 }
                 break;
             case SteamRexState.Phase3:
+                if (player != null && (player.transform.position - this.transform.position).magnitude <= 2.0f && !hasUsedMelee)
+                {
+                    currentAction.SetActionDuration(1.0f);
+                    hasUsedMelee = true;
+                    currentLocationTarget = (Vector2)this.transform.position + new Vector2(-0.35f, 0.35f);
+                    animator.SetTrigger("StartMelee");
+                }
+                else
+                {
+                    hasUsedMelee = false;
+                    if (currentCycleIndex == 0)
+                    {
+                        currentAction.SetActionDuration(2.0f);
+                        Phase3Charge();
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 1)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 2)
+                    {
+                        currentAction.SetActionDuration(0.75f);
+                        animator.SetTrigger("StartFire");
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 3)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 4)
+                    {
+                        currentAction.SetActionDuration(1.25f);
+                        animator.SetTrigger("StartJump");
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 5)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 6)
+                    {
+                        currentAction.SetActionDuration(1.25f);
+                        animator.SetTrigger("StartJump");
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 7)
+                    {
+                        currentAction.SetActionDuration(0.5f);
+                        currentCycleIndex++;
+                    }
+                    else if (currentCycleIndex == 8)
+                    {
+                        currentAction.SetActionDuration(1.25f);
+                        animator.SetTrigger("StartJump");
+                        currentCycleIndex = 0;
+                    }
+                }
                 if (currentHealth <= 0)
                 {
                     state = SteamRexState.Dead;
+                    animator.SetInteger("Phase", 4);
                     StopAllCoroutines();
                     currentAction = null;
                 }
@@ -139,7 +291,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         //check location, lifetime, and hitbox size
         try
         {
-            ConvertActionTo<MeleeAttack>(currentAction).AttackLocation(currentLocationTarget, meleeSettings);
+            projectiles.Add(ConvertActionTo<MeleeAttack>(currentAction).AttackLocation(this.transform.GetChild(1).transform.position, meleeSettings));
         }
         catch (TypeAccessException)
         {
@@ -147,6 +299,9 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
     }
 
+    /// <summary>
+    /// Long Charge
+    /// </summary>
     public void Phase1Charge()
     {
         currentAction = actions[0];
@@ -179,9 +334,9 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.5f, currentLocationTarget));
-            animator.SetBool("IsWalking", true);
+            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.75f, currentLocationTarget));
             animator.SetTrigger("StartWalk");
+            animator.SetBool("IsWalking", true);
         }
         catch (TypeAccessException)
         {
@@ -189,6 +344,9 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
     }
 
+    /// <summary>
+    /// Jump to Center
+    /// </summary>
     public void Phase1Jump()
     {
         currentAction = actions[0];
@@ -211,12 +369,15 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
     }
 
+    /// <summary>
+    /// Fire fireball towards player
+    /// </summary>
     public void Phase1Fireball()
     {
         currentAction = actions[2];
         if (player != null)
         {
-            currentLocationTarget = (Vector2)(player.transform.position - this.transform.position).normalized;
+            currentLocationTarget = (Vector2)(player.transform.position - this.transform.GetChild(0).transform.position).normalized;
         }
         else
         {
@@ -232,7 +393,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            ConvertActionTo<FireProjectiles>(currentAction).EmitProjectile(projSettings, currentLocationTarget);
+            projectiles.Add(ConvertActionTo<FireProjectiles>(currentAction).EmitProjectile(projSettings, currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -241,14 +402,234 @@ public class SteamRexBehavior : NPCBaseBehavior
     }
 
 
+    /// <summary>
+    /// Shorter Charge
+    /// </summary>
+    public void Phase2Charge()
+    {
+        currentAction = actions[0];
+        if (player != null)
+        {
+            if (player.transform.position.x <= this.transform.position.x)
+            {
+                currentLocationTarget = arenaMarks[0];
+                TurnLeft();
+            }
+            else
+            {
+                currentLocationTarget = arenaMarks[1];
+                TurnRight();
+            }
+        }
+        else
+        {
+            int i = UnityEngine.Random.Range(0, 2);
+            currentLocationTarget = arenaMarks[i];
+            if (i == 0)
+            {
+                TurnLeft();
+            }
+            else
+            {
+                TurnRight();
+            }
+        }
+        try
+        {
+            //there either should be something to tell it to trigger after the charge or have a charging animation to use
+            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.65f, currentLocationTarget));
+            animator.SetTrigger("StartWalk");
+            animator.SetBool("IsWalking", true);
+        }
+        catch (TypeAccessException)
+        {
+            Debug.Log($"Could not run {currentAction} as a Move action in Phase2Charge()");
+        }
+    }
+
+    /// <summary>
+    /// Jump to the player, then center
+    /// </summary>
+    public void Phase2Jump()
+    {
+        currentAction = actions[0];
+        if (currentCycleIndex == 5 )
+        {
+            currentLocationTarget = player.transform.position;
+        }
+        else
+        {
+            currentLocationTarget = arenaMarks[2];
+        }
+        if (currentLocationTarget.x < this.transform.position.x)
+        {
+            TurnLeft();
+        }
+        else
+        {
+            TurnRight();
+        }
+        try
+        {
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+        }
+        catch (TypeAccessException)
+        {
+            Debug.Log($"Could not run {currentAction} as a Move action in Phase2Jump()");
+        }
+    }
+
+    /// <summary>
+    /// Fire wide cone towards player
+    /// </summary>
+    public void Phase2Fireball()
+    {
+        currentAction = actions[2];
+        if (player != null)
+        {
+            currentLocationTarget = (Vector2)(player.transform.position - this.transform.GetChild(0).transform.position).normalized;
+        }
+        else
+        {
+            currentLocationTarget = (Vector2)(Vector3.zero - this.transform.position).normalized;
+        }
+        if (currentLocationTarget.x < this.transform.position.x)
+        {
+            TurnLeft();
+        }
+        else
+        {
+            TurnRight();
+        }
+        try
+        {
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, projSettings, currentLocationTarget));
+        }
+        catch (TypeAccessException)
+        {
+            Debug.Log($"Could not run {currentAction} as a FireProjectiles action in Phase2Fireball()");
+        }
+    }
+
+    /// <summary>
+    /// Short Charge
+    /// </summary>
+    public void Phase3Charge()
+    {
+        currentAction = actions[0];
+        if (player != null)
+        {
+            if (player.transform.position.x <= this.transform.position.x)
+            {
+                currentLocationTarget = arenaMarks[0];
+                TurnLeft();
+            }
+            else
+            {
+                currentLocationTarget = arenaMarks[1];
+                TurnRight();
+            }
+        }
+        else
+        {
+            int i = UnityEngine.Random.Range(0, 2);
+            currentLocationTarget = arenaMarks[i];
+            if (i == 0)
+            {
+                TurnLeft();
+            }
+            else
+            {
+                TurnRight();
+            }
+        }
+        try
+        {
+            //there either should be something to tell it to trigger after the charge or have a charging animation to use
+            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.5f, currentLocationTarget));
+            animator.SetTrigger("StartWalk");
+            animator.SetBool("IsWalking", true);
+        }
+        catch (TypeAccessException)
+        {
+            Debug.Log($"Could not run {currentAction} as a Move action in Phase3Charge()");
+        }
+    }
+
+    /// <summary>
+    /// Jump to player twice, jump to center
+    /// </summary>
+    public void Phase3Jump()
+    {
+        currentAction = actions[0];
+        //it doesn't trigger fast enough :tear:
+        if (currentCycleIndex == 5 || currentCycleIndex == 7)
+        {
+            currentLocationTarget = player.transform.position;
+        }
+        else
+        {
+            currentLocationTarget = arenaMarks[2];
+        }
+        if (currentLocationTarget.x < this.transform.position.x)
+        {
+            TurnLeft();
+        }
+        else
+        {
+            TurnRight();
+        }
+        try
+        {
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+        }
+        catch (TypeAccessException)
+        {
+            Debug.Log($"Could not run {currentAction} as a Move action in Phase3Jump()");
+        }
+    }
+
+    /// <summary>
+    /// Fire wide cone with higher proj density towards player
+    /// </summary>
+    public void Phase3Fireball()
+    {
+        currentAction = actions[2];
+        if (player != null)
+        {
+            currentLocationTarget = (Vector2)(player.transform.position - this.transform.GetChild(0).transform.position).normalized;
+        }
+        else
+        {
+            currentLocationTarget = (Vector2)(Vector3.zero - this.transform.position).normalized;
+        }
+        if (currentLocationTarget.x < this.transform.position.x)
+        {
+            TurnLeft();
+        }
+        else
+        {
+            TurnRight();
+        }
+        try
+        {
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(120, projSettings, currentLocationTarget));
+        }
+        catch (TypeAccessException)
+        {
+            Debug.Log($"Could not run {currentAction} as a FireProjectiles action in Phase3Fireball()");
+        }
+    }
+
+
     //Probably should make sure it can only get hit by an attack once
     private void OnTriggerEnter2D(Collider2D collision)
     {
         PlayerAttack pa;
-        if (collision.tag == "WeaponHitBox" && (pa = collision.GetComponent<PlayerAttack>()) != null)
+        if (collision.tag == "WeaponHitBox" && (pa = collision.gameObject.transform.parent.GetComponent<PlayerAttack>()) != null)
         {
-            sr.color = new Color(255, 230, 230);
-            //TakeDamage(pa.damage);
+            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
+            TakeDamage(pa.damage);
         }
     }
 
@@ -260,11 +641,5 @@ public class SteamRexBehavior : NPCBaseBehavior
     private void TurnRight()
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 180.0f, 0.0f));
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        //check if its a wall, if it is:
-        //StopAllCoroutines();
     }
 }
