@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     //jetpack refs
     [SerializeField] private float jetpackFuel = 3f;
+    public float jpackFuel => jetpackFuel;
     [SerializeField] private float jetpackInitialBoost = 2.5f;
     private bool jetpackInUse;
     [SerializeField] private float jetpackCooldown = 3f;
