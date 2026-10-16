@@ -1467,6 +1467,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SteamRex
       objectReference: {fileID: 0}
+    - target: {fileID: 1967948573513298113, guid: 83f842386c8a1fc4ead3f89f75e6836c, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 3007890732816201825, guid: 83f842386c8a1fc4ead3f89f75e6836c, type: 3}
       propertyPath: m_SortingOrder
       value: 2
