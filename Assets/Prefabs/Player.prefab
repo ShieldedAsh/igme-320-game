@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6583743389979668093}
   - component: {fileID: -5621033486213496804}
   - component: {fileID: 109830746946145905}
+  - component: {fileID: 2387393055056727673}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -183,6 +184,7 @@ MonoBehaviour:
   attackHitbox: {fileID: 8153167537513750294, guid: c61ae573e1caa3f44ab78a283fcc4cb6, type: 3}
   attackDuration: 0.15
   attackOffset: 1
+  damage: 2
 --- !u!114 &109830746946145905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,5 +203,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   jetpackFuel: 1
+  jetpackInitialBoost: 2.5
   jetpackCooldown: 3
   jetpackForce: 10
+--- !u!114 &2387393055056727673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230823812136170712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f6a7b123d4809959bcf30fa8e6e727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAugments
