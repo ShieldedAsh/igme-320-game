@@ -7,9 +7,9 @@ public class TargetDummyBehavior : NPCBaseBehavior
         if (collision.gameObject.tag == "WeaponHitBox")
         {
             PlayerAttack pa;
-            if ((pa = collision.gameObject.GetComponent<PlayerAttack>()) != null)
+            if ((pa = collision.gameObject.transform.parent.transform.GetComponent<PlayerAttack>()) != null)
             {
-                //TakeDamage(pa.damage);
+                TakeDamage(pa.damage);
             }
             
         }
