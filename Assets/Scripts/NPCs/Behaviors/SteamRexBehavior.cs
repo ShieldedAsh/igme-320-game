@@ -60,10 +60,10 @@ public class SteamRexBehavior : NPCBaseBehavior
         if (projectilePrefabs.Count > 0)
         {
             actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform));
-            projSettings = new ProjectileSettings(1, 2.5f, 5.0f, 4.0f);
+            projSettings = new ProjectileSettings(2.5f, 5.0f, 4.0f);
             if (this.transform.childCount > 0)
             {
-                projSettings.SetSpawnLocation(this.transform.GetChild(0));
+                //projSettings.SetSpawnLocation(this.transform.GetChild(0));
             }
         }
         
@@ -136,7 +136,7 @@ public class SteamRexBehavior : NPCBaseBehavior
                 {
                     state = SteamRexState.Phase2;
                     sr.sprite = phaseStartSprites[1];
-                    projSettings.SetCount(5);
+                    //projSettings.SetCount(5);
                     projSettings.SetScale(2.0f);
                     projSettings.SetSpeed(3.5f);
                     animator.SetInteger("Phase", 2);
@@ -198,7 +198,7 @@ public class SteamRexBehavior : NPCBaseBehavior
                 {
                     state = SteamRexState.Phase3;
                     sr.sprite = phaseStartSprites[2];
-                    projSettings.SetCount(11);
+                    //projSettings.SetCount(11);
                     projSettings.SetScale(1.5f);
                     projSettings.SetSpeed(3.5f);
                     animator.SetInteger("Phase", 3);

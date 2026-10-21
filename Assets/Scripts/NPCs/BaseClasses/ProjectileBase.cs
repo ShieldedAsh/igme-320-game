@@ -43,17 +43,20 @@ public class ProjectileBase : MonoBehaviour
         }
         if (currentLifetime >= totalLifetime)
         {
-            NPCBaseBehavior parentBehavior;
-            if ((parentBehavior = parent.GetComponent<NPCBaseBehavior>()) != null)
-            {
-                parentBehavior.RemoveProjectile(this.gameObject);
-            }
             DestroySelf();
         }
     }
 
     public void DestroySelf()
     {
+        if (parent != null)
+        {
+            NPCBaseBehavior parentBehavior;
+            if ((parentBehavior = parent.GetComponent<NPCBaseBehavior>()) != null)
+            {
+                parentBehavior.RemoveProjectile(this.gameObject);
+            }
+        }
         Destroy(this.gameObject);
     }
 }

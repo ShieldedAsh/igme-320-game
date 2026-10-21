@@ -1,31 +1,42 @@
 using UnityEngine;
 
+#nullable enable
 public struct ProjectileSettings
 {
-    int count;
     float scale;
     float speed;
     float lifetime;
-    Transform projectileSpawnLocation;
+    GameObject? projectileSpawnLocationObject;
+    Vector2 projectileSpawnOffset;
 
-    public int Count { get => count; }
     public float Scale { get => scale; }
     public float Speed { get => speed; }
     public float Lifetime { get => lifetime; }
-    public Transform SpawnLocation { get => projectileSpawnLocation; }
 
-    public ProjectileSettings(int _count, float _scale, float _speed, float _lifetime, Transform _projectileSpawnLocation = null) : this()
+
+    public GameObject? LocationObject { get => projectileSpawnLocationObject; }
+    public Vector2 SpawnOffset { get => projectileSpawnOffset; }
+
+    public ProjectileSettings(float _scale, float _speed, float _lifetime) : this(_scale, _speed, _lifetime, null, null) {}
+
+    public ProjectileSettings(float _scale, float _speed, float _lifetime, GameObject? _projectileSpawnLocationObject = null) : this(_scale, _speed, _lifetime, _projectileSpawnLocationObject, null) {}
+
+    public ProjectileSettings(float _scale, float _speed, float _lifetime, Vector2? _projectileSpawnOffset = null) : this(_scale, _speed, _lifetime, null, _projectileSpawnOffset) {}
+
+    public ProjectileSettings(float _scale, float _speed, float _lifetime, GameObject? _projectileSpawnLocationObject = null, Vector2? _projectileSpawnOffset = null) : this()
     {
-        count = _count;
         scale = _scale;
         speed = _speed;
         lifetime = _lifetime;
-        projectileSpawnLocation = _projectileSpawnLocation;
-    }
-
-    public void SetCount(int value)
-    {
-        count = value;
+        projectileSpawnLocationObject = _projectileSpawnLocationObject;
+        if (_projectileSpawnOffset != null)
+        {
+            projectileSpawnOffset = (Vector2)_projectileSpawnOffset;
+        }
+        else
+        {
+            projectileSpawnOffset = new Vector2(0, 0);
+        }
     }
 
     public void SetScale(float value)
@@ -43,8 +54,13 @@ public struct ProjectileSettings
         lifetime = value;
     }
 
-    public void SetSpawnLocation(Transform location)
+    public void SetLocationObject(GameObject obj)
     {
-        projectileSpawnLocation = location;
+        projectileSpawnLocationObject = obj;
+    }
+
+    public void SetSpawnOffset(Vector2 offset)
+    {
+        projectileSpawnOffset = offset;
     }
 }
