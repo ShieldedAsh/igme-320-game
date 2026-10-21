@@ -13,13 +13,21 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected List<GameObject> meleeHitboxPrefabs;
     [SerializeField, Min(1)]
     protected int maxHealth;
+    [SerializeField]
+    protected GameObject player;
 
     [SerializeField]
     protected int currentHealth;
     protected List<NPCBaseAction> actions;
     protected NPCBaseAction currentAction;
     protected float timeTillAction;
+    protected int phaseEvents;
+    protected int currentPhaseEvent;
     protected List<GameObject> projectiles;
+
+    protected SpriteRenderer sr;
+    protected List<ProjectileSettings> projectileSettings;
+    protected List<MeleeSettings> meleeSettings;
 
     /// <summary>
     /// The max health of the NPC
@@ -34,7 +42,6 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     // Set as virtual in case child needs to add to Start()
     protected virtual void Start()
     {
-        Debug.Log("base start called");
         currentHealth = maxHealth;
         timeTillAction = 0;
         if (actions == null)
@@ -49,6 +56,22 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         {
             projectiles = new List<GameObject>();
         }
+        if (player == null)
+        {
+            if (FindFirstObjectByType<PlayerMovement>() != null)
+            {
+                player = FindFirstObjectByType<PlayerMovement>().gameObject;
+            }
+        }
+        sr = this.gameObject.GetComponent<SpriteRenderer>();
+        if (projectileSettings == null)
+        {
+            projectileSettings = new List<ProjectileSettings>();
+        }
+        if (meleeSettings == null)
+        {
+            meleeSettings = new List<MeleeSettings>();
+        }
     }
 
     // If there is more we need to do per update, put here
@@ -56,9 +79,22 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     void FixedUpdate()
     {
         timeTillAction -= Time.fixedDeltaTime;
+        if (sr.color != Color.white)
+        {
+            sr.color = Color.white;
+        }
         if (CanAct())
         {
             timeTillAction = Act();
+            //update phase counter
+            if (currentPhaseEvent >= phaseEvents)
+            {
+                currentPhaseEvent = 0;
+            }
+            else
+            {
+                currentPhaseEvent++;
+            }
         }
     }
 
@@ -74,6 +110,14 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     /// <param name="damage">The amount of health to reduce by</param>
     protected virtual void TakeDamage(int damage)
     {
+        try
+        {
+            animator.SetTrigger("isDamaged");
+        }
+        catch
+        {
+            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
+        }
         currentHealth -= damage;
     }
 
@@ -102,5 +146,26 @@ public abstract class NPCBaseBehavior : MonoBehaviour
             return (T)Convert.ChangeType(action, typeof(T));
         }
         throw new TypeAccessException();
+    }
+
+    protected void TurnLeft()
+    {
+        this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+    }
+
+    protected void TurnRight()
+    {
+        this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 180.0f, 0.0f));
+    }
+
+    protected void OnTriggerEnter2D(Collider2D collision)
+    {
+        PlayerAttack pa;
+        if (collision.tag == "WeaponHitBox" && (pa = collision.gameObject.transform.parent.GetComponent<PlayerAttack>()) != null)
+        {
+            TakeDamage(pa.damage);
+            //Check to see if there is a specific way this should be destroyed
+            Destroy(pa.gameObject);
+        }
     }
 }

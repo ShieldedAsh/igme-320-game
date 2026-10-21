@@ -60,7 +60,7 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
                 case 3:
                     if (mentionAction)
                         Debug.Log($"{directionAngle} degree Circle - " + count);
-                    newProjectiles = fp.EmitCircle(settings, count, directionAngle);
+                    newProjectiles = fp.EmitCircle(settings, directionAngle, count);
                     break;
                 case 4:
                     if (mentionAction)
@@ -80,7 +80,7 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
                 case 7:
                     if (mentionAction)
                         Debug.Log($"{directionAngle} degree Arc - " + count);
-                    newProjectiles = fp.EmitArc(arcAngle, settings, count, directionAngle);
+                    newProjectiles = fp.EmitArc(arcAngle, settings, directionAngle, count);
                     break;
             }
         }

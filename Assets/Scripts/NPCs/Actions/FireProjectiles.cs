@@ -55,18 +55,23 @@ public class FireProjectiles : NPCBaseAction
 
 
     #region Emit Projectile
+    /// <summary>
+    /// Fires one projectile
+    /// </summary>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
+    /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(float _fireAngle = 0.0f)
     {
         return CreateProjectile(settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _fireAngle);
     }
-    
+
     /// <summary>
     /// Fires one projectile
     /// </summary>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(float _scale, float _speed, float _lifetime, float _fireAngle = 0.0f)
     {
@@ -76,10 +81,10 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Fires one projectile
     /// </summary>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// /// <param name="direction">The direction to fire towards</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_direction">The direction to fire towards</param>
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(float _scale, float _speed, float _lifetime, Vector2 _direction)
     {
@@ -89,8 +94,8 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Fires one projectile
     /// </summary>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(ProjectileSettings _settings, float _fireAngle = 0.0f)
     {
@@ -100,8 +105,8 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Fires one projectile
     /// </summary>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="direction">The direction to fire towards</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_direction">The direction to fire towards</param>
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(ProjectileSettings _settings, Vector2 _direction)
     {
@@ -110,62 +115,81 @@ public class FireProjectiles : NPCBaseAction
     #endregion
 
     #region Emit Circle
-    public List<GameObject>EmitCircle(int _count = 1, float _fireAngleOffset = 0.0f)
-    {
-        return EmitCircle(settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _count, _fireAngleOffset);
-    }
-
     /// <summary>
     /// Fires projectiles in a circle
     /// </summary>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
-    public List<GameObject>EmitCircle(ProjectileSettings _settings, int _count = 1, float _fireAngleOffset = 0.0f)
+    public List<GameObject>EmitCircle(float _fireAngleOffset = 0.0f, int _count = 1)
     {
-        return EmitCircle(_settings.Scale, _settings.Speed, _settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _count, _fireAngleOffset);
+        return EmitCircle(settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _fireAngleOffset, _count);
     }
 
     /// <summary>
     /// Fires projectiles in a circle
     /// </summary>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="directionOffset">The direction to offset the start direction by</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
+    /// <returns>A list of the instantiated projectiles</returns>
+    public List<GameObject>EmitCircle(ProjectileSettings _settings, float _fireAngleOffset = 0.0f, int _count = 1)
+    {
+        return EmitCircle(_settings.Scale, _settings.Speed, _settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _fireAngleOffset, _count);
+    }
+
+    /// <summary>
+    /// Fires projectiles in a circle
+    /// </summary>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_directionOffset">The direction to offset the start direction by</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCircle(ProjectileSettings _settings, Vector2 _directionOffset, int _count = 1)
     {
-        return EmitCircle(_settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, _count, AngleMath.GetVectorDirection(_directionOffset));
+        return EmitCircle(_settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, AngleMath.GetVectorDirection(_directionOffset), _count);
     }
 
     /// <summary>
     /// Fires projectiles in a circle
     /// </summary>
-    /// <param name="count">The amount of projectiles to fire</param>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="directionOffset">The direction to offset the start direction by</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_directionOffset">The direction to offset the start direction by</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCircle(float _scale, float _speed, float _lifetime, Vector2 _directionOffset, int _count = 1)
     {
-        return EmitCircle(_scale, _speed, _lifetime, null, Vector2.zero, _count, AngleMath.GetVectorDirection(_directionOffset));
+        return EmitCircle(_scale, _speed, _lifetime, null, Vector2.zero, AngleMath.GetVectorDirection(_directionOffset), _count);
     }
 
     /// <summary>
     /// Fires projectiles in a circle
     /// </summary>
-    /// <param name="count">The amount of projectiles to fire</param>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
-    public List<GameObject> EmitCircle(float _scale, float _speed, float _lifetime, int _count = 1, float _fireAngleOffset = 0.0f)
+    public List<GameObject> EmitCircle(float _scale, float _speed, float _lifetime, float _fireAngleOffset = 0.0f, int _count = 1)
     {
-        return EmitCircle(_scale, _speed, _lifetime, null, Vector2.zero, _count, _fireAngleOffset);
+        return EmitCircle(_scale, _speed, _lifetime, null, Vector2.zero, _fireAngleOffset, _count);
     }
 
-    private List<GameObject> EmitCircle(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, int _count, float _fireAngleOffset)
+    /// <summary>
+    /// Fires projectiles in a circle
+    /// </summary>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_locationObject">The GameObject that will be used as the origin point of spawned projectiles. Null value will default to "Parent" position</param>
+    /// <param name="_spawnOffset">The offset from the spawn point, Default is (0,0)</param>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
+    /// <returns>A list of the instantiated projectiles</returns>
+    private List<GameObject> EmitCircle(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _fireAngleOffset, int _count)
     {
         List<GameObject> projectiles = new List<GameObject>();
         if (_count <= 1)
@@ -187,6 +211,11 @@ public class FireProjectiles : NPCBaseAction
     #endregion
 
     #region Emit Cross
+    /// <summary>
+    /// Fires four projectiles in a cross
+    /// </summary>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCross(float _fireAngleOffset = 0.0f)
     {
         return EmitCircle(4);
@@ -195,23 +224,23 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Fires four projectiles in a cross
     /// </summary>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCross(float _scale, float _speed, float _lifetime, float _fireAngleOffset = 0.0f)
     {
-        return EmitCircle(_scale, _speed, _lifetime, 4, _fireAngleOffset);
+        return EmitCircle(_scale, _speed, _lifetime, _fireAngleOffset, 4);
     }
 
     /// <summary>
     /// Fires four projectiles in a cross
     /// </summary>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="directionOffset">The direction to offset the direction angle by</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_directionOffset">The direction to offset the direction angle by</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCross(float _scale, float _speed, float _lifetime, Vector2 _directionOffset)
     {
@@ -221,19 +250,19 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Fires four projectiles in a cross
     /// </summary>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="fireAngleOffset">The angle to offset the start angle by in degrees</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_fireAngleOffset">The angle to offset the start angle by in degrees</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCross(ProjectileSettings _settings, float _fireAngleOffset = 0.0f)
     {
-        return EmitCircle(_settings, 4, _fireAngleOffset);
+        return EmitCircle(_settings, _fireAngleOffset, 4);
     }
 
     /// <summary>
     /// Fires four projectiles in a cross
     /// </summary>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="directionOffset">The direction to offset the direction angle by</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_directionOffset">The direction to offset the direction angle by</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitCross(ProjectileSettings _settings, Vector2 _directionOffset)
     {
@@ -241,65 +270,74 @@ public class FireProjectiles : NPCBaseAction
     }
     #endregion
 
-    #region EmitArc
-    public List<GameObject> EmitArc(float _arcAngle, int _count = 1, float _fireAngle = 0.0f)
-    {
-        return CreateProjectileArc(_arcAngle, settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _count, _fireAngle);
-    }
-
+    #region Emit Arc
     /// <summary>
-    /// Fires projectiles in an arc
+    /// 
     /// </summary>
-    /// <param name="arcAngle">The width of the arc in degrees</param>
-    /// <param name="count">The amount of projectiles to fire</param>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_arcAngle">The width of the arc in degrees</param>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
-    public List<GameObject> EmitArc(float _arcAngle, float _scale, float _speed, float _lifetime, int _count = 1, float _fireAngle = 0.0f)
+    public List<GameObject> EmitArc(float _arcAngle, float _fireAngle = 0.0f, int _count = 1)
     {
-        return CreateProjectileArc(_arcAngle, _scale, _speed, _lifetime, null, Vector2.zero, _count, _fireAngle);
+        return CreateProjectileArc(_arcAngle, settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _fireAngle, _count);
     }
 
     /// <summary>
     /// Fires projectiles in an arc
     /// </summary>
-    /// <param name="arcAngle">The width of the arc in degrees</param>
-    /// <param name="count">The amount of projectiles to fire</param>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="direction">The direction to fire towards</param>
+    /// <param name="_arcAngle">The width of the arc in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
+    /// <returns>A list of the instantiated projectiles</returns>
+    public List<GameObject> EmitArc(float _arcAngle, float _scale, float _speed, float _lifetime, float _fireAngle = 0.0f, int _count = 1)
+    {
+        return CreateProjectileArc(_arcAngle, _scale, _speed, _lifetime, null, Vector2.zero, _fireAngle, _count);
+    }
+
+    /// <summary>
+    /// Fires projectiles in an arc
+    /// </summary>
+    /// <param name="_arcAngle">The width of the arc in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_direction">The direction to fire towards</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitArc(float _arcAngle, float _scale, float _speed, float _lifetime, Vector2 _direction, int _count = 1)
     {
-        return CreateProjectileArc(_arcAngle, _scale, _speed, _lifetime, null, Vector2.zero, _count, AngleMath.GetVectorDirection(_direction));
+        return CreateProjectileArc(_arcAngle, _scale, _speed, _lifetime, null, Vector2.zero, AngleMath.GetVectorDirection(_direction), _count);
     }
 
 
     /// <summary>
     /// Fires projectiles in an arc
     /// </summary>
-    /// <param name="arcAngle">The width of the arc in degrees</param>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_arcAngle">The width of the arc in degrees</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
-    public List<GameObject> EmitArc(float _arcAngle, ProjectileSettings _settings, int _count = 1, float _fireAngle = 0.0f)
+    public List<GameObject> EmitArc(float _arcAngle, ProjectileSettings _settings, float _fireAngle = 0.0f, int _count = 1)
     {
-        return CreateProjectileArc(_arcAngle, _settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, _count, _fireAngle);
+        return CreateProjectileArc(_arcAngle, _settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, _fireAngle, _count);
     }
 
     /// <summary>
     /// Fires projectiles in an arc
     /// </summary>
-    /// <param name="arcAngle">The width of the arc in degrees</param>
-    /// <param name="settings">The projectile settings</param>
-    /// <param name="direction">The direction to fire towards</param>
+    /// <param name="_arcAngle">The width of the arc in degrees</param>
+    /// <param name="_settings">The projectile settings</param>
+    /// <param name="_direction">The direction to fire towards</param>
+    /// <param name="_count">The amount of projectiles to fire</param>
     /// <returns>A list of the instantiated projectiles</returns>
     public List<GameObject> EmitArc(float _arcAngle, ProjectileSettings _settings, Vector2 _direction, int _count = 1)
     {
-        return CreateProjectileArc(_arcAngle, _settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, _count, AngleMath.GetVectorDirection(_direction));
+        return CreateProjectileArc(_arcAngle, _settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, AngleMath.GetVectorDirection(_direction), _count);
     }
     #endregion
 
@@ -307,15 +345,16 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Instantiates projectiles in an arc and adds them to projectileList
     /// </summary>
-    /// <param name="projectileList">The list to add to</param>
-    /// <param name="arcAngle">The width of the arc in degrees</param>
-    /// <param name="count">The amount of projectiles to instantiate</param>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_arcAngle">The width of the arc in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_locationObject">The GameObject that will be used as the origin point of spawned projectiles. Null value will default to "Parent" position</param>
+    /// <param name="_spawnOffset">The offset from the spawn point, Default is (0,0)</param>
+    /// <param name="_fireAngle">The angle to fire towards in degrees</param>
+    /// <param name="_count">The amount of projectiles to instantiate</param>
     /// <returns>A list of instantiated projectiles</returns>
-    private List<GameObject> CreateProjectileArc(float _arcAngle, float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, int _count = 1, float _fireAngle = 0.0f)
+    private List<GameObject> CreateProjectileArc(float _arcAngle, float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _fireAngle = 0.0f, int _count = 1)
     {
         List<GameObject> projectiles = new List<GameObject>();
         if (_count <= 1)
@@ -337,10 +376,12 @@ public class FireProjectiles : NPCBaseAction
     /// <summary>
     /// Instantiates a projectile
     /// </summary>
-    /// <param name="scale">The size of the projectile</param>
-    /// <param name="speed">The speed of the projectile</param>
-    /// <param name="lifetime">In seconds, how long until the projectile despawns</param>
-    /// <param name="directionAngle">The angle to move it towards in degrees</param>
+    /// <param name="_scale">The size of the projectile</param>
+    /// <param name="_speed">The speed of the projectile</param>
+    /// <param name="_lifetime">In seconds, how long until the projectile despawns</param>
+    /// <param name="_locationObject">The GameObject that will be used as the origin point of spawned projectiles. Null value will default to "Parent" position</param>
+    /// <param name="_spawnOffset">The offset from the spawn point, Default is (0,0)</param>
+    /// <param name="_directionAngle">The angle to move it towards in degrees</param>
     /// <returns>The instantiated projectile</returns>
     private GameObject CreateProjectile(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _directionAngle = 0.0f)
     {

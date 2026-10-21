@@ -59,4 +59,12 @@ public class ProjectileBase : MonoBehaviour
         }
         Destroy(this.gameObject);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Wall")
+        {
+            DestroySelf();
+        }
+    }
 }
