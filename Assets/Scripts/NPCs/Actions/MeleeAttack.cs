@@ -77,7 +77,7 @@ public class MeleeAttack : NPCBaseAction
         {
             meleeScript.SetLifetime(lifetime);
         }
-        incrementAndDelayFunction(delayTime);
+        delayFunction(delayTime);
         return hitbox;
     }
     #endregion

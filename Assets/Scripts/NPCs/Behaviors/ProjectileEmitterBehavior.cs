@@ -24,7 +24,7 @@ public class ProjectileEmitterBehavior : NPCBaseBehavior
         {
             actionTime = 0.1f;
         }
-        actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, IncrementEventCounterAndWait, actionTime));
+        actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, OverwriteActionCooldown, actionTime));
         actions[0].SetDelayTime(0.0f);
         currentAction = actions[0];
         directionAngle = 0.0f;

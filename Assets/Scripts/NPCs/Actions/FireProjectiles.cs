@@ -35,7 +35,7 @@ public class FireProjectiles : NPCBaseAction
         projectilePrefab = _projectilePrefab;
         settings = new ProjectileSettings(1.0f, 1.0f, 1.0f);
     }
-    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, Action<float> _incrementAndDelayFunction, ProjectileSettings _settings, float _actionDuration = 1.0f) : base(_parent, _incrementAndDelayFunction, _actionDuration) 
+    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, ProjectileSettings _settings, Action<float> _incrementAndDelayFunction, float _actionDuration = 1.0f) : base(_parent, _incrementAndDelayFunction, _actionDuration) 
     { 
         projectilePrefab = _projectilePrefab;
         settings = _settings;
@@ -195,7 +195,7 @@ public class FireProjectiles : NPCBaseAction
         if (_count <= 1)
         {
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, _fireAngleOffset));
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
             return projectiles;
         }
 
@@ -207,7 +207,7 @@ public class FireProjectiles : NPCBaseAction
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, currentAngle));
             currentAngle = currentAngle + deltaAngle;
         }
-        incrementAndDelayFunction(delayTime);
+        delayFunction(delayTime);
         return projectiles;
     }
     #endregion
@@ -274,7 +274,7 @@ public class FireProjectiles : NPCBaseAction
 
     #region Emit Arc
     /// <summary>
-    /// 
+    /// Fires projectiles in an arc
     /// </summary>
     /// <param name="_arcAngle">The width of the arc in degrees</param>
     /// <param name="_fireAngle">The angle to fire towards in degrees</param>
@@ -362,7 +362,7 @@ public class FireProjectiles : NPCBaseAction
         if (_count <= 1)
         {
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, _fireAngle));
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
             return projectiles;
         }
         float deltaAngle = _arcAngle / (_count - 1.0f);
@@ -373,7 +373,7 @@ public class FireProjectiles : NPCBaseAction
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, currentAngle));
             currentAngle += deltaAngle;
         }
-        incrementAndDelayFunction(delayTime);
+        delayFunction(delayTime);
         return projectiles;
     }
 
@@ -387,7 +387,7 @@ public class FireProjectiles : NPCBaseAction
     /// <param name="_spawnOffset">The offset from the spawn point, Default is (0,0)</param>
     /// <param name="_directionAngle">The angle to move it towards in degrees</param>
     /// <returns>The instantiated projectile</returns>
-    private GameObject CreateProjectile(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _directionAngle = 0.0f, bool _increment = false)
+    private GameObject CreateProjectile(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _directionAngle = 0.0f, bool useDelay = false)
     {
         GameObject projectile = UnityEngine.Object.Instantiate(projectilePrefab);
         if (_locationObject != null)
@@ -409,9 +409,9 @@ public class FireProjectiles : NPCBaseAction
             projScript.SetLifetime(_lifetime);
             projScript.SetParent(parent);
         }
-        if (_increment)
+        if (useDelay)
         {
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
         }
         return projectile;
     }

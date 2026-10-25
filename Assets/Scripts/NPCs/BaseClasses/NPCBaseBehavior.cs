@@ -22,6 +22,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected List<NPCBaseAction> actions;
     protected NPCBaseAction currentAction;
     protected IEnumerator? currentCoroutine;
+    [SerializeField]
     protected float timeTillAction;
     protected int phaseEvents;
     protected int currentPhaseEvent;
@@ -31,6 +32,9 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected Color baseColor;
     protected List<ProjectileSettings> projectileSettings;
     protected List<MeleeSettings> meleeSettings;
+    protected List<MoveSettings> moveSettings;
+
+    protected float lifeTime = 0;
 
     /// <summary>
     /// The max health of the NPC
@@ -76,6 +80,10 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         {
             meleeSettings = new List<MeleeSettings>();
         }
+        if (moveSettings == null)
+        {
+            moveSettings = new List<MoveSettings>();
+        }
         currentCoroutine = null;
     }
 
@@ -83,6 +91,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     // Take action should be specifically for "actions"
     void FixedUpdate()
     {
+        lifeTime += Time.fixedDeltaTime;
         timeTillAction -= Time.fixedDeltaTime;
         if (sr.color != baseColor)
         {
@@ -91,15 +100,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         if (CanAct())
         {
             timeTillAction = Act();
-            //update phase counter
-            if (currentPhaseEvent >= phaseEvents)
-            {
-                currentPhaseEvent = 0;
-            }
-            else
-            {
-                currentPhaseEvent++;
-            }
+            IncrementEventCounter();
         }
     }
 
@@ -131,6 +132,10 @@ public abstract class NPCBaseBehavior : MonoBehaviour
             sr.color = new Color(1f, 0.9f, 0.9f, 1f);
         }
         currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            InteruptCurrentEvent(0.0f, true);
+        }
     }
 
     protected bool CanAct()
@@ -162,12 +167,22 @@ public abstract class NPCBaseBehavior : MonoBehaviour
 
     protected void TurnLeft()
     {
-        this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+        this.transform.rotation = Quaternion.Euler(new Vector3(
+            this.transform.rotation.eulerAngles.x,
+            0.0f,
+            this.transform.rotation.eulerAngles.z
+            )
+        );
     }
 
     protected void TurnRight()
     {
-        this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 180.0f, 0.0f));
+        this.transform.rotation = Quaternion.Euler(new Vector3(
+            this.transform.rotation.eulerAngles.x, 
+            180.0f, 
+            this.transform.rotation.eulerAngles.z
+            )
+        );
     }
 
     protected void TurnTowards(Vector2 loc)
@@ -180,6 +195,46 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         {
             TurnLeft();
         }
+    }
+
+    protected void FlipUp()
+    {
+        this.transform.rotation = Quaternion.Euler(new Vector3(
+            0.0f, 
+            this.transform.rotation.eulerAngles.y,
+            0.0f
+            )
+        );
+    }
+
+    protected void FlipRight()
+    {
+        this.transform.rotation = Quaternion.Euler(new Vector3(
+            0.0f,
+            this.transform.rotation.eulerAngles.y,
+            270.0f
+            )
+        );
+    }
+
+    protected void FlipDown()
+    {
+        this.transform.rotation = Quaternion.Euler(new Vector3(
+            180.0f,
+            this.transform.rotation.eulerAngles.y,
+            0.0f
+            )
+        );
+    }
+
+    protected void FlipLeft()
+    {
+        this.transform.rotation = Quaternion.Euler(new Vector3(
+            0.0f,
+            this.transform.rotation.eulerAngles.y,
+            90.0f
+            )
+        );
     }
 
     protected void OnTriggerEnter2D(Collider2D collision)
@@ -198,9 +253,10 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             InteruptCurrentEvent();
-            
         }
     }
+
+    //Check to make sure these work correctly and don't get overwritten by currentAction.Duration
 
     public void IncrementEventCounter()
     {
@@ -211,19 +267,12 @@ public abstract class NPCBaseBehavior : MonoBehaviour
         }
     }
 
-    public void IncrementEventCounterAndWait(float waitFor = 0.0f)
-    {
-        IncrementEventCounter();
-        timeTillAction = waitFor;
-    }
-
     protected void InteruptCurrentEvent(float pauseTime = 0.0f, bool overrideActionCooldown = false)
     {
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
         }
-        IncrementEventCounter();
         if (timeTillAction > pauseTime || overrideActionCooldown)
         {
             timeTillAction = pauseTime;

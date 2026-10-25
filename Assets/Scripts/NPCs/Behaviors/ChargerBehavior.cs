@@ -9,7 +9,7 @@ public class ChargerBehavior : NPCBaseBehavior
     protected override void Start()
     {
         base.Start();
-        actions.Add(new Move(this.transform, IncrementEventCounterAndWait));
+        actions.Add(new Move(this.transform, OverwriteActionCooldown));
         actions[0].SetDelayTime(0.0f);
         currentAction = actions[0];
     }

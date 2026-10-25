@@ -5,13 +5,13 @@ public abstract class NPCBaseAction
 {
     protected float actionDuration;
     protected Transform parent;
-    protected Action<float> incrementAndDelayFunction;
+    protected Action<float> delayFunction;
     protected float delayTime;
 
     public NPCBaseAction(Transform _parent, Action<float> _incrementAndDelayFunction, float _actionDuration = 1.0f, float _delayTime = 0.25f)
     {
         parent = _parent;
-        incrementAndDelayFunction = _incrementAndDelayFunction;
+        delayFunction = _incrementAndDelayFunction;
         actionDuration = _actionDuration;
         delayTime = _delayTime;
     }

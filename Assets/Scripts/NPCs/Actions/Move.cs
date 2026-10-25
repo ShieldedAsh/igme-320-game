@@ -167,7 +167,7 @@ public class Move : NPCBaseAction
         if (_speed == 0)
         {
             parent.position = GetDestination<T>(_location, _overshootDistance, lockX, lockY);
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
         }
         else
         {
@@ -231,7 +231,7 @@ public class Move : NPCBaseAction
             yield return null;
         }
         parent.position = GetDestination<T>(_location, _overshootDistance, lockX, lockY);
-        incrementAndDelayFunction(delayTime);
+        delayFunction(delayTime);
     }
 
     #endregion
@@ -299,7 +299,7 @@ public class Move : NPCBaseAction
         else
         {
             parent.position = destination;
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
         }
     }
 
@@ -366,7 +366,7 @@ public class Move : NPCBaseAction
         else
         {
             parent.position = destination;
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
         }
     }
 
@@ -455,7 +455,7 @@ public class Move : NPCBaseAction
                 yield return null;
             }
             parent.position = end;
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
         }
     }
 
@@ -494,7 +494,7 @@ public class Move : NPCBaseAction
         if (_speed == 0)
         {
             parent.position = GetDestination<T>(_location);
-            incrementAndDelayFunction(delayTime);
+            delayFunction(delayTime);
         }
         else
         {

@@ -11,7 +11,6 @@ enum ChargerMiniBossState
 public class ChargerMiniBossBehavior : NPCBaseBehavior
 {
     ChargerMiniBossState state;
-    MoveSettings settings;
     Vector2[] arenaMarkers;
 
 
@@ -19,8 +18,8 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
     {
         base.Start();
         state = ChargerMiniBossState.Spawn;
-        settings = new MoveSettings(1.0f, 14.0f, 1.0f, 2.0f, false, true, EaseType.FunctionDefault);
-        actions.Add(new Move(this.gameObject.transform, IncrementEventCounterAndWait, settings));
+        moveSettings.Add(new MoveSettings(1.0f, 14.0f, 1.0f, 2.0f, false, true, EaseType.FunctionDefault));
+        actions.Add(new Move(this.gameObject.transform, OverwriteActionCooldown, moveSettings[0]));
         arenaMarkers = new Vector2[2];
         arenaMarkers[0] = new Vector2(-8, 0);
         arenaMarkers[1] = new Vector2(8, 0);

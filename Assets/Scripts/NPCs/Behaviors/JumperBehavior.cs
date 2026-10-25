@@ -9,7 +9,7 @@ public class JumperBehavior : NPCBaseBehavior
     protected override void Start()
     {
         base.Start();
-        actions.Add(new Move(this.transform, IncrementEventCounterAndWait));
+        actions.Add(new Move(this.transform, OverwriteActionCooldown));
         currentAction = actions[0];
     }
 
