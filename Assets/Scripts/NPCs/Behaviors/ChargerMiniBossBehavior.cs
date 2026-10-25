@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 enum ChargerMiniBossState
@@ -10,12 +11,19 @@ enum ChargerMiniBossState
 public class ChargerMiniBossBehavior : NPCBaseBehavior
 {
     ChargerMiniBossState state;
+    MoveSettings settings;
+    Vector2[] arenaMarkers;
+
 
     protected override void Start()
     {
         base.Start();
         state = ChargerMiniBossState.Spawn;
-        actions.Add(new Move(this.gameObject.transform));
+        settings = new MoveSettings(1.0f, 14.0f, 1.0f, 2.0f, false, true, EaseType.FunctionDefault);
+        actions.Add(new Move(this.gameObject.transform, IncrementEventCounterAndWait, settings));
+        arenaMarkers = new Vector2[2];
+        arenaMarkers[0] = new Vector2(-8, 0);
+        arenaMarkers[1] = new Vector2(8, 0);
     }
 
     protected override float Act()
@@ -51,13 +59,13 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
 
     private void AliveAct()
     {
-        animator.SetBool("IsWalking", false);
-        if (currentPhaseEvent == 0)
+        if (animator != null)
         {
+            animator.SetBool("IsWalking", false);
             animator.SetTrigger("StartCharge");
             animator.SetBool("IsWalking", true);
-            Charge(1.0f);
         }
+        Charge();
         if (currentHealth <= 0)
         {
             state = ChargerMiniBossState.Dead;
@@ -66,11 +74,31 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
 
     private void DeadAct()
     {
+        //do things based on what people want
         Destroy(this.gameObject);
     }
 
-    public void Charge(float chargeupTime)
+    public void Charge()
     {
-        StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<GameObject>(animator.GetCurrentAnimatorStateInfo(0).length + chargeupTime, player, 1.0f));
+        if (player != null)
+        {
+            currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<GameObject>(player);
+            TurnTowards(player.transform.position);
+        }
+        else
+        {
+            Vector2 target = Vector2.zero;
+            if (Mathf.Abs(arenaMarkers[0].x - this.gameObject.transform.position.x) > Mathf.Abs(arenaMarkers[1].x - this.gameObject.transform.position.x))
+            {
+                target = arenaMarkers[0];
+            }
+            else
+            {
+                target = arenaMarkers[1];
+            }
+            currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<Vector2>(target);
+            TurnTowards(target);
+        }
+        StartCoroutine(currentCoroutine);
     }
 }

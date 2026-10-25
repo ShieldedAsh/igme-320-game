@@ -27,7 +27,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         state = SteamRexState.Spawn;
         hasUsedMelee = false;
         sr.sprite = phaseStartSprites[0];
-        actions.Add(new Move(this.transform, 2.0f));
+        actions.Add(new Move(this.transform, IncrementEventCounterAndWait, 2.0f));
         currentAction = actions[0];
         GameObject markers;
         if ((markers = GameObject.Find("RoomMarkers")) != null)
@@ -48,12 +48,12 @@ public class SteamRexBehavior : NPCBaseBehavior
         currentLocationTarget = arenaMarks[0];
         if (meleeHitboxPrefabs.Count > 0)
         {
-            actions.Add(new MeleeAttack(meleeHitboxPrefabs[0], this.transform));
+            actions.Add(new MeleeAttack(meleeHitboxPrefabs[0], IncrementEventCounterAndWait, this.transform));
             meleeSettings.Add(new MeleeSettings(0.33f, new Vector2(0.6f, 0.6f)));
         }
         if (projectilePrefabs.Count > 0)
         {
-            actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform));
+            actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, IncrementEventCounterAndWait));
             projectileSettings.Add(new ProjectileSettings(2.5f, 5.0f, 4.0f));
             if (this.transform.childCount > 0)
             {

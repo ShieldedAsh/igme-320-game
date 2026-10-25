@@ -30,12 +30,12 @@ public class FireProjectiles : NPCBaseAction
         }
     }
     
-    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, float _actionDuration = 1.0f) : base(_parent, _actionDuration) 
+    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, Action<float> _incrementAndDelayFunction, float _actionDuration = 1.0f) : base(_parent, _incrementAndDelayFunction, _actionDuration) 
     { 
         projectilePrefab = _projectilePrefab;
         settings = new ProjectileSettings(1.0f, 1.0f, 1.0f);
     }
-    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, ProjectileSettings _settings, float _actionDuration = 1.0f) : base(_parent, _actionDuration) 
+    public FireProjectiles(GameObject _projectilePrefab, Transform _parent, Action<float> _incrementAndDelayFunction, ProjectileSettings _settings, float _actionDuration = 1.0f) : base(_parent, _incrementAndDelayFunction, _actionDuration) 
     { 
         projectilePrefab = _projectilePrefab;
         settings = _settings;
@@ -62,7 +62,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(float _fireAngle = 0.0f)
     {
-        return CreateProjectile(settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _fireAngle);
+        return CreateProjectile(settings.Scale, settings.Speed, settings.Lifetime, settings.LocationObject, settings.SpawnOffset, _fireAngle, true);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(float _scale, float _speed, float _lifetime, float _fireAngle = 0.0f)
     {
-        return CreateProjectile(_scale, _speed, _lifetime, null, Vector2.zero, _fireAngle);
+        return CreateProjectile(_scale, _speed, _lifetime, null, Vector2.zero, _fireAngle, true);
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(float _scale, float _speed, float _lifetime, Vector2 _direction)
     {
-        return CreateProjectile(_scale, _speed, _lifetime, null, Vector2.zero, AngleMath.GetVectorDirection(_direction));
+        return CreateProjectile(_scale, _speed, _lifetime, null, Vector2.zero, AngleMath.GetVectorDirection(_direction), true);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(ProjectileSettings _settings, float _fireAngle = 0.0f)
     {
-        return CreateProjectile(_settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, _fireAngle);
+        return CreateProjectile(_settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, _fireAngle, true);
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ public class FireProjectiles : NPCBaseAction
     /// <returns>The instantiated projectile</returns>
     public GameObject EmitProjectile(ProjectileSettings _settings, Vector2 _direction)
     {
-        return CreateProjectile(_settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, AngleMath.GetVectorDirection(_direction));
+        return CreateProjectile(_settings.Scale, _settings.Speed, _settings.Lifetime, _settings.LocationObject, _settings.SpawnOffset, AngleMath.GetVectorDirection(_direction), true);
     }
     #endregion
 
@@ -195,6 +195,7 @@ public class FireProjectiles : NPCBaseAction
         if (_count <= 1)
         {
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, _fireAngleOffset));
+            incrementAndDelayFunction(delayTime);
             return projectiles;
         }
 
@@ -206,6 +207,7 @@ public class FireProjectiles : NPCBaseAction
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, currentAngle));
             currentAngle = currentAngle + deltaAngle;
         }
+        incrementAndDelayFunction(delayTime);
         return projectiles;
     }
     #endregion
@@ -360,6 +362,7 @@ public class FireProjectiles : NPCBaseAction
         if (_count <= 1)
         {
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, _fireAngle));
+            incrementAndDelayFunction(delayTime);
             return projectiles;
         }
         float deltaAngle = _arcAngle / (_count - 1.0f);
@@ -370,6 +373,7 @@ public class FireProjectiles : NPCBaseAction
             projectiles.Add(CreateProjectile(_scale, _speed, _lifetime, _locationObject, _spawnOffset, currentAngle));
             currentAngle += deltaAngle;
         }
+        incrementAndDelayFunction(delayTime);
         return projectiles;
     }
 
@@ -383,7 +387,7 @@ public class FireProjectiles : NPCBaseAction
     /// <param name="_spawnOffset">The offset from the spawn point, Default is (0,0)</param>
     /// <param name="_directionAngle">The angle to move it towards in degrees</param>
     /// <returns>The instantiated projectile</returns>
-    private GameObject CreateProjectile(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _directionAngle = 0.0f)
+    private GameObject CreateProjectile(float _scale, float _speed, float _lifetime, GameObject _locationObject, Vector2 _spawnOffset, float _directionAngle = 0.0f, bool _increment = false)
     {
         GameObject projectile = UnityEngine.Object.Instantiate(projectilePrefab);
         if (_locationObject != null)
@@ -404,6 +408,10 @@ public class FireProjectiles : NPCBaseAction
             projScript.SetSpeed(_speed);
             projScript.SetLifetime(_lifetime);
             projScript.SetParent(parent);
+        }
+        if (_increment)
+        {
+            incrementAndDelayFunction(delayTime);
         }
         return projectile;
     }
