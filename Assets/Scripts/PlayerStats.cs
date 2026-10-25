@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
-    private int baseMaxHealth = 3;
+    private int baseMaxHealth = 7;
     private int currentMax;
     private int playerHealth;
     
