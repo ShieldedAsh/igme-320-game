@@ -26,6 +26,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected List<GameObject> projectiles;
 
     protected SpriteRenderer sr;
+    protected Color baseColor;
     protected List<ProjectileSettings> projectileSettings;
     protected List<MeleeSettings> meleeSettings;
 
@@ -64,6 +65,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
             }
         }
         sr = this.gameObject.GetComponent<SpriteRenderer>();
+        baseColor = sr.color;
         if (projectileSettings == null)
         {
             projectileSettings = new List<ProjectileSettings>();
@@ -79,9 +81,9 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     void FixedUpdate()
     {
         timeTillAction -= Time.fixedDeltaTime;
-        if (sr.color != Color.white)
+        if (sr.color != baseColor)
         {
-            sr.color = Color.white;
+            sr.color = baseColor;
         }
         if (CanAct())
         {
@@ -167,5 +169,10 @@ public abstract class NPCBaseBehavior : MonoBehaviour
             //Check to see if there is a specific way this should be destroyed
             Destroy(pa.gameObject);
         }
+    }
+
+    public void OverwriteActionCooldown(float cooldown)
+    {
+        timeTillAction = cooldown;
     }
 }

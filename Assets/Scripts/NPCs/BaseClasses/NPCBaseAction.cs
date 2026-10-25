@@ -15,6 +15,11 @@ public abstract class NPCBaseAction
 
     public void SetActionDuration(float value)
     {
+        if (value < 0)
+        {
+            actionDuration = 0;
+            return;
+        }
         actionDuration = value;
     }
 }

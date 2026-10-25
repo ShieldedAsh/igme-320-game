@@ -71,6 +71,6 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
 
     public void Charge(float chargeupTime)
     {
-        StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeInto(animator.GetCurrentAnimatorStateInfo(0).length + chargeupTime, player, 1.0f));
+        StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<GameObject>(animator.GetCurrentAnimatorStateInfo(0).length + chargeupTime, player, 1.0f));
     }
 }

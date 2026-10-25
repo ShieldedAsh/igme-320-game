@@ -17,7 +17,7 @@ public class ChargerBehavior : NPCBaseBehavior
     {
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeInto(0.5f, target, 4.0f));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<GameObject>(0.5f, target, 1.0f, 2.0f));
         }
         catch (TypeAccessException e)
         {

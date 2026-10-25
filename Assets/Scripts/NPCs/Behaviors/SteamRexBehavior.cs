@@ -307,7 +307,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.75f, currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<Vector2>(0.75f, currentLocationTarget, currentAction.Duration));
             animator.SetTrigger("StartWalk");
             animator.SetBool("IsWalking", true);
         }
@@ -334,7 +334,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -410,7 +410,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.65f, currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<Vector2>(0.65f, currentLocationTarget, currentAction.Duration));
             animator.SetTrigger("StartWalk");
             animator.SetBool("IsWalking", true);
         }
@@ -444,7 +444,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -519,7 +519,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.5f, currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<Vector2>(0.5f, currentLocationTarget, currentAction.Duration));
             animator.SetTrigger("StartWalk");
             animator.SetBool("IsWalking", true);
         }
@@ -554,7 +554,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {

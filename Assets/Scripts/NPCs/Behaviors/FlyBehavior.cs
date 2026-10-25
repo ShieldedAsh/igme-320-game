@@ -16,7 +16,7 @@ public class FlyBehavior : NPCBaseBehavior
     {
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).MoveTo(destination));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedMove<Vector2>(destination));
         }
         catch (System.TypeAccessException e)
         {
