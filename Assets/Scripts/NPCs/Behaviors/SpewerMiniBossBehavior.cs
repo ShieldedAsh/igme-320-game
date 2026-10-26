@@ -154,19 +154,11 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         if (moveDirection == MoveDirection.Horizontal)
         {
             index = 1;
-            if (currentMarkerIndex == 0)  
+            if (currentMarkerIndex == 0 || currentMarkerIndex == 1)
             {
                 FlipUp();
             }
-            else if (currentMarkerIndex == 1)
-            {
-                FlipUp();
-            }
-            else if (currentMarkerIndex == 2)
-            {
-                FlipDown();
-            }
-            else if (currentMarkerIndex == 3)
+            else
             {
                 FlipDown();
             }
@@ -174,19 +166,11 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         else if (moveDirection == MoveDirection.Vertical) 
         {
             index = 0;
-            if (currentMarkerIndex == 0)
-            {
-                FlipLeft();
-            }
-            else if (currentMarkerIndex == 1)
+            if (currentMarkerIndex == 1)
             {
                 FlipRight();
             }
-            else if (currentMarkerIndex == 2)
-            {
-                FlipLeft();
-            }
-            else if (currentMarkerIndex == 3)
+            else
             {
                 FlipLeft();
             }
