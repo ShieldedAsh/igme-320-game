@@ -8,7 +8,10 @@ public class PlayerStats : MonoBehaviour
     private int baseMaxHealth = 7;
     private int currentMax;
     private int playerHealth;
-    
+
+    public int CurrentHealth => playerHealth;
+    public int CurrentMaxHealth => currentMax;
+
     private float lastHitTimer = 1.0f;
     private bool justHit = false;
 
