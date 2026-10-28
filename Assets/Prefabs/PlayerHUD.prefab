@@ -185,7 +185,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 140, y: -81.8}
-  m_SizeDelta: {x: 240, y: 30}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3308892858955109285
 GameObject:
@@ -298,7 +298,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 140, y: -40}
-  m_SizeDelta: {x: 240, y: 30}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1176701267292581089
 MonoBehaviour:
@@ -315,6 +315,8 @@ MonoBehaviour:
   playerMovement: {fileID: 0}
   jetpackFuelFill: {fileID: 4505537650560670366}
   maxFuel: 1
+  playerStats: {fileID: 0}
+  healthFill: {fileID: 0}
 --- !u!1 &6736764430941200181
 GameObject:
   m_ObjectHideFlags: 0
