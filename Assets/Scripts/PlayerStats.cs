@@ -13,7 +13,7 @@ public class PlayerStats : MonoBehaviour
     private bool justHit = false;
 
     private PlayerAugments augments;
-    private int MaxHealth => augments.stats.MaxHealth .ApplyInt(baseMaxHealth);
+    private int MaxHealth => augments.stats.MaxHealth.ApplyInt(baseMaxHealth);
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
