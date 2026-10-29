@@ -63,6 +63,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
     private void SpawnAct()
     {
         currentAction = actions[0];
+        currentHealth = maxHealth;
         phaseEvents = 3;
         this.transform.position = arenaMarkers[0];
         OverwriteActionCooldown(1.0f);

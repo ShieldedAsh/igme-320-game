@@ -52,6 +52,7 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
     private void SpawnAct()
     {
         currentAction = actions[0];
+        currentHealth = maxHealth;
         phaseEvents = 0;
         state = ChargerMiniBossState.Alive;
     }
