@@ -334,7 +334,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector2>(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -444,7 +444,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector2>(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -554,7 +554,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector2>(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {

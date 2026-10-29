@@ -131,6 +131,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
 
     private void DeadAct()
     {
+        //AugmentManager.DropAugment(1, true);
         Destroy(this.gameObject);
     }
 

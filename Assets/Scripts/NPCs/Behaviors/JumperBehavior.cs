@@ -17,7 +17,7 @@ public class JumperBehavior : NPCBaseBehavior
     {
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedJump<Vector3>(target.transform.position));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector3>(target.transform.position));
         }
         catch (TypeAccessException e)
         {

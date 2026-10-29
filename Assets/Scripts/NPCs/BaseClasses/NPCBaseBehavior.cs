@@ -21,7 +21,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected int currentHealth;
     protected List<NPCBaseAction> actions;
     protected NPCBaseAction currentAction;
-    protected IEnumerator? currentCoroutine;
+    protected IEnumerator currentCoroutine;
     [SerializeField]
     protected float timeTillAction;
     protected int phaseEvents;

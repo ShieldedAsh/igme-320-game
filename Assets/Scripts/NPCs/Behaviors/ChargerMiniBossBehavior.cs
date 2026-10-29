@@ -73,7 +73,7 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
 
     private void DeadAct()
     {
-        //do things based on what people want
+        //AugmentManager.DropAugment(1, true);
         Destroy(this.gameObject);
     }
 

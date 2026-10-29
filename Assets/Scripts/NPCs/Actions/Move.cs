@@ -226,7 +226,7 @@ public class Move : NPCBaseAction
             t = AddEase(t, EaseType.None, _easeType);
             
             parent.position = Vector2.Lerp(startPos, GetDestination<T>(_location, _overshootDistance, lockX, lockY), t);
-            elapsedTime += Time.deltaTime;
+            elapsedTime += Time.fixedDeltaTime;
 
             yield return null;
         }
@@ -380,9 +380,9 @@ public class Move : NPCBaseAction
     /// <typeparam name="T">The type used for the destination</typeparam>
     /// <param name="_location">The place to move to</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator TimedJump<T>(T _location)
+    public IEnumerator JumpTo<T>(T _location)
     {
-        return TimedJump<T>(_location, settings.MoveTime, settings.EaseType);
+        return JumpTo<T>(_location, settings.MoveTime, settings.EaseType);
     }
 
     /// <summary>
@@ -392,9 +392,9 @@ public class Move : NPCBaseAction
     /// <param name="_location">The place to move to</param>
     /// <param name="_settings">The settings to use</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator TimedJump<T>(T _location, MoveSettings _settings)
+    public IEnumerator JumpTo<T>(T _location, MoveSettings _settings)
     {
-        return TimedJump<T>(_location, _settings.MoveTime, _settings.EaseType);
+        return JumpTo<T>(_location, _settings.MoveTime, _settings.EaseType);
     }
 
     /// <summary>
@@ -403,12 +403,12 @@ public class Move : NPCBaseAction
     /// <typeparam name="T">The type used for the destination</typeparam>
     /// <param name="_location">The place to move to</param>
     /// <param name="_moveTime">The time it takes to move to _location</param>
+    /// /// <param name="_easeType">The type of easing to use while moving. Default is SmootherStep(up)/SmoothStep(down)</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator TimedJump<T>(T _location, float _moveTime, EaseType _easeType = EaseType.FunctionDefault) {
+    public IEnumerator JumpTo<T>(T _location, float _moveTime, EaseType _easeType = EaseType.FunctionDefault) {
         Vector2 start = parent.transform.position;
-        Vector2 end = GetDestination<T>(_location);
-
-        float xDist = end.x - start.x;
+        Vector2 target = GetDestination<T>(_location);
+        float xDist = target.x - start.x;
         if (Mathf.Abs(xDist) <= 0.05f)
         {
             yield return null;
@@ -419,10 +419,10 @@ public class Move : NPCBaseAction
             float height = 1;
 
             // look into always starting at 0,0 and having end be relative to start, then transforming to original positions
-            float midY = Mathf.Max(start.y, end.y) + height;
-            float a = (2.0f * (start.y + end.y - (2.0f * midY))) / (xDist * xDist);
-            float b = -1.0f * (((start.x * (start.y + (3.0f * end.y))) + (end.x * (end.y + (3.0f * start.y))) - ((4.0f * midY) * (end.x + start.x))) / (xDist * xDist));
-            float c = start.y - ((start.x * (start.x * (start.y - end.y) - (end.x * ((3.0f * start.y) + end.y - (4.0f * midY))))) / (xDist * xDist));
+            float midY = Mathf.Max(start.y, target.y) + height;
+            float a = (2.0f * (start.y + target.y - (2.0f * midY))) / (xDist * xDist);
+            float b = -1.0f * (((start.x * (start.y + (3.0f * target.y))) + (target.x * (target.y + (3.0f * start.y))) - ((4.0f * midY) * (target.x + start.x))) / (xDist * xDist));
+            float c = start.y - ((start.x * (start.x * (start.y - target.y) - (target.x * ((3.0f * start.y) + target.y - (4.0f * midY))))) / (xDist * xDist));
 
             float elapsedTime = 0;
             if (_moveTime <= 0)
@@ -437,70 +437,140 @@ public class Move : NPCBaseAction
             while (elapsedTime < _moveTime)
             {
                 float t = (elapsedTime / _moveTime);
-                if (start.y < end.y)
+                if (start.y <= target.y)
                 {
                     t = AddEase(t, EaseType.SmootherStep, _easeType);
                 }
-                else if (start.y > end.y)
+                else if (start.y > target.y)
                 {
                     t = AddEase(t, EaseType.SmoothStep, _easeType);
                 }
-                float x = (t * xDist) + start.x;
+                float x = (t * (target.x - start.x)) + start.x;
 
                 // y = ax^2 + bx + c
                 float y = (a * (x * x)) + (b * x) + c;
                 parent.position = new Vector2(x, y);
-                elapsedTime += Time.deltaTime;
+                elapsedTime += Time.fixedDeltaTime;
 
                 yield return null;
             }
-            parent.position = end;
+            parent.position = target;
             delayFunction(delayTime);
         }
     }
 
     /// <summary>
-    /// Moves to the destination in an arc at a certain speed. Uses saved settings
+    /// Moves in an arc toward the location. The end position will be the first location it will land on the ground. Otherwise, it will land at _location
     /// </summary>
     /// <typeparam name="T">The type used for the destination</typeparam>
-    /// <param name="_location">The place to move to</param>
+    /// <param name="_location">The place to move towards</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator UntimedJump<T>(T _location)
+    public IEnumerator JumpToSafe<T>(T _location)
     {
-        return UntimedJump<T>(_location, settings.Speed, settings.EaseType);
+        return JumpToSafe<T>(_location, settings.MoveTime, settings.EaseType);
     }
 
     /// <summary>
-    /// Moves to the destination in an arc at a certain speed
+    /// Moves in an arc toward the location. The end position will be the first location it will land on the ground. Otherwise, it will land at _location
     /// </summary>
     /// <typeparam name="T">The type used for the destination</typeparam>
-    /// <param name="_location">The place to move to</param>
+    /// <param name="_location">The place to move towards</param>
     /// <param name="_settings">The settings to use</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator UntimedJump<T>(T _location, MoveSettings _settings)
+    public IEnumerator JumpToSafe<T>(T _location, MoveSettings _settings)
     {
-        return UntimedJump<T>(_location, _settings.Speed, _settings.EaseType);
+        return JumpToSafe<T>(_location, _settings.MoveTime, _settings.EaseType);
     }
 
+    //I might make an even safer version that check all positions from start but that will take more work so I won't do that right now
+    //Also I should make it so i don't repeat all this code (I dont feel like it)
     /// <summary>
-    /// Moves to the destination in an arc at a certain speed
+    /// Moves in an arc toward the location. The end position will be the first location it will land on the ground. Otherwise, it will land at _location
     /// </summary>
     /// <typeparam name="T">The type used for the destination</typeparam>
-    /// <param name="_location">The place to move to</param>
-    /// <param name="_speed">The speed at which the NPC moves to _location</param>
+    /// <param name="_location">The place to move towards</param>
+    /// <param name="_moveTime">The time it takes to move to the end location</param>
+    /// <param name="_easeType">The type of easing to use while moving. Default is SmootherStep(up)/SmoothStep(down)</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator UntimedJump<T>(T _location, float _speed, EaseType _easeType = EaseType.FunctionDefault)
+    public IEnumerator JumpToSafe<T>(T _location, float _moveTime, EaseType _easeType = EaseType.FunctionDefault)
     {
-        if (_speed == 0)
+        Vector2 start = parent.transform.position;
+        Vector2 target = GetDestination<T>(_location);
+        float xDist = target.x - start.x;
+        if (Mathf.Abs(xDist) <= 0.05f)
         {
-            parent.position = GetDestination<T>(_location);
-            delayFunction(delayTime);
+            yield return null;
         }
         else
         {
-            yield return TimedJump(_location, ((Vector3)GetDestination<T>(_location) - parent.position).magnitude / Mathf.Abs(_speed), _easeType);
+            //Not actual height, will see if I can make that work
+            float height = 1;
+
+            // look into always starting at 0,0 and having end be relative to start, then transforming to original positions
+            float midY = Mathf.Max(start.y, target.y) + height;
+            float a = (2.0f * (start.y + target.y - (2.0f * midY))) / (xDist * xDist);
+            float b = -1.0f * (((start.x * (start.y + (3.0f * target.y))) + (target.x * (target.y + (3.0f * start.y))) - ((4.0f * midY) * (target.x + start.x))) / (xDist * xDist));
+            float c = start.y - ((start.x * (start.x * (start.y - target.y) - (target.x * ((3.0f * start.y) + target.y - (4.0f * midY))))) / (xDist * xDist));
+
+            //Checks to see if the NPC would land on the ground when landing. If it isn't able to find a spot, it will stop at the original position
+            bool foundLandingPosition = false;
+            float checkingX = target.x;
+            while (!foundLandingPosition)
+            {
+                Vector2 checking = new Vector2(checkingX, (a * (checkingX * checkingX)) + (b * checkingX) + c);
+                RaycastHit2D hit = Physics2D.Raycast(checking, Vector2.down, Mathf.Infinity, LayerMask.GetMask("Ground"));
+                if (hit)
+                {
+                    //has to be touching the ground
+                    float dist = hit.distance - (parent.GetComponent<SpriteRenderer>().bounds.size.y / 2);
+                    if (dist <= 0)
+                    {
+                        target = new Vector2(checking.x, checking.y + dist);
+                        foundLandingPosition = true;
+                    }
+                    checkingX += Time.fixedDeltaTime;
+                }
+                else
+                {
+                    //if nothing is hit then the NPC has left the arena, it should just return the original position.
+                    foundLandingPosition = true;
+                }
+            }
+            float endX = target.x;
+
+            float elapsedTime = 0;
+            if (_moveTime <= 0)
+            {
+                _moveTime = actionDuration;
+            }
+            if (_moveTime > actionDuration)
+            {
+                SetActionDuration(_moveTime);
+            }
+
+            while (elapsedTime < _moveTime)
+            {
+                float t = (elapsedTime / _moveTime);
+                if (start.y <= target.y)
+                {
+                    t = AddEase(t, EaseType.SmootherStep, _easeType);
+                }
+                else if (start.y > target.y)
+                {
+                    t = AddEase(t, EaseType.SmoothStep, _easeType);
+                }
+                float x = (t * (target.x - start.x)) + start.x;
+
+                // y = ax^2 + bx + c
+                float y = (a * (x * x)) + (b * x) + c;
+                parent.position = new Vector2(x, y);
+                elapsedTime += Time.fixedDeltaTime;
+
+                yield return null;
+            }
+            parent.position = target;
+            delayFunction(delayTime);
         }
-        yield return null;
     }
 
     #endregion
