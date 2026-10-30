@@ -5,8 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - WeaponHitBox
-  - Enemy
+  - Platform
+  - Wall
+  - Ground
   - EnemyProjectile
+  - Enemy
   - LevelSwitcher
   layers:
   - Default

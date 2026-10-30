@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     //jetpack refs
-    [SerializeField] private float jetpackFuel = 3f;
+    [SerializeField] private float jetpackFuel = 1f;
+    public float jpackFuel => jetpackFuel;
     [SerializeField] private float jetpackInitialBoost = 2.5f;
     private bool jetpackInUse;
     [SerializeField] private float jetpackCooldown = 3f;
@@ -88,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
             //and there is fuel
             if (jetpackFuel >= 0.0f)
             {
-                if (jetpackFuel == 3.0f)
+                if (jetpackFuel == 1.0f)
                 {
                     rb.AddForceY(jetpackInitialBoost, ForceMode2D.Impulse);
                 }
