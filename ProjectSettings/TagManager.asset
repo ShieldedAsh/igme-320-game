@@ -8,6 +8,9 @@ TagManager:
   - Platform
   - Wall
   - Ground
+  - EnemyProjectile
+  - Enemy
+  - LevelSwitcher
   layers:
   - Default
   - TransparentFX

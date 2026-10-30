@@ -110,4 +110,4 @@ InitTestScene*.unity*
 
 #helix stuff that doesn't need to be committed from my system
 .helix/
-./vscode
+.vscode/
