@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     //component refs
     private Rigidbody2D rb;
     private Collider2D col;
-    
+
     //movement actions
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     //jetpack refs
-    [SerializeField] private float jetpackFuel = 3f;
+    [SerializeField] private float jetpackFuel = 1f;
+    public float jpackFuel => jetpackFuel;
     [SerializeField] private float jetpackInitialBoost = 2.5f;
     private bool jetpackInUse;
     [SerializeField] private float jetpackCooldown = 3f;
@@ -31,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
 
     //augments
     private PlayerAugments augments;
+
+    //animator
+    [SerializeField] protected Animator animator;
     
     void Start()
     {
@@ -41,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         jetpackAction = InputSystem.actions.FindAction("Jetpack");
 
         augments = GetComponent<PlayerAugments>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -84,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
             //and there is fuel
             if (jetpackFuel >= 0.0f)
             {
-                if (jetpackFuel == 3.0f)
+                if (jetpackFuel == 1.0f)
                 {
                     rb.AddForceY(jetpackInitialBoost, ForceMode2D.Impulse);
                 }
@@ -110,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
                 jetpackCooldown = 3f;
             }
         }
+        UpdateAnimator();
     }
 
     private bool IsGrounded()
@@ -120,5 +126,21 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hit = Physics2D.BoxCast(colBounds.center, colBounds.size, 0f, Vector2.down, 0.05f, groundLayer);
         //if hit collider isnt null, you hit something, which means you're grounded
         return hit.collider != null;
+    }
+
+    private void UpdateAnimator()
+    {
+        if (animator == null)
+            return;
+
+        bool grounded = IsGrounded();
+
+        // Walk only when moving horizontally on the ground
+        bool walking = Mathf.Abs(moveX) > 0.01f && grounded;
+
+        animator.SetBool("IsWalking", walking);
+        animator.SetBool("IsGrounded", grounded);
+
+       
     }
 }

@@ -2,19 +2,6 @@ using UnityEngine;
 
 public class TargetDummyBehavior : NPCBaseBehavior
 {
-    protected void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "WeaponHitBox")
-        {
-            PlayerAttack pa;
-            if ((pa = collision.gameObject.GetComponent<PlayerAttack>()) != null)
-            {
-                //TakeDamage(pa.damage);
-            }
-            
-        }
-    }
-
     protected override void Start()
     {
         maxHealth = 5;

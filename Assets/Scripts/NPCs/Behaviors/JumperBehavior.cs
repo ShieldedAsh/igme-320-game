@@ -9,7 +9,7 @@ public class JumperBehavior : NPCBaseBehavior
     protected override void Start()
     {
         base.Start();
-        actions.Add(new Move(this.transform));
+        actions.Add(new Move(this.transform, OverwriteActionCooldown));
         currentAction = actions[0];
     }
 
@@ -17,7 +17,7 @@ public class JumperBehavior : NPCBaseBehavior
     {
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(target.transform.position));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector3>(target.transform.position));
         }
         catch (TypeAccessException e)
         {

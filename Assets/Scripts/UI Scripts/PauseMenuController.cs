@@ -13,6 +13,7 @@ public class PauseMenuController : MonoBehaviour
     private void Awake()
     {
         SetPaused(false);
+        CheckEventSystem();
     }
 
     private void Update()
@@ -45,6 +46,12 @@ public class PauseMenuController : MonoBehaviour
         LoadScene("LevelSelect");
     }
 
+    public void ExitGame()
+    {
+        Debug.Log("Exit game");
+        Application.Quit();
+    }
+
     private void LoadScene(string sceneName)
     {
         Time.timeScale = 1f;
@@ -75,5 +82,18 @@ public class PauseMenuController : MonoBehaviour
         {
             Time.timeScale = 1f;
         }
+    }
+
+    private void CheckEventSystem()
+    {
+        UnityEngine.EventSystems.EventSystem existingEventSystem = UnityEngine.Object.FindAnyObjectByType < UnityEngine.EventSystems.EventSystem>();
+
+        if (existingEventSystem != null)
+        {
+            return;
+        }
+        GameObject eventSystemObject = new GameObject("EventSystem");
+        eventSystemObject.AddComponent < UnityEngine.EventSystems.EventSystem>();
+        eventSystemObject.AddComponent < UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
     }
 }
