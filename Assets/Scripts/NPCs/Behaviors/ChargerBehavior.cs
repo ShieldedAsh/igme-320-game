@@ -9,7 +9,8 @@ public class ChargerBehavior : NPCBaseBehavior
     protected override void Start()
     {
         base.Start();
-        actions.Add(new Move(this.transform));
+        actions.Add(new Move(this.transform, OverwriteActionCooldown));
+        actions[0].SetDelayTime(0.0f);
         currentAction = actions[0];
     }
 
@@ -17,7 +18,7 @@ public class ChargerBehavior : NPCBaseBehavior
     {
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeInto(0.5f, target, 4.0f));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<GameObject>(0.5f, target, 1.0f, 2.0f));
         }
         catch (TypeAccessException e)
         {

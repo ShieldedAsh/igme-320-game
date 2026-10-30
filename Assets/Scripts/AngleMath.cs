@@ -38,4 +38,21 @@ public static class AngleMath
         }
         return angle;
     }
+
+    /// <summary>
+    /// Gets the overshoot amount for a target
+    /// </summary>
+    /// <param name="_start">The start point</param>
+    /// <param name="_end">The initial end target</param>
+    /// <param name="_overshootDistance">How far to move past</param>
+    /// <returns>The amount of overshoot</returns>
+    public static Vector2 GetOvershoot(Vector2 _start, Vector2 _end, float _overshootDistance)
+    {
+        float angle = ToRadians(GetVectorDirection(_end - _start));
+        if (_overshootDistance > 0)
+        {
+            return new Vector2(_overshootDistance * Mathf.Cos(angle), _overshootDistance * Mathf.Sin(angle));
+        }
+        return Vector2.zero;
+    }
 }

@@ -13,16 +13,11 @@ enum SteamRexState
 
 public class SteamRexBehavior : NPCBaseBehavior
 {
-    SpriteRenderer sr;
     [SerializeField]
-    GameObject player;
     SteamRexState state;
-    int currentCycleIndex;
     bool hasUsedMelee;
     Vector2[] arenaMarks;
     Vector2 currentLocationTarget;
-    ProjectileSettings projSettings;
-    MeleeSettings meleeSettings;
     [SerializeField]
     Sprite[] phaseStartSprites;
 
@@ -31,9 +26,8 @@ public class SteamRexBehavior : NPCBaseBehavior
         base.Start();
         state = SteamRexState.Spawn;
         hasUsedMelee = false;
-        sr = this.gameObject.GetComponent<SpriteRenderer>();
         sr.sprite = phaseStartSprites[0];
-        actions.Add(new Move(this.transform, 2.0f));
+        actions.Add(new Move(this.transform, OverwriteActionCooldown, 2.0f));
         currentAction = actions[0];
         GameObject markers;
         if ((markers = GameObject.Find("RoomMarkers")) != null)
@@ -54,16 +48,16 @@ public class SteamRexBehavior : NPCBaseBehavior
         currentLocationTarget = arenaMarks[0];
         if (meleeHitboxPrefabs.Count > 0)
         {
-            actions.Add(new MeleeAttack(meleeHitboxPrefabs[0], this.transform));
-            meleeSettings = new MeleeSettings(0.33f, new Vector2(0.6f, 0.6f));
+            actions.Add(new MeleeAttack(meleeHitboxPrefabs[0], OverwriteActionCooldown, this.transform));
+            meleeSettings.Add(new MeleeSettings(0.33f, new Vector2(0.6f, 0.6f)));
         }
         if (projectilePrefabs.Count > 0)
         {
-            actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform));
-            projSettings = new ProjectileSettings(1, 2.5f, 5.0f, 4.0f);
+            actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, OverwriteActionCooldown));
+            projectileSettings.Add(new ProjectileSettings(2.5f, 5.0f, 4.0f));
             if (this.transform.childCount > 0)
             {
-                projSettings.SetSpawnLocation(this.transform.GetChild(0));
+                //projSettings.SetSpawnLocation(this.transform.GetChild(0));
             }
         }
         
@@ -79,10 +73,6 @@ public class SteamRexBehavior : NPCBaseBehavior
     //Going to need to time everything to make sure it looks correct
     protected override float Act()
     {
-        if (sr.color != Color.white)
-        {
-            sr.color = Color.white;
-        }
         animator.SetBool("IsWalking", false);
         switch (state)
         {
@@ -91,6 +81,7 @@ public class SteamRexBehavior : NPCBaseBehavior
                 currentAction.SetActionDuration(1.5f);
                 state = SteamRexState.Phase1;
                 animator.SetInteger("Phase", 1);
+                phaseEvents = 4;
                 break;
             case SteamRexState.Phase1:
                 if (player != null && (player.transform.position - this.transform.position).magnitude <= 2.0f && !hasUsedMelee)
@@ -103,43 +94,39 @@ public class SteamRexBehavior : NPCBaseBehavior
                 else
                 {
                     hasUsedMelee = false;
-                    if (currentCycleIndex == 0)
+                    if (currentPhaseEvent == 0)
                     {
                         currentAction.SetActionDuration(2.25f);
                         Phase1Charge();
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 1)
+                    else if (currentPhaseEvent == 1)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 2)
+                    else if (currentPhaseEvent == 2)
                     {
                         currentAction.SetActionDuration(1.25f);
                         animator.SetTrigger("StartFire");    
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 3)
+                    else if (currentPhaseEvent == 3)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 4)
+                    else if (currentPhaseEvent == 4)
                     {
                         currentAction.SetActionDuration(1.75f);
                         animator.SetTrigger("StartJump");
-                        currentCycleIndex = 0;
                     }
                 }
                 if (currentHealth <= maxHealth * 0.65f)
                 {
                     state = SteamRexState.Phase2;
                     sr.sprite = phaseStartSprites[1];
-                    projSettings.SetCount(5);
-                    projSettings.SetScale(2.0f);
-                    projSettings.SetSpeed(3.5f);
+                    //projSettings.SetCount(5);
+                    projectileSettings[0].SetScale(2.0f);
+                    projectileSettings[0].SetSpeed(3.5f);
                     animator.SetInteger("Phase", 2);
+                    currentPhaseEvent = 6;
                 }
                 break;
             case SteamRexState.Phase2:
@@ -153,55 +140,49 @@ public class SteamRexBehavior : NPCBaseBehavior
                 else
                 {
                     hasUsedMelee = false;
-                    if (currentCycleIndex == 0)
+                    if (currentPhaseEvent == 0)
                     {
                         currentAction.SetActionDuration(2.05f);
                         Phase2Charge();
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 1)
+                    else if (currentPhaseEvent == 1)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 2)
+                    else if (currentPhaseEvent == 2)
                     {
                         currentAction.SetActionDuration(1.0f);
                         Debug.Log("AHHHH");
                         animator.SetTrigger("StartFire");
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 3)
+                    else if (currentPhaseEvent == 3)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 4)
+                    else if (currentPhaseEvent == 4)
                     {
                         currentAction.SetActionDuration(1.5f);
                         animator.SetTrigger("StartJump");
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 5)
+                    else if (currentPhaseEvent == 5)
                     {
                         currentAction.SetActionDuration(0.25f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 6)
+                    else if (currentPhaseEvent == 6)
                     {
                         currentAction.SetActionDuration(1.5f);
                         animator.SetTrigger("StartJump");
-                        currentCycleIndex = 0;
                     }
                 }
                 if (currentHealth <= maxHealth * 0.25f)
                 {
                     state = SteamRexState.Phase3;
                     sr.sprite = phaseStartSprites[2];
-                    projSettings.SetCount(11);
-                    projSettings.SetScale(1.5f);
-                    projSettings.SetSpeed(3.5f);
+                    //projSettings.SetCount(11);
+                    projectileSettings[0].SetScale(1.5f);
+                    projectileSettings[0].SetSpeed(3.5f);
                     animator.SetInteger("Phase", 3);
+                    phaseEvents = 8;
                 }
                 break;
             case SteamRexState.Phase3:
@@ -215,55 +196,46 @@ public class SteamRexBehavior : NPCBaseBehavior
                 else
                 {
                     hasUsedMelee = false;
-                    if (currentCycleIndex == 0)
+                    if (currentPhaseEvent == 0)
                     {
                         currentAction.SetActionDuration(2.0f);
                         Phase3Charge();
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 1)
+                    else if (currentPhaseEvent == 1)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 2)
+                    else if (currentPhaseEvent == 2)
                     {
                         currentAction.SetActionDuration(0.75f);
                         animator.SetTrigger("StartFire");
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 3)
+                    else if (currentPhaseEvent == 3)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 4)
+                    else if (currentPhaseEvent == 4)
                     {
                         currentAction.SetActionDuration(1.25f);
                         animator.SetTrigger("StartJump");
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 5)
+                    else if (currentPhaseEvent == 5)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 6)
+                    else if (currentPhaseEvent == 6)
                     {
                         currentAction.SetActionDuration(1.25f);
                         animator.SetTrigger("StartJump");
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 7)
+                    else if (currentPhaseEvent == 7)
                     {
                         currentAction.SetActionDuration(0.5f);
-                        currentCycleIndex++;
                     }
-                    else if (currentCycleIndex == 8)
+                    else if (currentPhaseEvent == 8)
                     {
                         currentAction.SetActionDuration(1.25f);
                         animator.SetTrigger("StartJump");
-                        currentCycleIndex = 0;
                     }
                 }
                 if (currentHealth <= 0)
@@ -278,6 +250,7 @@ public class SteamRexBehavior : NPCBaseBehavior
                 Destroy(this.gameObject);
                 break;
         }
+
         if (currentAction == null)
         {
             return 1.0f;
@@ -291,7 +264,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         //check location, lifetime, and hitbox size
         try
         {
-            projectiles.Add(ConvertActionTo<MeleeAttack>(currentAction).AttackLocation(this.transform.GetChild(1).transform.position, meleeSettings));
+            projectiles.Add(ConvertActionTo<MeleeAttack>(currentAction).AttackLocation(this.transform.GetChild(1).transform.position, meleeSettings[0]));
         }
         catch (TypeAccessException)
         {
@@ -334,7 +307,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.75f, currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<Vector2>(0.75f, currentLocationTarget, currentAction.Duration));
             animator.SetTrigger("StartWalk");
             animator.SetBool("IsWalking", true);
         }
@@ -361,7 +334,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -393,7 +366,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            projectiles.Add(ConvertActionTo<FireProjectiles>(currentAction).EmitProjectile(projSettings, currentLocationTarget));
+            projectiles.Add(ConvertActionTo<FireProjectiles>(currentAction).EmitProjectile(projectileSettings[0], currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -437,7 +410,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.65f, currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<Vector2>(0.65f, currentLocationTarget, currentAction.Duration));
             animator.SetTrigger("StartWalk");
             animator.SetBool("IsWalking", true);
         }
@@ -453,7 +426,7 @@ public class SteamRexBehavior : NPCBaseBehavior
     public void Phase2Jump()
     {
         currentAction = actions[0];
-        if (currentCycleIndex == 5 )
+        if (currentPhaseEvent == 5 )
         {
             currentLocationTarget = player.transform.position;
         }
@@ -471,7 +444,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -503,7 +476,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, projSettings, currentLocationTarget));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, projectileSettings[0], currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -546,7 +519,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         try
         {
             //there either should be something to tell it to trigger after the charge or have a charging animation to use
-            StartCoroutine(ConvertActionTo<Move>(currentAction).ChargeTo(0.5f, currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedCharge<Vector2>(0.5f, currentLocationTarget, currentAction.Duration));
             animator.SetTrigger("StartWalk");
             animator.SetBool("IsWalking", true);
         }
@@ -563,7 +536,7 @@ public class SteamRexBehavior : NPCBaseBehavior
     {
         currentAction = actions[0];
         //it doesn't trigger fast enough :tear:
-        if (currentCycleIndex == 5 || currentCycleIndex == 7)
+        if (currentPhaseEvent == 5 || currentPhaseEvent == 7)
         {
             currentLocationTarget = player.transform.position;
         }
@@ -581,7 +554,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo(currentLocationTarget));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(currentLocationTarget));
         }
         catch (TypeAccessException)
         {
@@ -613,33 +586,11 @@ public class SteamRexBehavior : NPCBaseBehavior
         }
         try
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(120, projSettings, currentLocationTarget));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(120, projectileSettings[0], currentLocationTarget));
         }
         catch (TypeAccessException)
         {
             Debug.Log($"Could not run {currentAction} as a FireProjectiles action in Phase3Fireball()");
         }
-    }
-
-
-    //Probably should make sure it can only get hit by an attack once
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        PlayerAttack pa;
-        if (collision.tag == "WeaponHitBox" && (pa = collision.gameObject.transform.parent.GetComponent<PlayerAttack>()) != null)
-        {
-            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
-            TakeDamage(pa.damage);
-        }
-    }
-
-    private void TurnLeft()
-    {
-        this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
-    }
-
-    private void TurnRight()
-    {
-        this.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 180.0f, 0.0f));
     }
 }

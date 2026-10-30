@@ -116,7 +116,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -7695398815890017941, guid: 946a0e56595b0b74f9981122f84d013c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -196,6 +196,9 @@ MonoBehaviour:
   - {fileID: 4670861617308951290, guid: 15aed54f2dc52324bb456841b8d7195f, type: 3}
   maxHealth: 100
   player: {fileID: 0}
+  currentHealth: 0
+  state: 0
+  phaseStartSprites: []
 --- !u!70 &3412265528160055772
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

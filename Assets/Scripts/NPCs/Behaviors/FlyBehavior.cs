@@ -8,7 +8,8 @@ public class FlyBehavior : NPCBaseBehavior
     {
         base.Start();
         destination = new Vector2(Random.Range(-9.0f, 9.0f), Random.Range(-5.0f, 5.0f));
-        actions.Add(new Move(this.transform, 1.0f));
+        actions.Add(new Move(this.transform, OverwriteActionCooldown, 1.0f));
+        actions[0].SetDelayTime(0.0f);
         currentAction = actions[0];
     }
 
@@ -16,7 +17,7 @@ public class FlyBehavior : NPCBaseBehavior
     {
         try
         {
-            StartCoroutine(ConvertActionTo<Move>(currentAction).MoveTo(destination));
+            StartCoroutine(ConvertActionTo<Move>(currentAction).TimedMove<Vector2>(destination));
         }
         catch (System.TypeAccessException e)
         {

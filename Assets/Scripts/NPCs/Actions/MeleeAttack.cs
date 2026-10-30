@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /*
@@ -13,7 +14,7 @@ public class MeleeAttack : NPCBaseAction
 
     public GameObject HitboxPrefab { get => hitboxPrefab; }
 
-    public MeleeAttack(GameObject _hitboxPrefab, Transform _parent, float _actionDuration = 1) : base(_parent, _actionDuration) { hitboxPrefab = _hitboxPrefab; }
+    public MeleeAttack(GameObject _hitboxPrefab, Action<float> _incrementAndDelayFunction, Transform _parent, float _actionDuration = 1) : base(_parent, _incrementAndDelayFunction, _actionDuration) { hitboxPrefab = _hitboxPrefab; }
 
     public void SetHitbox(GameObject hitbox)
     {
@@ -68,7 +69,7 @@ public class MeleeAttack : NPCBaseAction
     /// <returns>The created hitbox</returns>
     private GameObject CreateHitbox(Vector2 location, Vector2 scale, float lifetime)
     {
-        GameObject hitbox = Object.Instantiate(hitboxPrefab, parent);
+        GameObject hitbox = UnityEngine.Object.Instantiate(hitboxPrefab, parent);
         hitbox.gameObject.transform.position = location;
         hitbox.gameObject.transform.localScale = scale;
         MeleeBase meleeScript = hitbox.GetComponent<MeleeBase>();
@@ -76,6 +77,7 @@ public class MeleeAttack : NPCBaseAction
         {
             meleeScript.SetLifetime(lifetime);
         }
+        delayFunction(delayTime);
         return hitbox;
     }
     #endregion
