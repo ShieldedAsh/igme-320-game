@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 enum ChargerMiniBossState
@@ -21,8 +20,8 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
         moveSettings.Add(new MoveSettings(1.0f, 14.0f, 1.0f, 2.0f, false, true, EaseType.FunctionDefault));
         actions.Add(new Move(this.gameObject.transform, OverwriteActionCooldown, moveSettings[0]));
         arenaMarkers = new Vector2[3];
-        arenaMarkers[0] = new Vector2(-8, 0);
-        arenaMarkers[1] = new Vector2(8, 0);
+        arenaMarkers[0] = new Vector2(-7.2f, 0);
+        arenaMarkers[1] = new Vector2(7.2f, 0);
         arenaMarkers[2] = new Vector2(0, -2);
     }
 
@@ -64,8 +63,6 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
         if (animator != null)
         {
             animator.SetBool("IsWalking", false);
-            animator.SetTrigger("StartCharge");
-            animator.SetBool("IsWalking", true);
         }
         Charge();
         if (currentHealth <= 0)
@@ -82,6 +79,11 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
 
     public void Charge()
     {
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", true);
+            animator.SetTrigger("StartWalk");
+        }
         if (player != null)
         {
             currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<GameObject>(player);
