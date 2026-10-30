@@ -118,14 +118,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         if (animator != null)
         {
-            try
-            {
-                animator.SetTrigger("isDamaged");
-            }
-            catch
-            {
-                sr.color = new Color(1f, 0.9f, 0.9f, 1f);
-            }
+            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
         }
         else
         {
@@ -239,10 +232,13 @@ public abstract class NPCBaseBehavior : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
+        PlayerStats ps;
         PlayerAttack pa;
-        if (collision.tag == "WeaponHitBox" && (pa = collision.gameObject.transform.parent.GetComponent<PlayerAttack>()) != null)
+        if (collision.tag == "WeaponHitBox" && 
+            (ps = collision.gameObject.transform.parent.GetComponent<PlayerStats>()) != null && 
+            (pa = collision.gameObject.transform.parent.GetComponent<PlayerAttack>()) != null)
         {
-            TakeDamage(pa.damage);
+            TakeDamage((int)ps.Stats.Damage.Apply(pa.baseDamage));
             //Check to see if there is a specific way this should be destroyed
             Destroy(collision.gameObject);
         }
@@ -282,5 +278,20 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     public void OverwriteActionCooldown(float cooldown)
     {
         timeTillAction = cooldown;
+    }
+
+    protected void AddAugment(int index)
+    {
+        if (player != null)
+        {
+            PlayerStats ps;
+            if ((ps = player.GetComponent<PlayerStats>()) != null)
+            {
+                if (ps.Augments.AllAugments.Count > index)
+                {
+                    ps.Augments.Add(ps.Augments.AllAugments[index]);
+                }
+            }
+        }
     }
 }

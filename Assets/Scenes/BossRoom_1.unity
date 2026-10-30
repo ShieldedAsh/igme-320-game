@@ -566,11 +566,10 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
   m_PrefabInstance: {fileID: 1717068947}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &266062581
+--- !u!114 &266062581 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8505945963017377692, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+  m_PrefabInstance: {fileID: 1717068947}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266062573}
   m_Enabled: 1
@@ -578,7 +577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916e5834ca8b4b1b8b451d09e0df724e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  baseMaxHealth: 7
 --- !u!114 &266062583 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 109830746946145905, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
@@ -2605,21 +2603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5404081427026248670, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 266062581}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
 --- !u!1 &1795776602
 GameObject:
@@ -3184,8 +3171,5 @@ SceneRoots:
   - {fileID: 543462362}
   - {fileID: 225694669}
   - {fileID: 1610523856}
-<<<<<<< Updated upstream
-  - {fileID: 1846194404}
-=======
   - {fileID: 145011250}
->>>>>>> Stashed changes
+  - {fileID: 1846194404}

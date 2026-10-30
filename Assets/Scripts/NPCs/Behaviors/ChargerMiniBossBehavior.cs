@@ -73,7 +73,7 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
 
     private void DeadAct()
     {
-        //AugmentManager.DropAugment(1, true);
+        AddAugment(2);
         Destroy(this.gameObject);
     }
 
@@ -84,13 +84,13 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
             animator.SetBool("IsWalking", true);
             animator.SetTrigger("StartWalk");
         }
-        if (player != null)
-        {
-            currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<GameObject>(player);
-            TurnTowards(player.transform.position);
-        }
-        else
-        {
+        //if (player != null)
+        //{
+        //    currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<GameObject>(player);
+        //    TurnTowards(player.transform.position);
+        //}
+        //else
+        //{
             Vector2 target = Vector2.zero;
             if (Mathf.Abs(arenaMarkers[0].x - this.gameObject.transform.position.x) > Mathf.Abs(arenaMarkers[1].x - this.gameObject.transform.position.x))
             {
@@ -102,7 +102,7 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
             }
             currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<Vector2>(target);
             TurnTowards(target);
-        }
+        //}
         StartCoroutine(currentCoroutine);
     }
 }
