@@ -10,7 +10,7 @@ public class PlayerAugments : MonoBehaviour
     //list of all augments that are NOT applied to the player
     //note: do we want augments to be able to be applied more than once?
     private List<AugmentBase> allAugments = new();
-
+    public List<AugmentBase> AllAugments { get => allAugments;  }
 
     //list of augment bases to apply
     private List<AugmentBase> augments;

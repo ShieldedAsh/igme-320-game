@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: 109830746946145905}
   - component: {fileID: 2387393055056727673}
   - component: {fileID: -8862294575905025243}
+  - component: {fileID: 8505945963017377692}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,17 +132,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.011862755, y: -0.22776306}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.23, y: 0.3}
+    oldSize: {x: 1.4375, y: 1.875}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.6631012, y: 1.4555261}
   m_EdgeRadius: 0
 --- !u!50 &6583743389979668093
 Rigidbody2D:
@@ -185,8 +186,8 @@ MonoBehaviour:
   attackHitbox: {fileID: 8153167537513750294, guid: c61ae573e1caa3f44ab78a283fcc4cb6, type: 3}
   attackDuration: 0.15
   attackOffset: 1
-  damage: 2
   animator: {fileID: -8862294575905025243}
+  baseDamage: 2
 --- !u!114 &109830746946145905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +209,7 @@ MonoBehaviour:
   jetpackInitialBoost: 2.5
   jetpackCooldown: 3
   jetpackForce: 10
+  animator: {fileID: -8862294575905025243}
 --- !u!114 &2387393055056727673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,3 +244,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8505945963017377692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3230823812136170712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 916e5834ca8b4b1b8b451d09e0df724e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  baseMaxHealth: 7

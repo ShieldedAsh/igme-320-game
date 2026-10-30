@@ -78,13 +78,13 @@ public class JumperMiniBossBehavior : NPCBaseBehavior
             currentAction.SetDelayTime(1.0f);
             if (player != null)
             {
-                currentCoroutine = ConvertActionTo<Move>(currentAction).JumpToSafe<GameObject>(player);
+                currentCoroutine = ConvertActionTo<Move>(currentAction).JumpTo<GameObject>(player);
                 TurnTowards(player.transform.position);
             }
             else
             {
                 int index = Random.Range(2, 4);
-                currentCoroutine = ConvertActionTo<Move>(currentAction).JumpToSafe<Vector2>(arenaMarkers[index]);
+                currentCoroutine = ConvertActionTo<Move>(currentAction).JumpTo<Vector2>(arenaMarkers[index]);
                 TurnTowards(arenaMarkers[index]);
             }
             
@@ -127,7 +127,7 @@ public class JumperMiniBossBehavior : NPCBaseBehavior
 
     private void DeadAct()
     {
-        //PlayerAugments.Add()
+        AddAugment(1);
         Destroy(this.gameObject);
     }
 }

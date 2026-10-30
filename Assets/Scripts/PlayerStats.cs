@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,9 +17,11 @@ public class PlayerStats : MonoBehaviour
     private bool justHit = false;
 
     private PlayerAugments augments;
+    
     private int MaxHealth => augments.stats.MaxHealth.ApplyInt(baseMaxHealth);
 
     public StatBlock Stats { get => augments.stats; }
+    public PlayerAugments Augments { get => augments; }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
