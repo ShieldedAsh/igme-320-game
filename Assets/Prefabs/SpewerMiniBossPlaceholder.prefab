@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2669445386012082701}
   - component: {fileID: 6824755292061894635}
   - component: {fileID: 1518430986991450741}
-  - component: {fileID: 7385874382842222821}
   - component: {fileID: 73096665205596864}
+  - component: {fileID: 6981435934862042280}
+  - component: {fileID: 8882153611933261990}
   m_Layer: 0
   m_Name: SpewerMiniBossPlaceholder
   m_TagString: Untagged
@@ -32,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4342021820148265975}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6824755292061894635
@@ -84,8 +86,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1, g: 0.9744202, b: 0, a: 1}
+  m_Sprite: {fileID: -5394084883203067220, guid: e68f037accb625740ae8f068f47b71c5, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -121,8 +123,28 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &7385874382842222821
-PolygonCollider2D:
+--- !u!114 &73096665205596864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843489541377856983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d552f470e7d9f534cbcea23fc2dbb6d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpewerMiniBossBehavior
+  animator: {fileID: 8882153611933261990}
+  projectilePrefabs:
+  - {fileID: 118067827849410058, guid: 08c217a7a104fcf4589c6e930426694c, type: 3}
+  meleeHitboxPrefabs: []
+  maxHealth: 30
+  player: {fileID: 0}
+  currentHealth: 0
+  timeTillAction: 0
+--- !u!61 &6981435934862042280
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -155,38 +177,68 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.018457323, y: -0.011074543}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.8125, y: 1.4583334}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0, y: 0.5773587}
-      - {x: -0.5, y: -0.28866667}
-      - {x: 0.5, y: -0.28866667}
-  m_UseDelaunayMesh: 1
---- !u!114 &73096665205596864
-MonoBehaviour:
+  m_Size: {x: 0.59100837, y: 1.4361842}
+  m_EdgeRadius: 0
+--- !u!95 &8882153611933261990
+Animator:
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1843489541377856983}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d552f470e7d9f534cbcea23fc2dbb6d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpewerMiniBossBehavior
-  animator: {fileID: 0}
-  projectilePrefabs:
-  - {fileID: 118067827849410058, guid: 08c217a7a104fcf4589c6e930426694c, type: 3}
-  meleeHitboxPrefabs: []
-  maxHealth: 0
-  player: {fileID: 0}
-  currentHealth: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d1e8b93ad312b574d93015acef8229e7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &6324060304575172840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4342021820148265975}
+  m_Layer: 0
+  m_Name: FireLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4342021820148265975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6324060304575172840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.016, y: 0.433, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2669445386012082701}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

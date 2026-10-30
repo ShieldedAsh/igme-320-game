@@ -20,9 +20,10 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
         state = ChargerMiniBossState.Spawn;
         moveSettings.Add(new MoveSettings(1.0f, 14.0f, 1.0f, 2.0f, false, true, EaseType.FunctionDefault));
         actions.Add(new Move(this.gameObject.transform, OverwriteActionCooldown, moveSettings[0]));
-        arenaMarkers = new Vector2[2];
+        arenaMarkers = new Vector2[3];
         arenaMarkers[0] = new Vector2(-8, 0);
         arenaMarkers[1] = new Vector2(8, 0);
+        arenaMarkers[2] = new Vector2(0, -2);
     }
 
     protected override float Act()
@@ -54,6 +55,7 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
         currentAction = actions[0];
         currentHealth = maxHealth;
         phaseEvents = 0;
+        this.transform.position = arenaMarkers[2];
         state = ChargerMiniBossState.Alive;
     }
 

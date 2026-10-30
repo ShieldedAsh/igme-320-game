@@ -22,7 +22,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
     protected override void Start()
     {
         base.Start();
-        projectileSettings.Add(new ProjectileSettings(0.25f, 4.0f, 6.0f));
+        projectileSettings.Add(new ProjectileSettings(0.25f, 4.0f, 6.0f, this.transform.GetChild(0).gameObject));
         actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, projectileSettings[0], OverwriteActionCooldown));
         moveSettings.Add(new MoveSettings(1.0f, 5.0f, 0.5f, 0.0f, true, false, EaseType.FunctionDefault));
         moveSettings.Add(new MoveSettings(1.0f, 5.0f, 0.5f, 0.0f, false, true, EaseType.FunctionDefault));
@@ -92,7 +92,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
             if (animator != null)
             {
                 animator.SetBool("IsWalking", true);
-                animator.SetTrigger("StartWalking");
+                animator.SetTrigger("StartWalk");
             }
             if (currentMarkerIndex == 1 || currentMarkerIndex == 3)
             {
@@ -108,7 +108,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
             if (animator != null)
             {
                 animator.SetBool("IsWalking", true);
-                animator.SetTrigger("StartWalking");
+                animator.SetTrigger("StartWalk");
             }
             if (currentMarkerIndex == 1 || currentMarkerIndex == 3)
             {
@@ -139,19 +139,28 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
     private void Spew()
     {
         currentAction = actions[0];
+        currentAction.SetDelayTime(1.0f);
         if (player != null)
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(45, AngleMath.GetVectorDirection(player.transform.position - this.transform.position), 5));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection(player.transform.position - this.transform.position), 5));
         }
         else
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(45, AngleMath.GetVectorDirection((Vector3)Vector2.zero - this.transform.position), 5));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection((Vector3)Vector2.zero - this.transform.position), 5));
         }
     }
 
     private void Crawl(MoveDirection moveDirection)
     {
         currentAction = actions[1];
+        if (currentPhaseEvent == 2)
+        {
+            currentAction.SetDelayTime(1.0f);
+        }
+        else
+        {
+            currentAction.SetDelayTime(0.1f);
+        }
         int index = 0;
         if (moveDirection == MoveDirection.Horizontal)
         {
@@ -178,7 +187,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
             }
         }
         TurnTowards(arenaMarkers[currentMarkerIndex]);
-        currentCoroutine = ConvertActionTo<Move>(currentAction).TimedMove(arenaMarkers[currentMarkerIndex], moveSettings[index]);
+        currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedMove<Vector2>(arenaMarkers[currentMarkerIndex], moveSettings[index]);
         StartCoroutine(currentCoroutine);
     }
 }

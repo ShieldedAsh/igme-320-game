@@ -171,7 +171,7 @@ public class Move : NPCBaseAction
         }
         else
         {
-            yield return TimedMove(_location, ((Vector3)GetDestination<T>(_location, _overshootDistance, lockX, lockY) - parent.position).magnitude / Mathf.Abs(_speed), 0.0f, false, false, _easeType);
+            yield return TimedMove(_location, ((Vector3)GetDestination<T>(_location, _overshootDistance, lockX, lockY) - parent.position).magnitude / Mathf.Abs(_speed), 0.0f, lockX, lockY, _easeType);
         }
         yield return null;    
     }
@@ -226,7 +226,7 @@ public class Move : NPCBaseAction
             t = AddEase(t, EaseType.None, _easeType);
             
             parent.position = Vector2.Lerp(startPos, GetDestination<T>(_location, _overshootDistance, lockX, lockY), t);
-            elapsedTime += Time.fixedDeltaTime;
+            elapsedTime += Time.deltaTime;
 
             yield return null;
         }
@@ -450,7 +450,7 @@ public class Move : NPCBaseAction
                 // y = ax^2 + bx + c
                 float y = (a * (x * x)) + (b * x) + c;
                 parent.position = new Vector2(x, y);
-                elapsedTime += Time.fixedDeltaTime;
+                elapsedTime += Time.deltaTime;
 
                 yield return null;
             }
@@ -528,7 +528,7 @@ public class Move : NPCBaseAction
                         target = new Vector2(checking.x, checking.y + dist);
                         foundLandingPosition = true;
                     }
-                    checkingX += Time.fixedDeltaTime;
+                    checkingX += Time.deltaTime;
                 }
                 else
                 {
@@ -564,7 +564,7 @@ public class Move : NPCBaseAction
                 // y = ax^2 + bx + c
                 float y = (a * (x * x)) + (b * x) + c;
                 parent.position = new Vector2(x, y);
-                elapsedTime += Time.fixedDeltaTime;
+                elapsedTime += Time.deltaTime;
 
                 yield return null;
             }
