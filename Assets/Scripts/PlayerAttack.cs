@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private GameObject attackHitbox;
     [SerializeField] private float attackDuration = 0.15f;
     [SerializeField] private float attackOffset = 0.75f;
+    [SerializeField] protected Animator animator;
 
     private PlayerAugments augments;
     [SerializeField] public int baseDamage = 2;
@@ -19,12 +20,20 @@ public class PlayerAttack : MonoBehaviour
     {
         attackAction = InputSystem.actions.FindAction("Attack");
         augments = GetComponent<PlayerAugments>();
+        animator = GetComponent<Animator>();
+       
     }
 
     void Update()
     {
-        if (attackAction.WasPressedThisFrame())
+        if (attackAction != null &&
+            attackAction.WasPressedThisFrame())
         {
+            if (animator != null)
+            {
+                animator.SetTrigger("Attack");
+            }
+
             Attack();
         }
     }
@@ -60,5 +69,6 @@ public class PlayerAttack : MonoBehaviour
        
 
         Destroy(hitbox, attackDuration);
+       
     }
 }
