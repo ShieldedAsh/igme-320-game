@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 enum SpewerMiniBossState {
@@ -30,10 +29,10 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         actions[1].SetDelayTime(0.1f);
 
         arenaMarkers = new Vector2[4];
-        arenaMarkers[0] = new Vector2(0, -3.35f); 
-        arenaMarkers[1] = new Vector2(-9, 0); 
-        arenaMarkers[2] = new Vector2(0, 4.3f);
-        arenaMarkers[3] = new Vector2(9, 0);
+        arenaMarkers[0] = new Vector2(0.0f, -3.0f); 
+        arenaMarkers[1] = new Vector2(-10.0f, 0.0f); 
+        arenaMarkers[2] = new Vector2(0.0f, 5.0f);
+        arenaMarkers[3] = new Vector2(10.0f, 0.0f);
         currentMarkerIndex = 0;
     }
 

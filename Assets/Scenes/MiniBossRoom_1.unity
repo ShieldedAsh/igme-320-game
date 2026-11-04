@@ -1114,7 +1114,7 @@ GameObject:
   - component: {fileID: 1380322237}
   - component: {fileID: 1380322236}
   - component: {fileID: 1380322235}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ceiling
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1361,7 +1361,7 @@ GameObject:
   - component: {fileID: 1531777476}
   - component: {fileID: 1531777475}
   - component: {fileID: 1531777474}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -2910,6 +2910,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6583743389979668093, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2926,7 +2930,7 @@ GameObject:
   - component: {fileID: 1916783294}
   - component: {fileID: 1916783293}
   - component: {fileID: 1916783292}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -3071,7 +3075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2669445386012082701, guid: 6d4ac9cc37ee6eb479ac6de27bbf0bb8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 2669445386012082701, guid: 6d4ac9cc37ee6eb479ac6de27bbf0bb8, type: 3}
       propertyPath: m_LocalPosition.z
