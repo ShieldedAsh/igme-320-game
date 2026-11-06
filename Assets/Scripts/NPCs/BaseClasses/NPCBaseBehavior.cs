@@ -118,7 +118,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         if (animator == null)
         {
-            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
+            sr.color = new Color(1f, 0.7f, 0.7f, 1f);
         }
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -237,14 +237,6 @@ public abstract class NPCBaseBehavior : MonoBehaviour
             TakeDamage((int)ps.Stats.Damage.Apply(pa.baseDamage));
             //Check to see if there is a specific way this should be destroyed
             Destroy(collision.gameObject);
-        }
-    }
-
-    protected void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Wall")
-        {
-            InteruptCurrentEvent();
         }
     }
 

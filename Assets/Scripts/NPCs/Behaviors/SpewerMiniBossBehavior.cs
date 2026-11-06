@@ -30,10 +30,16 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
 
         arenaMarkers = new Vector2[4];
         arenaMarkers[0] = new Vector2(0.0f, -3.0f); 
-        arenaMarkers[1] = new Vector2(-10.0f, 0.0f); 
+        arenaMarkers[1] = new Vector2(-10.0f, 1.0f); 
         arenaMarkers[2] = new Vector2(0.0f, 5.0f);
-        arenaMarkers[3] = new Vector2(10.0f, 0.0f);
+        arenaMarkers[3] = new Vector2(10.0f, 1.0f);
         currentMarkerIndex = 0;
+    }
+
+    protected override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        sr.color = new Color(1f, 0.7f, 0.7f, 1f);
     }
 
     protected override float Act()
@@ -64,10 +70,11 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         currentAction = actions[0];
         currentHealth = maxHealth;
         phaseEvents = 3;
-        this.transform.position = arenaMarkers[0];
+        this.transform.position = arenaMarkers[2];
+        FlipDown();
         OverwriteActionCooldown(1.0f);
         currentPhaseEvent = 2;
-        currentMarkerIndex = 1;
+        currentMarkerIndex = 3;
         state = SpewerMiniBossState.Alive;
     }
 
@@ -84,7 +91,6 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
             {
                 animator.SetTrigger("StartFire");
             }
-            Spew();
         }
         if (currentPhaseEvent == 1)
         {
@@ -135,18 +141,19 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         Destroy(this.gameObject);
     }
 
-    private void Spew()
+    public void Spew()
     {
         currentAction = actions[0];
         currentAction.SetDelayTime(1.0f);
         if (player != null)
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection(player.transform.position - this.transform.position), 5));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection(player.transform.position - projectileSettings[0].LocationObject.transform.position), 5));
         }
         else
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection((Vector3)Vector2.zero - this.transform.position), 5));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection((Vector3)Vector2.zero - projectileSettings[0].LocationObject.transform.position), 5));
         }
+        animator.SetTrigger("EndFire");
     }
 
     private void Crawl(MoveDirection moveDirection)
@@ -188,5 +195,34 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         TurnTowards(arenaMarkers[currentMarkerIndex]);
         currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedMove<Vector2>(arenaMarkers[currentMarkerIndex], moveSettings[index]);
         StartCoroutine(currentCoroutine);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (currentPhaseEvent == 0)
+        {
+            Gizmos.color = Color.red;
+            Vector2 target = Vector2.zero;
+            if (player != null)
+            {
+                target = player.transform.position;
+            }
+            Gizmos.DrawWireSphere(target, 0.25f);
+            if (projectileSettings != null && projectileSettings.Count > 0)
+            {
+                Gizmos.DrawLine(projectileSettings[0].LocationObject.transform.position, target);
+            }
+            else
+            {
+                Gizmos.DrawLine(this.transform.position, target);
+            }
+            
+        }
+        else
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(arenaMarkers[currentMarkerIndex], 1);
+        }
+            
     }
 }

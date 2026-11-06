@@ -138,7 +138,7 @@ MonoBehaviour:
   projectilePrefabs:
   - {fileID: 1547135214006848333, guid: 26c387feea3982b4ab23a68f16e80a02, type: 3}
   meleeHitboxPrefabs: []
-  maxHealth: 20
+  maxHealth: 40
   player: {fileID: 0}
   currentHealth: 0
   timeTillAction: 0
