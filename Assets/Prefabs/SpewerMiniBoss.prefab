@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 6981435934862042280}
   - component: {fileID: 8882153611933261990}
   m_Layer: 0
-  m_Name: SpewerMiniBossPlaceholder
-  m_TagString: Untagged
+  m_Name: SpewerMiniBoss
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
   projectilePrefabs:
   - {fileID: 118067827849410058, guid: 08c217a7a104fcf4589c6e930426694c, type: 3}
   meleeHitboxPrefabs: []
-  maxHealth: 30
+  maxHealth: 60
   player: {fileID: 0}
   currentHealth: 0
   timeTillAction: 0

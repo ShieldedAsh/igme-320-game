@@ -74,7 +74,10 @@ public class PlayerStats : MonoBehaviour
     {
         if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "EnemyProjectile") && !justHit)
         {
-            //call projectile base class if it is a projectile and tell it to Destroy itself after the instance of damage occurs
+            if (col.gameObject.GetComponent<ProjectileBase>() != null)
+            {
+                col.gameObject.GetComponent<ProjectileBase>().DestroySelf();
+            }
             playerHealth--;
             Debug.Log(playerHealth);
             justHit = true;
