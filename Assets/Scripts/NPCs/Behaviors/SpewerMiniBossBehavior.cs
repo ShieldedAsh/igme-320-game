@@ -71,14 +71,9 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         currentAction = actions[0];
         currentHealth = maxHealth;
         phaseEvents = 3;
-
-        /*
         this.transform.position = arenaMarkers[2];
         FlipDown();
         currentMarkerIndex = 3;
-        */
-        this.transform.position = arenaMarkers[0];
-        currentMarkerIndex = 1;
 
         OverwriteActionCooldown(1.0f);
         currentPhaseEvent = 2;
