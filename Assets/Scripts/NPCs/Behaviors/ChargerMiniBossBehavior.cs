@@ -24,9 +24,15 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
         moveSettings.Add(new MoveSettings(1.0f, 20.0f, 0.25f, 0.0f, false, false, EaseType.FunctionDefault));
         actions.Add(new Move(this.gameObject.transform, OverwriteActionCooldown, moveSettings[0]));
         arenaMarkers = new Vector2[3];
-        arenaMarkers[0] = new Vector2(-7.2f, -2);
-        arenaMarkers[1] = new Vector2(7.2f, -2);
-        arenaMarkers[2] = new Vector2(0, -2);
+        arenaMarkers[0] = new Vector2(-7.75f, -2.2f);
+        arenaMarkers[1] = new Vector2(7.75f, -2.2f);
+        arenaMarkers[2] = new Vector2(0, -2.2f);
+    }
+
+    protected override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        sr.color = new Color(1f, 0.7f, 0.7f, 1f);
     }
 
     protected override float Act()
@@ -44,7 +50,7 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
                 DeadAct();
                 break;
         }
-        Debug.Log(currentAction.Duration);
+
         // Wait for...
         if (currentAction != null)
         {
@@ -129,12 +135,10 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
         if (Mathf.Abs(arenaMarkers[0].x - this.gameObject.transform.position.x) > Mathf.Abs(arenaMarkers[1].x - this.gameObject.transform.position.x))
         {
             currentTarget = arenaMarkers[0];
-            Debug.Log("Charging left");
         }
         else
         {
             currentTarget = arenaMarkers[1];
-            Debug.Log("Charging right");
         }
         currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<Vector2>(currentTarget, new System.Tuple<Animator, string>(animator, "IsWalking"));
         TurnTowards(currentTarget);
@@ -150,13 +154,11 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
             {
                 currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<GameObject>(player, moveSettings[2], new System.Tuple<Animator, string>(animator, "IsBoosting"));
                 TurnTowards(player.transform.position);
-                Debug.Log("Boosting to player");
             }
             else
             {
                 currentTarget = arenaMarkers[2];
                 currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<Vector2>(currentTarget, moveSettings[2], new System.Tuple<Animator, string>(animator, "IsBoosting"));
-                Debug.Log("Boosting Center");
                 TurnTowards(currentTarget);
             }
         }
@@ -165,12 +167,10 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
             if (Mathf.Abs(arenaMarkers[0].x - this.gameObject.transform.position.x) > Mathf.Abs(arenaMarkers[1].x - this.gameObject.transform.position.x))
             {
                 currentTarget = arenaMarkers[1];
-                Debug.Log("Boosting Right");
             }
             else
             {
                 currentTarget = arenaMarkers[0];
-                Debug.Log("Boosting Left");
             }
             currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<Vector2>(currentTarget, moveSettings[3], new System.Tuple<Animator, string>(animator, "IsBoosting"));
             TurnTowards(currentTarget);
@@ -181,7 +181,6 @@ public class ChargerMiniBossBehavior : NPCBaseBehavior
     private void JumpUp()
     {
         currentAction.SetDelayTime(1.0f);
-        Debug.Log("Jumping");
         currentTarget = new Vector2(this.transform.position.x, 2);
         currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedCharge<Vector2>(currentTarget, moveSettings[1]);
         TurnTowards(currentTarget);
