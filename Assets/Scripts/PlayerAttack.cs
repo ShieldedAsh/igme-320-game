@@ -6,44 +6,59 @@ public class PlayerAttack : MonoBehaviour
 {
     private InputAction attackAction;
 
-    [SerializeField] private GameObject attackHitbox;
-    [SerializeField] private float attackDuration = 0.15f;
-    [SerializeField] private float attackOffset = 0.75f;
-    [SerializeField] protected Animator animator;
+    [SerializeField]
+    private GameObject attackHitbox;
+
+    [SerializeField]
+    private float attackDuration = 0.15f;
+
+    [SerializeField]
+    private float attackOffset = 0.75f;
+
+    [SerializeField]
+    protected Animator animator;
+
+    [SerializeField]
+    private float attackCooldown = 0.25f;
 
     private PlayerAugments augments;
-    [SerializeField] public int baseDamage = 2;
+
+    [SerializeField]
+    public int baseDamage = 2;
     private int damage => augments.stats.Damage.ApplyInt(baseDamage);
 
-    
     void Start()
     {
         attackAction = InputSystem.actions.FindAction("Attack");
         augments = GetComponent<PlayerAugments>();
         animator = GetComponent<Animator>();
-       
     }
 
     void Update()
     {
-        if (attackAction != null &&
-            attackAction.WasPressedThisFrame())
+        if (attackCooldown <= 0.25f)
         {
-            if (animator != null)
-            {
-                animator.SetTrigger("Attack");
-            }
+            attackCooldown += Time.deltaTime;
+        }
 
-            Attack();
+        if (attackCooldown >= 0.25f)
+        {
+            if (attackAction != null && attackAction.WasPressedThisFrame())
+            {
+                if (animator != null)
+                {
+                    animator.SetTrigger("Attack");
+                }
+
+                Attack();
+                attackCooldown = 0.0f;
+            }
         }
     }
 
     void Attack()
     {
-       
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(
-            Mouse.current.position.ReadValue()
-        );
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
         mousePosition.z = transform.position.z;
 
@@ -58,17 +73,10 @@ public class PlayerAttack : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
 
         // Spawn hitbox as a child of the player
-        GameObject hitbox = Instantiate(
-            attackHitbox,
-            spawnPosition,
-            rotation
-        );
+        GameObject hitbox = Instantiate(attackHitbox, spawnPosition, rotation);
 
         hitbox.transform.SetParent(transform);
 
-       
-
         Destroy(hitbox, attackDuration);
-       
     }
 }
