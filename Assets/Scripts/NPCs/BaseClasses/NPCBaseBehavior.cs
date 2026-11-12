@@ -189,8 +189,8 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected void FlipUp()
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
-            0.0f, 
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
+            0.0f,
             0.0f
             )
         );
@@ -200,7 +200,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
             0.0f,
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
             270.0f
             )
         );
@@ -210,7 +210,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
             180.0f,
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
             0.0f
             )
         );
@@ -220,7 +220,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
             0.0f,
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
             90.0f
             )
         );
