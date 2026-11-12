@@ -265,6 +265,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3328571166372886279, guid: 193b70923dda2284cbc4a751915ceea6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3328571166372886279, guid: 193b70923dda2284cbc4a751915ceea6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3328571166372886279, guid: 193b70923dda2284cbc4a751915ceea6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1681,7 +1689,7 @@ GameObject:
   - component: {fileID: 1380322237}
   - component: {fileID: 1380322236}
   - component: {fileID: 1380322235}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ceiling
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1819,7 +1827,7 @@ GameObject:
   - component: {fileID: 1531777476}
   - component: {fileID: 1531777475}
   - component: {fileID: 1531777474}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -2053,11 +2061,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.657691
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.0656343
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2095,6 +2103,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8505945963017377692, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+      propertyPath: baseMaxHealth
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2111,7 +2123,7 @@ GameObject:
   - component: {fileID: 1916783294}
   - component: {fileID: 1916783293}
   - component: {fileID: 1916783292}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Wall
   m_Icon: {fileID: 0}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class ProjectileBase : MonoBehaviour
 {
     Vector2 movementDirection;
@@ -60,9 +60,9 @@ public class ProjectileBase : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Wall")
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Platform")
         {
             DestroySelf();
         }

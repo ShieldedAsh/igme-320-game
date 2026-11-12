@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 1819866234857475289}
   - component: {fileID: 8386838799087929409}
   m_Layer: 0
-  m_Name: ChargerMiniBossPlaceholder
-  m_TagString: Untagged
+  m_Name: ChargerMiniBoss
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
   animator: {fileID: 8386838799087929409}
   projectilePrefabs: []
   meleeHitboxPrefabs: []
-  maxHealth: 40
+  maxHealth: 80
   player: {fileID: 0}
   currentHealth: 0
   timeTillAction: 0

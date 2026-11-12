@@ -4,6 +4,7 @@ public class TargetDummyBehavior : NPCBaseBehavior
 {
     protected override void Start()
     {
+        base.Start();
         maxHealth = 5;
         currentHealth = maxHealth;
     }

@@ -116,13 +116,9 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     /// <param name="damage">The amount of health to reduce by</param>
     protected virtual void TakeDamage(int damage)
     {
-        if (animator != null)
+        if (animator == null)
         {
-            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
-        }
-        else
-        {
-            sr.color = new Color(1f, 0.9f, 0.9f, 1f);
+            sr.color = new Color(1f, 0.7f, 0.7f, 1f);
         }
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -193,8 +189,8 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     protected void FlipUp()
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
-            0.0f, 
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
+            0.0f,
             0.0f
             )
         );
@@ -204,7 +200,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
             0.0f,
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
             270.0f
             )
         );
@@ -214,7 +210,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
             180.0f,
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
             0.0f
             )
         );
@@ -224,7 +220,7 @@ public abstract class NPCBaseBehavior : MonoBehaviour
     {
         this.transform.rotation = Quaternion.Euler(new Vector3(
             0.0f,
-            this.transform.rotation.eulerAngles.y,
+            0.0f,
             90.0f
             )
         );
@@ -241,14 +237,6 @@ public abstract class NPCBaseBehavior : MonoBehaviour
             TakeDamage((int)ps.Stats.Damage.Apply(pa.baseDamage));
             //Check to see if there is a specific way this should be destroyed
             Destroy(collision.gameObject);
-        }
-    }
-
-    protected void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Wall")
-        {
-            InteruptCurrentEvent();
         }
     }
 

@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 enum SpewerMiniBossState {
@@ -18,23 +18,29 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
     SpewerMiniBossState state;
     Vector2[] arenaMarkers;
     int currentMarkerIndex;
+    Vector2 targetLocation;
 
     protected override void Start()
     {
         base.Start();
         projectileSettings.Add(new ProjectileSettings(0.25f, 4.0f, 6.0f, this.transform.GetChild(0).gameObject));
         actions.Add(new FireProjectiles(projectilePrefabs[0], this.transform, projectileSettings[0], OverwriteActionCooldown));
-        moveSettings.Add(new MoveSettings(1.0f, 5.0f, 0.5f, 0.0f, true, false, EaseType.FunctionDefault));
-        moveSettings.Add(new MoveSettings(1.0f, 5.0f, 0.5f, 0.0f, false, true, EaseType.FunctionDefault));
-        actions.Add(new Move(this.gameObject.transform, OverwriteActionCooldown));
+        moveSettings.Add(new MoveSettings(1.0f, 5.0f, 0.5f, 0.0f, false, false, EaseType.FunctionDefault));
+        actions.Add(new Move(this.gameObject.transform, OverwriteActionCooldown, moveSettings[0]));
         actions[1].SetDelayTime(0.1f);
 
         arenaMarkers = new Vector2[4];
-        arenaMarkers[0] = new Vector2(0, -3.35f); 
-        arenaMarkers[1] = new Vector2(-9, 0); 
-        arenaMarkers[2] = new Vector2(0, 4.3f);
-        arenaMarkers[3] = new Vector2(9, 0);
+        arenaMarkers[0] = new Vector2(0.0f, -3.0f); 
+        arenaMarkers[1] = new Vector2(-10.0f, 1.0f); 
+        arenaMarkers[2] = new Vector2(0.0f, 5.0f);
+        arenaMarkers[3] = new Vector2(10.0f, 1.0f);
         currentMarkerIndex = 0;
+    }
+
+    protected override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        sr.color = new Color(1f, 0.7f, 0.7f, 1f);
     }
 
     protected override float Act()
@@ -65,16 +71,17 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         currentAction = actions[0];
         currentHealth = maxHealth;
         phaseEvents = 3;
-        this.transform.position = arenaMarkers[0];
+        this.transform.position = arenaMarkers[2];
+        FlipDown();
+        currentMarkerIndex = 3;
+
         OverwriteActionCooldown(1.0f);
         currentPhaseEvent = 2;
-        currentMarkerIndex = 1;
         state = SpewerMiniBossState.Alive;
     }
 
     private void AliveAct()
     {
-        
         if (animator != null)
         {
             animator.SetBool("IsWalking", false);
@@ -85,7 +92,6 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
             {
                 animator.SetTrigger("StartFire");
             }
-            Spew();
         }
         if (currentPhaseEvent == 1)
         {
@@ -94,14 +100,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
                 animator.SetBool("IsWalking", true);
                 animator.SetTrigger("StartWalk");
             }
-            if (currentMarkerIndex == 1 || currentMarkerIndex == 3)
-            {
-                Crawl(MoveDirection.Horizontal);
-            }
-            else
-            {
-                Crawl(MoveDirection.Vertical);
-            }
+            Crawl();
         }
         if (currentPhaseEvent == 2)
         {
@@ -110,14 +109,7 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
                 animator.SetBool("IsWalking", true);
                 animator.SetTrigger("StartWalk");
             }
-            if (currentMarkerIndex == 1 || currentMarkerIndex == 3)
-            {
-                Crawl(MoveDirection.Vertical);
-            }
-            else
-            {
-                Crawl(MoveDirection.Horizontal);
-            }
+            Crawl();
             currentMarkerIndex++;
             if (currentMarkerIndex >= 4)
             {
@@ -136,58 +128,87 @@ public class SpewerMiniBossBehavior : NPCBaseBehavior
         Destroy(this.gameObject);
     }
 
-    private void Spew()
+    public void Spew()
     {
         currentAction = actions[0];
         currentAction.SetDelayTime(1.0f);
         if (player != null)
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection(player.transform.position - this.transform.position), 5));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection(player.transform.position - projectileSettings[0].LocationObject.transform.position), 5));
         }
         else
         {
-            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection((Vector3)Vector2.zero - this.transform.position), 5));
+            projectiles.AddRange(ConvertActionTo<FireProjectiles>(currentAction).EmitArc(90, AngleMath.GetVectorDirection((Vector3)Vector2.zero - projectileSettings[0].LocationObject.transform.position), 5));
         }
+        animator.SetTrigger("EndFire");
     }
 
-    private void Crawl(MoveDirection moveDirection)
+    private void Crawl()
     {
         currentAction = actions[1];
-        if (currentPhaseEvent == 2)
-        {
-            currentAction.SetDelayTime(1.0f);
-        }
-        else
+        if (currentPhaseEvent == 1)
         {
             currentAction.SetDelayTime(0.1f);
         }
-        int index = 0;
-        if (moveDirection == MoveDirection.Horizontal)
+        else
         {
-            index = 1;
-            if (currentMarkerIndex == 0 || currentMarkerIndex == 1)
+            currentAction.SetDelayTime(1.0f);
+            switch (currentMarkerIndex)
             {
-                FlipUp();
-            }
-            else
-            {
-                FlipDown();
+                case 0:
+                    FlipUp();
+                    break;
+                case 1:
+                    FlipRight();
+                    break;
+                case 2:
+                    FlipDown();
+                    break;
+                case 3:
+                    FlipLeft();
+                    break;
             }
         }
-        else if (moveDirection == MoveDirection.Vertical) 
+        if ((currentMarkerIndex % 2 == 0 && currentPhaseEvent == 1) || (currentMarkerIndex % 2 == 1 && currentPhaseEvent == 2))
         {
-            index = 0;
-            if (currentMarkerIndex == 1)
-            {
-                FlipRight();
-            }
-            else
-            {
-                FlipLeft();
-            }
+            targetLocation = new Vector3(this.transform.position.x, arenaMarkers[currentMarkerIndex].y);
+            currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedMove<Vector2>(targetLocation);
         }
-        TurnTowards(arenaMarkers[currentMarkerIndex]);
-        currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedMove<Vector2>(arenaMarkers[currentMarkerIndex], moveSettings[index]);
+        else
+        {
+            targetLocation = new Vector3(arenaMarkers[currentMarkerIndex].x, this.transform.position.y);
+            currentCoroutine = ConvertActionTo<Move>(currentAction).UntimedMove<Vector2>(targetLocation);
+        }
         StartCoroutine(currentCoroutine);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (actions != null && actions.Count > 0)
+        {
+            if (currentPhaseEvent == 1)
+            {
+                Gizmos.color = Color.red;
+                Vector2 target = Vector2.zero;
+                if (player != null)
+                {
+                    target = player.transform.position;
+                }
+                Gizmos.DrawWireSphere(target, 0.25f);
+                if (projectileSettings != null && projectileSettings.Count > 0)
+                {
+                    Gizmos.DrawLine(projectileSettings[0].LocationObject.transform.position, target);
+                }
+                else
+                {
+                    Gizmos.DrawLine(this.transform.position, target);
+                }
+            }
+            else
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(targetLocation, 1);
+            }
+        }
     }
 }
