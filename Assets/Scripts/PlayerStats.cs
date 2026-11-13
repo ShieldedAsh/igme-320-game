@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,8 @@ public class PlayerStats : MonoBehaviour
     private int currentMax;
     private int playerHealth;
 
+    private SpriteRenderer sr;
+
     public int CurrentHealth => playerHealth;
     public int CurrentMaxHealth => currentMax;
 
@@ -16,10 +19,18 @@ public class PlayerStats : MonoBehaviour
     private bool justHit = false;
 
     private PlayerAugments augments;
+
     private int MaxHealth => augments.stats.MaxHealth.ApplyInt(baseMaxHealth);
 
-    public StatBlock Stats { get => augments.stats; }
-    
+    public StatBlock Stats
+    {
+        get => augments.stats;
+    }
+    public PlayerAugments Augments
+    {
+        get => augments;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,6 +38,7 @@ public class PlayerStats : MonoBehaviour
         currentMax = MaxHealth;
         playerHealth = currentMax;
         augments.Changed += OnAugmentsChanged;
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void OnDestroy()
@@ -56,6 +68,7 @@ public class PlayerStats : MonoBehaviour
         if (justHit && lastHitTimer > 0.0f)
         {
             lastHitTimer -= Time.deltaTime;
+            sr.color = Color.red;
             // Debug.Log($"Timer: {lastHitTimer}");
         }
 
@@ -63,15 +76,18 @@ public class PlayerStats : MonoBehaviour
         {
             justHit = false;
             lastHitTimer = 1.0f;
+            sr.color = Color.white;
         }
-
     }
 
     void OnTriggerStay2D(Collider2D col)
     {
         if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "EnemyProjectile") && !justHit)
         {
-            //call projectile base class if it is a projectile and tell it to Destroy itself after the instance of damage occurs
+            if (col.gameObject.GetComponent<ProjectileBase>() != null)
+            {
+                col.gameObject.GetComponent<ProjectileBase>().DestroySelf();
+            }
             playerHealth--;
             Debug.Log(playerHealth);
             justHit = true;
