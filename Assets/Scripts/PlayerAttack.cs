@@ -13,7 +13,7 @@ public class PlayerAttack : MonoBehaviour
 
     private PlayerAugments augments;
     [SerializeField] public int baseDamage = 2;
-    private int damage => augments.stats.Damage.ApplyInt(baseDamage);
+    public int damage => augments.stats.Damage.ApplyInt(baseDamage);
 
     
     void Start()
