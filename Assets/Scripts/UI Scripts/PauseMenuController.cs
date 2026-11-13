@@ -1,25 +1,30 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseButton;
-    [SerializeField] private GameObject pauseScreen;
+    [SerializeField]
+    private GameObject pauseButton;
+
+    [SerializeField]
+    private GameObject pauseScreen;
+
+    private InputAction attackAction;
 
     private bool isPaused;
 
     //on load set pause=false
     private void Awake()
     {
+        attackAction = InputSystem.actions.FindAction("Player/Attack");
         SetPaused(false);
         CheckEventSystem();
     }
 
     private void Update()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             SetPaused(!isPaused);
         }
@@ -30,18 +35,17 @@ public class PauseMenuController : MonoBehaviour
         SetPaused(true);
     }
 
-
-    public void ResumeGame()//resume game method for resume button
+    public void ResumeGame() //resume game method for resume button
     {
         SetPaused(false);
     }
 
-    public void GoToMainMenu()//go to main menu for start menu button
+    public void GoToMainMenu() //go to main menu for start menu button
     {
         LoadScene("StartMenu");
     }
 
-    public void GoToLevelSelect()//go to level select for level selector button
+    public void GoToLevelSelect() //go to level select for level selector button
     {
         LoadScene("LevelSelect");
     }
@@ -74,10 +78,12 @@ public class PauseMenuController : MonoBehaviour
         if (paused)
         {
             Time.timeScale = 0f; //pause time
+            attackAction.Disable();
         }
         else
         {
-            Time.timeScale = 1f;//resume time
+            Time.timeScale = 1f; //resume time
+            attackAction.Enable();
         }
     }
 
@@ -86,12 +92,14 @@ public class PauseMenuController : MonoBehaviour
         if (isPaused)
         {
             Time.timeScale = 1f;
+            attackAction.Enable();
         }
     }
 
     private void CheckEventSystem()
     {
-        UnityEngine.EventSystems.EventSystem existingEventSystem = UnityEngine.Object.FindAnyObjectByType<UnityEngine.EventSystems.EventSystem>();
+        UnityEngine.EventSystems.EventSystem existingEventSystem =
+            UnityEngine.Object.FindAnyObjectByType<UnityEngine.EventSystems.EventSystem>();
 
         if (existingEventSystem != null)
         {
