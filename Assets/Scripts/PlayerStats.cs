@@ -72,7 +72,7 @@ public class PlayerStats : MonoBehaviour
         if (playerHealth <= 0)
         {
             PlayerRunStats.Clear();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("MiniBossRoom_1");
         }
 
         if (justHit && lastHitTimer > 0.0f)

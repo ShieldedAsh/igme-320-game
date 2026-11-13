@@ -29,7 +29,8 @@ public class RoomExit : MonoBehaviour
             unlockedVisual = FindChildByName("DoorVisual");
         }
 
-        SetUnlocked(false);
+        bool isLobby = SceneManager.GetActiveScene().name == "Lobby";
+        SetUnlocked(isLobby);
     }
 
     private void Update()
