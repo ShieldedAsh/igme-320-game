@@ -65,6 +65,11 @@ public class PauseMenuController : MonoBehaviour
 
     private void SetPaused(bool paused)
     {
+        if (paused && !isPaused && Time.timeScale == 0f)
+        {
+            return;
+        }
+
         isPaused = paused;
 
         pauseScreen.SetActive(paused); //show pause menu screen

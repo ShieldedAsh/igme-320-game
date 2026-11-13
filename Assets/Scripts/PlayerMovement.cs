@@ -118,6 +118,17 @@ public class PlayerMovement : MonoBehaviour
         UpdateAnimator();
     }
 
+    public void RestoreJetpackFuel(float fuel)
+    {
+        jetpackFuel = Mathf.Clamp01(fuel);
+        jetpackInUse = false;
+
+        if (rb != null)
+        {
+            rb.gravityScale = 1.0f;
+        }
+    }
+
     private bool IsGrounded()
     {
         //get bounds of collider
