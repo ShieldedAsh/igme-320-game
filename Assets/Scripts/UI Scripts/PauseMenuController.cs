@@ -30,7 +30,7 @@ public class PauseMenuController : MonoBehaviour
         SetPaused(true);
     }
 
-    
+
     public void ResumeGame()//resume game method for resume button
     {
         SetPaused(false);
@@ -61,6 +61,11 @@ public class PauseMenuController : MonoBehaviour
 
     private void SetPaused(bool paused)
     {
+        if (paused && !isPaused && Time.timeScale == 0f)
+        {
+            return;
+        }
+
         isPaused = paused;
 
         pauseScreen.SetActive(paused); //show pause menu screen
@@ -86,14 +91,14 @@ public class PauseMenuController : MonoBehaviour
 
     private void CheckEventSystem()
     {
-        UnityEngine.EventSystems.EventSystem existingEventSystem = UnityEngine.Object.FindAnyObjectByType < UnityEngine.EventSystems.EventSystem>();
+        UnityEngine.EventSystems.EventSystem existingEventSystem = UnityEngine.Object.FindAnyObjectByType<UnityEngine.EventSystems.EventSystem>();
 
         if (existingEventSystem != null)
         {
             return;
         }
         GameObject eventSystemObject = new GameObject("EventSystem");
-        eventSystemObject.AddComponent < UnityEngine.EventSystems.EventSystem>();
-        eventSystemObject.AddComponent < UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+        eventSystemObject.AddComponent<UnityEngine.EventSystems.EventSystem>();
+        eventSystemObject.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
     }
 }
