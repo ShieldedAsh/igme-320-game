@@ -39,6 +39,9 @@ public class PlayerStats : MonoBehaviour
         playerHealth = currentMax;
         augments.Changed += OnAugmentsChanged;
         sr = GetComponent<SpriteRenderer>();
+
+        PlayerMovement movement =GetComponent<PlayerMovement>();
+        PlayerRunStats.Restore(this, movement);
     }
 
     void OnDestroy()
@@ -57,11 +60,18 @@ public class PlayerStats : MonoBehaviour
         currentMax = newMax;
     }
 
+    public void RestoreHealth(int health)
+    {
+        currentMax = MaxHealth;
+        playerHealth = Mathf.Clamp(health,1,currentMax);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (playerHealth <= 0)
         {
+            PlayerRunStats.Clear();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 

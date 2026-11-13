@@ -72,8 +72,7 @@ public class RoomExit : MonoBehaviour
 
     public void TryUnlockExit()
     {
-        bool miniBossDefeated =
-            miniBossWasFound && miniBoss == null;
+        bool miniBossDefeated = miniBossWasFound && miniBoss == null;
 
         if (miniBossDefeated && IsRoomClear())
         {
@@ -96,11 +95,26 @@ public class RoomExit : MonoBehaviour
         }
     }
 
+   /* private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!isUnlocked ||isLoading ||!other.CompareTag("Player"))
+        {
+            return;
+        }
+
+        EnterNextLevel();
+    }
+   */
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isUnlocked ||isLoading ||!other.CompareTag("Player"))
         {
             return;
+        }
+        if (other.TryGetComponent(out PlayerStats playerStats))
+        {
+            PlayerMovement playerMovement = other.GetComponent<PlayerMovement>();
+            PlayerRunStats.Capture(playerStats,playerMovement);
         }
 
         EnterNextLevel();
@@ -112,7 +126,6 @@ public class RoomExit : MonoBehaviour
         {
             return;
         }
-
         isLoading = true;
         SceneManager.LoadSceneAsync(nextSceneName);
     }
