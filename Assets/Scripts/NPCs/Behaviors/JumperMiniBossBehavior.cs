@@ -50,6 +50,12 @@ public class JumperMiniBossBehavior : NPCBaseBehavior
         return 1.0f;
     }
 
+    protected override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        sr.color = new Color(1f, 0.7f, 0.7f, 1f);
+    }
+
     private void SpawnAct()
     {
         currentAction = actions[0];
