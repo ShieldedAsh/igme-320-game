@@ -244,9 +244,9 @@ public class Move : NPCBaseAction
     /// <typeparam name="T">The type used for the destination</typeparam>
     /// <param name="_location">The place to move to</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator UntimedCharge<T>(T _location)
+    public IEnumerator UntimedCharge<T>(T _location, Tuple<UnityEngine.Animator, string> _animations = null)
     {
-        return UntimedCharge<T>(settings.WaitTime, _location, settings.Speed, settings.OvershootDistance, settings.LockingX, settings.LockingY, settings.EaseType);
+        return UntimedCharge<T>(settings.WaitTime, _location,  settings.Speed, settings.OvershootDistance, settings.LockingX, settings.LockingY, settings.EaseType, _animations);
     }
 
     /// <summary>
@@ -256,9 +256,9 @@ public class Move : NPCBaseAction
     /// <param name="_location">The place to move to</param>
     /// <param name="_settings">The settings to use</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator UntimedCharge<T>(T _location, MoveSettings _settings)
+    public IEnumerator UntimedCharge<T>(T _location, MoveSettings _settings, Tuple<UnityEngine.Animator, string> _animations = null)
     {
-        return UntimedCharge<T>(settings.WaitTime, _location, _settings.Speed, _settings.OvershootDistance, _settings.LockingX, _settings.LockingY, _settings.EaseType);
+        return UntimedCharge<T>(settings.WaitTime, _location, _settings.Speed, _settings.OvershootDistance, _settings.LockingX, _settings.LockingY, _settings.EaseType, _animations);
     }
 
     /// <summary>
@@ -272,7 +272,7 @@ public class Move : NPCBaseAction
     /// <param name="lockY">If true, the y-coordinate will be the same as the parent</param> 
     /// <param name="_easeType">The type of easing to use while moving. Default is Ease Out</param>
     /// <returns>An IEnumerator to run in StartCoroutine()</returns>
-    public IEnumerator UntimedCharge<T>(float _waitTime, T _location, float _speed, float _overshootDistance = 0.0f, bool lockX = false, bool lockY = false, EaseType _easeType = EaseType.FunctionDefault)
+    public IEnumerator UntimedCharge<T>(float _waitTime, T _location, float _speed, float _overshootDistance = 0.0f, bool lockX = false, bool lockY = false, EaseType _easeType = EaseType.FunctionDefault, Tuple<UnityEngine.Animator, string> _animations = null)
     {
         float w = Mathf.Max(_waitTime, 0);
         SetActionDuration(w + 0.1f);
@@ -280,6 +280,17 @@ public class Move : NPCBaseAction
         if (_waitTime > 0)
         {
             yield return new WaitForSeconds(_waitTime);
+            if (_animations?.Item1 != null)
+            {
+                if (_animations.Item2.Substring(0,2) == "Is")
+                {
+                    _animations.Item1.SetBool(_animations.Item2, true);
+                }
+                else
+                {
+                    _animations.Item1.SetTrigger(_animations.Item2);
+                }   
+            }
         }
 
         Vector2 destination = GetDestination<T>(_location, _overshootDistance, lockX, lockY);

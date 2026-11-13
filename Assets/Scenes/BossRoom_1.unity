@@ -256,7 +256,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0141292cbac902ea581cd583459d3d85, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -451,7 +451,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0141292cbac902ea581cd583459d3d85, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -566,11 +566,10 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
   m_PrefabInstance: {fileID: 1717068947}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &266062581
+--- !u!114 &266062581 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8505945963017377692, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+  m_PrefabInstance: {fileID: 1717068947}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266062573}
   m_Enabled: 1
@@ -578,7 +577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 916e5834ca8b4b1b8b451d09e0df724e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  baseMaxHealth: 7
 --- !u!114 &266062583 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 109830746946145905, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
@@ -618,7 +616,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0141292cbac902ea581cd583459d3d85, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1006,7 +1004,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0141292cbac902ea581cd583459d3d85, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2399,7 +2397,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0141292cbac902ea581cd583459d3d85, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2563,11 +2561,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.678071
+      value: -8.59
       objectReference: {fileID: 0}
     - target: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.3455906
+      value: -2.99
       objectReference: {fileID: 0}
     - target: {fileID: 142688901767449472, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2605,21 +2603,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5404081427026248670, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
+    - target: {fileID: 8505945963017377692, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
+      propertyPath: baseMaxHealth
+      value: 9999
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3230823812136170712, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 266062581}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 220cca96b97288642988f7a2522a2c72, type: 3}
 --- !u!1 &1795776602
 GameObject:
@@ -2777,7 +2768,7 @@ BoxCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 0141292cbac902ea581cd583459d3d85, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3184,8 +3175,5 @@ SceneRoots:
   - {fileID: 543462362}
   - {fileID: 225694669}
   - {fileID: 1610523856}
-<<<<<<< Updated upstream
-  - {fileID: 1846194404}
-=======
   - {fileID: 145011250}
->>>>>>> Stashed changes
+  - {fileID: 1846194404}

@@ -264,7 +264,7 @@ public class SteamRexBehavior : NPCBaseBehavior
         //check location, lifetime, and hitbox size
         try
         {
-            projectiles.Add(ConvertActionTo<MeleeAttack>(currentAction).AttackLocation(this.transform.GetChild(1).transform.position, meleeSettings[0]));
+            projectiles.Add(ConvertActionTo<MeleeAttack>(currentAction).AttackLocation(this.transform.GetChild(0).transform.position, meleeSettings[0]));
         }
         catch (TypeAccessException)
         {
