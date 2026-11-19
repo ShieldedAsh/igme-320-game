@@ -27,7 +27,7 @@ public class Move : NPCBaseAction
                             $"Wait Time: {settings.WaitTime}\n" +
                             $"Overshoot Distance: {settings.OvershootDistance}\n" +
                             $"Locking (X,Y): {settings.Locking}" +
-                            $"Ease Type: {settings.EaseType.HumanName()}";
+                            $"Ease Type: {settings.EaseType}";
             return output;
         }
     }
